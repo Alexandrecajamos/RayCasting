@@ -64,7 +64,8 @@ void MainWindow::Render(int sizeX, int sizeY){
             float t=0;
             Point px(Xj,Yi,Cam.d);
             t = obj->faces.at(0)->Inter(px);
-            if(t != -1 && t>1)
+            bool teste = obj->Esf.Interseccao(px);
+            if(t != -1 && t>1 && teste)
                 image.setPixel(i, j, qRgb(obj->faces.at(0)->M.A.R* 255, obj->faces.at(0)->M.D.G * 255, obj->faces.at(0)->M.E.B* 255) );
             else
                 image.setPixel( i, j, qRgb(54, 54, 54));

@@ -56,6 +56,39 @@ void Objeto::calc_Esfera(){
 
 }
 
+float Objeto::Inter(Point Pint, int *idx){
+
+    float t = -1;
+    float Menor_T=999;
+    int cont=0;
+    if(this->Esf.Interseccao(Pint)){
+        for(std::vector<Face*>::iterator i = this->faces.begin(); i!= this->faces.end(); i++){
+
+            float x = (*i)->Inter(Pint);
+            if(x != -1 && x<Menor_T){
+                Menor_T = x;
+                (*idx) = cont;
+            }
+            cont++;
+        }
+        if(Menor_T != 999)
+            t=Menor_T;
+    }
+
+    return t;
+}
+void Objeto::Transforoma(float **A){
+    Operacoes Op;
+    for(std::vector<Point*>::iterator i = this->points.begin(); i!= this->points.end(); i++){
+        float** V = Op.VetorColuna((*i));
+        float** r = Op.mult(4,4,1,A,V);
+        (*i)->x=r[0][0];
+        (*i)->y=r[1][0];
+        (*i)->z=r[2][0];
+    }
+
+}
+
 
 /*
 void Objeto::addFace(Point P1, Point P2, Point P3, Material M){

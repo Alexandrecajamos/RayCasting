@@ -3,7 +3,9 @@
 
 Objeto::Objeto()
 {
-
+    Point C(0,0,0);
+    this->Esf.centro=C;
+    this->Esf.raio=0;
 }
 
 
@@ -12,7 +14,7 @@ void Objeto::addPoint(float x, float y, float z){
     this->points.push_back(p);
 
 }
-void Objeto::addFace(int iP1, int iP2, int iP3, Material M){
+void Objeto::addFace(int iP1, int iP2, int iP3, Material *M){
     Face *F = new Face(this->points.at(iP1),this->points.at(iP2),this->points.at(iP3),M);
     this->faces.push_back(F);
 }

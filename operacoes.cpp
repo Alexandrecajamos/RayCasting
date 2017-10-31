@@ -245,7 +245,7 @@ float** Operacoes::Rotacao(int N, int E,float A){
     for(int i=0;i<N;i++){
         if(i!=E)
             for(int j=0;j<N;j++)
-                if(j!=E)
+                if(j!=E){
                     if(i!=j)
                         if((i>E && i!=0 && j!=1) || (j<E && j!=0))
                             M[i][j]=-S;
@@ -254,6 +254,7 @@ float** Operacoes::Rotacao(int N, int E,float A){
 
                     else
                         M[i][j]=C;
+                }
     }
     return M;
 }
@@ -265,7 +266,7 @@ float** Operacoes::Rotacao2(int N, int E,float A, float Sen, float Cos){
     for(int i=0;i<N;i++){
         if(i!=E)
             for(int j=0;j<N;j++)
-                if(j!=E)
+                if(j!=E){
                     if(i!=j)
                         if((i>E && i!=0 && j!=1) || (j<E && j!=0))
                             M[i][j]=-S;
@@ -274,6 +275,8 @@ float** Operacoes::Rotacao2(int N, int E,float A, float Sen, float Cos){
 
                     else
                         M[i][j]=C;
+            }
+
     }
     return M;
 }

@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
+#include "cenario.h"
 namespace Ui {
 class MainWindow;
 }
@@ -14,7 +14,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    void Render(int sizeX, int sizeY);
+    void Render(int sizeX, int sizeY, Cenario *Scene);
 
 private:
     Ui::MainWindow *ui;

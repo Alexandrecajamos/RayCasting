@@ -8,6 +8,7 @@
 #include "operacoes.h"
 #include "objeto.h"
 #include "camera.h"
+#include "luz.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -15,8 +16,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    int sizeX = 400;
-    int sizeY = 400;
+    int sizeX = 650;
+    int sizeY = 650;
 
     //initialize random seed
     srand (time(NULL));
@@ -35,9 +36,9 @@ void MainWindow::Render(int sizeX, int sizeY){
 
     QImage image = QImage( sizeX, sizeY, QImage::Format_RGB32 );
 
-    Point Eye(15,15,15);
+    Point Eye(25,25,25);
     Point LA(0,0,0);
-    Point VUp(0,15,0);
+    Point VUp(0,25,0);
     Observador Obs(Eye,LA,VUp);
     Camera Cam(0.5,0.5,-0.7,sizeX,sizeY,Obs);
 
@@ -49,13 +50,14 @@ void MainWindow::Render(int sizeX, int sizeY){
 
 
     RGB C(0.5,0.5,0.5);
-    RGB C2(1,0,0);
-    RGB C3(0,1,0);
-    RGB C4(0,0,1);
-    Material *M = new Material(C,C,C,2);
-    Material *M2 = new Material(C2,C2,C2,2);
-    Material *M3 = new Material(C3,C3,C3,2);
-    Material *M4 = new Material(C4,C4,C4,2);
+    RGB C2(0.8,0.01,0.01);
+    RGB C3(0.01,0.8,0.01);
+    RGB C4(0.01,0.01,0.8);
+
+    Material *M = new Material(C,C,C,0.5);
+    Material *M2 = new Material(C2,C2,C2,0.5);
+    Material *M3 = new Material(C3,C3,C3,0.5);
+    Material *M4 = new Material(C4,C4,C4,0.5);
 
     obj->addFace(0,1,2,M);
     obj->addFace(3,0,2,M2);
@@ -70,6 +72,9 @@ void MainWindow::Render(int sizeX, int sizeY){
     obj->Transforoma(WC);
     obj->calc_Esfera();
 
+    RGB RL(0.7,0.7,0.7);
+    Point *P = new Point(-200,35,175);
+    luz Luz(RL,P);
 
     //Ray Casting :
 
@@ -86,11 +91,45 @@ void MainWindow::Render(int sizeX, int sizeY){
             t = obj->Inter(px, &ind);//obj->faces.at(0)->Inter(px);
             //Point n = obj->faces.at(ind)->calcNormal();
 
-            if(t != -1 && t>0.7){
-                image.setPixel(i, j, qRgb(obj->faces.at(ind)->M->A.R* 255, obj->faces.at(ind)->M->D.G * 255, obj->faces.at(ind)->M->E.B* 255) );
+            if(t != -1 && t>1){
 
+                Point Pint = px;
+                Pint.operator *=(t);
+
+                Face* F = obj->faces.at(ind);
+
+                Point nFace = F->calcNormal();
+                nFace.normalize();
+                Point Fonte = (*Luz.P);
+                // Já que não estou transformando a posição da luz W_to_Cam;
+                Fonte.operator -=(Pint);
+                Fonte.normalize();
+                float xDif = nFace.ProdutoEscalar(Fonte);
+
+                Point v(0,0,0); // = Obs.Pos;
+                v.operator -=(Pint);
+                v.normalize();
+                Point r = nFace;
+                r.operator *=(2*xDif);
+                r.operator -=(Fonte);
+                r.normalize();
+                float xEsp=v.ProdutoEscalar(r);
+                xEsp=pow(xEsp,F->M->m);
+
+
+                RGB A(F->M->A.R*Luz.F.R,F->M->A.G*Luz.F.G,F->M->A.B*Luz.F.B);
+                RGB D(F->M->D.R*(Luz.F.R*xDif),F->M->D.G*(Luz.F.G*xDif),F->M->D.B*(Luz.F.B*xDif));
+                RGB E (F->M->E.R*(Luz.F.R*xEsp),F->M->E.G*(Luz.F.G*xEsp),F->M->E.B*(Luz.F.B*xEsp));
+
+                float rrr = A.R + D.R + E.R;
+                float ggg = A.G + D.G + E.G;
+                float bbb = A.B + D.B + E.B;
+                RGB print(rrr,ggg,bbb);
+                print.Normalize();
+
+                image.setPixel( i, j, qRgb(print.R*255, print.G*255, print.B*255)); //54 54 54
             }else
-                image.setPixel( i, j, qRgb(54, 54, 54));
+                image.setPixel( i, j, qRgb(10, 10, 10)); //54 54 54
 
         }
     }

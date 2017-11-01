@@ -7,9 +7,9 @@ class luz
 {
 public:
     luz();
-    luz(RGB R, Point Pos);
-    RGB R;
-    Point P;
+    luz(RGB R, Point *Pos);
+    RGB F;
+    Point *P;
 };
 
 #endif // LUZ_H

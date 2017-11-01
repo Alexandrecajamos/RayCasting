@@ -10,6 +10,14 @@ RGB::RGB(float r, float g, float b){
     this->B=b;
 }
 
+void RGB::Normalize(){
+      if(this->R>1)
+          this->R=1;
+      if(this->G>1)
+          this->G=1;
+      if(this->B>1)
+          this->B=1;
+}
 
 
 

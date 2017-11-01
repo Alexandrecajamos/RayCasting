@@ -4,7 +4,7 @@ luz::luz()
 {
 
 }
-luz::luz(RGB _R, Point _Pos){
-    this->R=_R;
+luz::luz(RGB _R, Point *_Pos){
+    this->F=_R;
     this->P=_Pos;
 }

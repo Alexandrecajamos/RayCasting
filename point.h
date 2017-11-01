@@ -15,6 +15,10 @@ public:
               x += P.x; y += P.y; z += P.z;
               return *this;
           }
+          Point& operator*=(float Esc) {
+              x *= Esc; y *= Esc; z *= Esc;
+              return *this;
+          }
           Point& operator-=(Point P){
               x -= P.x; y -= P.y; z -= P.z;
               return *this;

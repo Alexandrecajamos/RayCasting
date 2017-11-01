@@ -259,7 +259,7 @@ float** Operacoes::Rotacao(int N, int E,float A){
     return M;
 }
 
-float** Operacoes::Rotacao2(int N, int E,float A, float Sen, float Cos){
+float** Operacoes::Rotacao2(int N, int E, float Sen, float Cos){
     float** M = this->Identidade(N);
     float S = Sen;
     float C = Cos;
@@ -289,12 +289,12 @@ float** Operacoes::RotacaoArb(int N, float A, float* V){
     L=sqrt(aux);
     S = V[1]/L;
     C = V[2]/L;
-    Rx =this->Rotacao2(N,0,A,S,C);
+    Rx =this->Rotacao2(N,0,S,C);
     //printf("\nRotacao em x\n");imp(N,N,Rx);
     H = this->NormaVetor(N,V);
     S = V[0]/H;
     C = L/H;
-    Ry = this->Rotacao2(N,1,A,S,C);
+    Ry = this->Rotacao2(N,1,S,C);
     Ry = this->Transposta(N,N,Ry);
     //printf("\nRotacao em y-\n");imp(N,N,Ry);
     Rz = Rotacao(N,2,A);

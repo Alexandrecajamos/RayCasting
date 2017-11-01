@@ -29,7 +29,7 @@ public:
     float** Translacao(int N, float* V);
     float** EspelhoArb(int N, float** V);
     float** Rotacao(int N, int E,float A);
-    float** Rotacao2(int N, int E,float A, float Sen, float Cos);
+    float** Rotacao2(int N, int E, float Sen, float Cos);
     float** RotacaoArb(int N, float A, float* V);
     float** RQ(float A, float* V);
 };

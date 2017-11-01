@@ -36,7 +36,8 @@ SOURCES += \
     luz.cpp \
     observador.cpp \
     objeto.cpp \
-    camera.cpp
+    camera.cpp \
+    cenario.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -50,7 +51,8 @@ HEADERS += \
     luz.h \
     observador.h \
     objeto.h \
-    camera.h
+    camera.h \
+    cenario.h
 
 FORMS += \
         mainwindow.ui

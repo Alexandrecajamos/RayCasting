@@ -9,6 +9,7 @@
 #include "objeto.h"
 #include "camera.h"
 #include "luz.h"
+#include "cenario.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -39,8 +40,9 @@ void MainWindow::Render(int sizeX, int sizeY){
     Point Eye(25,25,25);
     Point LA(0,0,0);
     Point VUp(0,25,0);
-    Observador Obs(Eye,LA,VUp);
-    Camera Cam(0.5,0.5,-0.7,sizeX,sizeY,Obs);
+    Observador *Obs = new Observador(Eye,LA,VUp);
+    Camera *Cam = new Camera(0.5,0.5,-0.7,sizeX,sizeY,*Obs);
+    Cenario scene(Obs, Cam);
 
     Objeto *obj = new Objeto();
     obj->addPoint(0,0,0);
@@ -63,50 +65,53 @@ void MainWindow::Render(int sizeX, int sizeY){
     obj->addFace(3,0,2,M2);
     obj->addFace(0,3,1,M3);
     obj->addFace(3,1,2, M4);
+
+    scene.addObjeto(obj);
+
     Operacoes Op;
     float **A = Op.Rotacao(3,0,90);
-    float** WC = Obs.Word_Cam();
+    float** WC = Obs->Word_Cam();
 
-    obj->Transforoma(A);
-
-    obj->Transforoma(WC);
+    scene.Objetos.at(0)->Transforoma(A);
+    scene.Word_Cam(WC);
+    //obj->Transforoma(WC);
     obj->calc_Esfera();
 
     RGB RL(0.7,0.7,0.7);
     Point *P = new Point(-200,35,175);
-    luz Luz(RL,P);
-
+    luz* Luz = new luz(RL,P);
+    scene.addFonte(Luz);
     //Ray Casting :
 
     for( int i=0; i<sizeX; i++)
     {
 
-        float Yi= (Cam.h/2)-(Cam.DY/2)-(i*Cam.DY);
+        float Yi= (scene.Cam->h/2)-(scene.Cam->DY/2)-(i*scene.Cam->DY);
         for( int j=0; j<sizeY; j++ )
         {
-            float Xj = (-Cam.w/2)+(Cam.DX/2)+(j*Cam.DX);
+            float Xj = (-scene.Cam->w/2)+(scene.Cam->DX/2)+(j*scene.Cam->DX);
             float t=0;
-            Point px(Xj,Yi,Cam.d);
-            int ind;
-            t = obj->Inter(px, &ind);//obj->faces.at(0)->Inter(px);
-            //Point n = obj->faces.at(ind)->calcNormal();
+            Point px(Xj,Yi,scene.Cam->d);
+            int iFace;
+            int iObj;
+            t = scene.Inter(px,iObj,iFace);
 
             if(t != -1 && t>1){
 
                 Point Pint = px;
                 Pint.operator *=(t);
 
-                Face* F = obj->faces.at(ind);
+                Face* F = scene.Objetos.at(iObj)->faces.at(iFace); //obj->faces.at(ind);
 
                 Point nFace = F->calcNormal();
                 nFace.normalize();
-                Point Fonte = (*Luz.P);
+                Point Fonte = (*Luz->P);
                 // Já que não estou transformando a posição da luz W_to_Cam;
                 Fonte.operator -=(Pint);
                 Fonte.normalize();
                 float xDif = nFace.ProdutoEscalar(Fonte);
 
-                Point v(0,0,0); // = Obs.Pos;
+                Point v =(*scene.fontes_luminosas.at(0)->P);
                 v.operator -=(Pint);
                 v.normalize();
                 Point r = nFace;
@@ -117,9 +122,9 @@ void MainWindow::Render(int sizeX, int sizeY){
                 xEsp=pow(xEsp,F->M->m);
 
 
-                RGB A(F->M->A.R*Luz.F.R,F->M->A.G*Luz.F.G,F->M->A.B*Luz.F.B);
-                RGB D(F->M->D.R*(Luz.F.R*xDif),F->M->D.G*(Luz.F.G*xDif),F->M->D.B*(Luz.F.B*xDif));
-                RGB E (F->M->E.R*(Luz.F.R*xEsp),F->M->E.G*(Luz.F.G*xEsp),F->M->E.B*(Luz.F.B*xEsp));
+                RGB A(F->M->A.R*Luz->F.R,F->M->A.G*Luz->F.G,F->M->A.B*Luz->F.B);
+                RGB D(F->M->D.R*(Luz->F.R*xDif),F->M->D.G*(Luz->F.G*xDif),F->M->D.B*(Luz->F.B*xDif));
+                RGB E (F->M->E.R*(Luz->F.R*xEsp),F->M->E.G*(Luz->F.G*xEsp),F->M->E.B*(Luz->F.B*xEsp));
 
                 float rrr = A.R + D.R + E.R;
                 float ggg = A.G + D.G + E.G;

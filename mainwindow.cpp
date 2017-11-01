@@ -31,7 +31,9 @@ MainWindow::MainWindow(QWidget *parent) :
     Observador *Obs = new Observador(Eye,LA,VUp);
     float** WC = Obs->Word_Cam();
     Camera *Cam = new Camera(0.5,0.5,-0.7,sizeX,sizeY,*Obs);
-    Cenario* scene = new Cenario(Obs, Cam);
+    RGB* Bg = new RGB(0.22,0.22,0.22);//(0.73,1,1);
+
+    Cenario* scene = new Cenario(Obs, Cam, Bg);
 
     RGB C(0.5,0.5,0.5);
     RGB C2(0.3295,0.5451,0.3295);
@@ -85,7 +87,7 @@ MainWindow::MainWindow(QWidget *parent) :
     Operacoes Op;
     float v[4]={20,20,0.5,1};
     float **A = Op.Escala(4,v);//Op.Rotacao(3,1,90);
-    float **R = Op.Rotacao(3,1,-35);
+    float **R = Op.Rotacao(3,2,-15);
 
     scene->Objetos.at(0)->Transforoma(A);
     scene->Objetos.at(0)->Transforoma(R);

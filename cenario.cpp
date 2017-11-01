@@ -5,9 +5,10 @@ Cenario::Cenario()
 
 }
 
-Cenario::Cenario(Observador *_Obs, Camera *_Cam){
+Cenario::Cenario(Observador *_Obs, Camera *_Cam, RGB *_BG){
     this->Obs=_Obs;
     this->Cam=_Cam;
+    this->BG=_BG;
 }
 
 void Cenario::addObjeto(Objeto *O){
@@ -58,7 +59,7 @@ float Cenario::Inter(Point Pij, int &Obj, int &Face){
 }
 
 RGB* Cenario::Ray_Pix_Ilm(Point px){
-    RGB* RayPix = new RGB(0.73,1,1); //Inicializa com background color;
+    RGB* RayPix = new RGB(this->BG->R, this->BG->G, this->BG->B); //(0.73,1,1); //Inicializa com background color;
 
     int iObj,iFace;
     float t = this->Inter(px, iObj,iFace);

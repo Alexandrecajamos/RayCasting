@@ -9,6 +9,7 @@ Objeto::Objeto()
 }
 
 
+
 void Objeto::addPoint(float x, float y, float z){
     Point *p = new Point(x,y,z);
     this->points.push_back(p);
@@ -98,7 +99,28 @@ void Objeto::Transforoma(float **A){
 
 }
 
+std::string readFile(char* Cam){
+    std::ifstream ifs(Cam);
+    return std::string((std::istreambuf_iterator<char>(ifs)),
+                  (std::istreambuf_iterator<char>()));
+}
 
+
+
+Objeto::Objeto(char *Caminho){
+    std::string obj = readFile(Caminho);
+
+    for(int i=0; i<obj.length();i++){
+        if(obj.at(i)=='v'){
+            std::string temp;
+            int k=(i+2);
+            while(obj.at(k)!= ';')
+                temp.at(k)=obj[k];
+
+        }
+    }
+
+}
 /*
 void Objeto::addFace(Point P1, Point P2, Point P3, Material M){
     Face *F = new Face(P1,P2,P3, M);

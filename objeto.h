@@ -1,18 +1,19 @@
 #ifndef OBJETO_H
 #define OBJETO_H
 #include<vector>
-
-
+#include "stdio.h"
 #include "v3.h"
 #include "face.h"
 #include "esfera.h"
 #include "operacoes.h"
 #include "material.h"
+#include <fstream>
 
 class Objeto
 {
 public:
     Objeto();
+    Objeto(char* Caminho);
         //void addPoint(Point P);
         //void addFace(Point p1, Point p2, Point p3, Material M);
         //void addFace2(Face F);

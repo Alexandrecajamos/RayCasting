@@ -1,7 +1,7 @@
 #ifndef LUZ_H
 #define LUZ_H
 #include "rgb.h"
-#include "point.h"
+#include "v3.h"
 
 class luz
 {

@@ -1,6 +1,6 @@
 #ifndef ARESTA_H
 #define ARESTA_H
-#include "point.h"
+#include "v3.h"
 
 class Aresta
 {

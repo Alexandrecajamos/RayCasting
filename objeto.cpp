@@ -63,6 +63,7 @@ float Objeto::Inter(Point Pint, int *idx){
     float t = -1;
     float Menor_T=999;
     int cont=0;
+    this->calc_Esfera();
     if(this->Esf.Interseccao(Pint)){
         for(std::vector<Face*>::iterator i = this->faces.begin(); i!= this->faces.end(); i++){
 

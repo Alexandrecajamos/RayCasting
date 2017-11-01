@@ -1,6 +1,6 @@
 #ifndef OBSERVADOR_H
 #define OBSERVADOR_H
-#include "point.h"
+#include "v3.h"
 #include "operacoes.h"
 
 class Observador

@@ -3,7 +3,7 @@
 #include<vector>
 
 
-#include "point.h"
+#include "v3.h"
 #include "face.h"
 #include "esfera.h"
 #include "operacoes.h"

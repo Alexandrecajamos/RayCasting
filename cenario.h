@@ -5,7 +5,8 @@
 #include "objeto.h"
 #include "camera.h"
 #include "luz.h"
-#include "point.h"
+#include "v3.h"
+#include "rgb.h"
 
 class Cenario
 {
@@ -16,6 +17,7 @@ public:
     void addFonte(luz *L);
     void Word_Cam(float **A);
     float Inter(Point Pij, int &iObj, int &iFace);
+    RGB* Ray_Pix_Ilm(Point Pij);
 
     Observador *Obs;
     Camera *Cam;

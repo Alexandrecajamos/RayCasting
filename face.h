@@ -1,6 +1,6 @@
 #ifndef FACE_H
 #define FACE_H
-#include "point.h"
+#include "v3.h"
 #include "material.h"
 class Face
 {

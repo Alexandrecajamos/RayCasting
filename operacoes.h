@@ -2,7 +2,7 @@
 #define OPERACOES_H
 #include <stdio.h>
 #include <stdlib.h>
-#include <point.h>
+#include <v3.h>
 
 class Operacoes
 {

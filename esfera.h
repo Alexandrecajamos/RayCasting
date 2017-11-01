@@ -1,6 +1,6 @@
 #ifndef ESFERA_H
 #define ESFERA_H
-#include "point.h"
+#include "v3.h"
 
 class Esfera
 {

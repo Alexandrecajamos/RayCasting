@@ -27,7 +27,6 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     esfera.cpp \
-    point.cpp \
     rgb.cpp \
     material.cpp \
     aresta.cpp \
@@ -37,12 +36,12 @@ SOURCES += \
     observador.cpp \
     objeto.cpp \
     camera.cpp \
-    cenario.cpp
+    cenario.cpp \
+    v3.cpp
 
 HEADERS += \
         mainwindow.h \
     esfera.h \
-    point.h \
     rgb.h \
     material.h \
     aresta.h \
@@ -52,7 +51,8 @@ HEADERS += \
     observador.h \
     objeto.h \
     camera.h \
-    cenario.h
+    cenario.h \
+    v3.h
 
 FORMS += \
         mainwindow.ui

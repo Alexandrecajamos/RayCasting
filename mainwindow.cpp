@@ -24,9 +24,9 @@ MainWindow::MainWindow(QWidget *parent) :
     srand (time(NULL));
 
 
-    Point Eye(10,10,10);
+    Point Eye(25,25,25);
     Point LA(0,0,0);
-    Point VUp(0,10,0);
+    Point VUp(0,50,0);
 
     Observador *Obs = new Observador(Eye,LA,VUp);
     float** WC = Obs->Word_Cam();
@@ -34,17 +34,15 @@ MainWindow::MainWindow(QWidget *parent) :
     Cenario* scene = new Cenario(Obs, Cam);
 
     RGB C(0.5,0.5,0.5);
-    RGB C2(0.8,0.01,0.01);
-    RGB C3(0.01,0.8,0.01);
-    RGB C4(0.01,0.01,0.8);
+    RGB C2(0.3295,0.5451,0.3295);
+    RGB C3(0.5450,0.3529,0.1686);
     RGB C5(0.5,0.5,0.5);
 
     Material *M = new Material(C,C,C,0.5);
     Material *M2 = new Material(C2,C2,C2,0.5);
     Material *M3 = new Material(C3,C3,C3,0.5);
-    Material *M4 = new Material(C4,C4,C4,0.5);
     Material *M5 = new Material(C5,C5,C5,0.5);
-    Material *M6 = new Material(C2,C3,C4,0.5);
+    Material *M6 = new Material(C2,C3,C5,0.5);
 
     /*Tetraedro Regular
     Objeto *obj = new Objeto();
@@ -75,8 +73,8 @@ MainWindow::MainWindow(QWidget *parent) :
     cubo->addFace(1,5,4,M2);
     cubo->addFace(5,1,2,M3);
     cubo->addFace(2,6,5,M3);
-    cubo->addFace(6,2,3,M4);
-    cubo->addFace(3,7,6,M4);
+    cubo->addFace(6,2,3,M3);
+    cubo->addFace(3,7,6,M3);
     cubo->addFace(3,0,4,M5);
     cubo->addFace(4,7,3,M5);
     cubo->addFace(4,5,7,M6);
@@ -85,10 +83,12 @@ MainWindow::MainWindow(QWidget *parent) :
     scene->addObjeto(cubo);
 
     Operacoes Op;
-    float **A = Op.Rotacao(3,1,90);
+    float v[4]={20,20,0.5,1};
+    float **A = Op.Escala(4,v);//Op.Rotacao(3,1,90);
+    float **R = Op.Rotacao(3,1,-35);
 
     scene->Objetos.at(0)->Transforoma(A);
-
+    scene->Objetos.at(0)->Transforoma(R);
     scene->Word_Cam(WC);
 
     RGB RL(0.7,0.7,0.7);

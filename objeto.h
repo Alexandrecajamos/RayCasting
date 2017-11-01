@@ -19,6 +19,7 @@ public:
 
     void addPoint(float x, float y, float z);
     void addFace(int iP1, int iP2, int iP3, Material *M);
+    void addFace2(int iP1, int iP2, int iP3);
     float Inter(Point Pint, int *ind);
     void calc_Esfera();
     // bool Interseccao();

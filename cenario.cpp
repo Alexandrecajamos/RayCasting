@@ -58,7 +58,7 @@ float Cenario::Inter(Point Pij, int &Obj, int &Face){
 }
 
 RGB* Cenario::Ray_Pix_Ilm(Point px){
-    RGB* RayPix = new RGB(0.21,0.21,0.21); //Inicializa com background color;
+    RGB* RayPix = new RGB(0.73,1,1); //Inicializa com background color;
 
     int iObj,iFace;
     float t = this->Inter(px, iObj,iFace);

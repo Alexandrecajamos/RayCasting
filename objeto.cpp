@@ -18,6 +18,12 @@ void Objeto::addFace(int iP1, int iP2, int iP3, Material *M){
     Face *F = new Face(this->points.at(iP1),this->points.at(iP2),this->points.at(iP3),M);
     this->faces.push_back(F);
 }
+
+void Objeto::addFace2(int iP1, int iP2, int iP3){
+    Face *F = new Face(this->points.at(iP1),this->points.at(iP2),this->points.at(iP3));
+    this->faces.push_back(F);
+}
+
 void Objeto::calc_Esfera(){
     float mX=this->points.at(0)->x;
     float mY=this->points.at(0)->y;

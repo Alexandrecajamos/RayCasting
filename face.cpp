@@ -20,6 +20,15 @@ Face::Face(Point *_P1, Point *_P2, Point *_P3, Material *_M){
     this->M =_M;
 }
 
+Face::Face(Point *_P1, Point *_P2, Point *_P3)
+{
+    this->P1=_P1;
+    this->P2=_P2;
+    this->P3=_P3;
+    RGB pad(0.81176,0.81176,0.81176);
+    this->M = new Material(pad,pad,pad,0.5);
+
+}
 Point Face::calcNormal(){
     //float *v = (float *)malloc(sizeof(float)* 3);
     Point p1=*(this->P1);

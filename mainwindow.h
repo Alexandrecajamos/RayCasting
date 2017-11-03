@@ -15,6 +15,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     void Render(int sizeX, int sizeY, Cenario *Scene);
+    void MontaCena(Cenario *Scene);
 
 private:
     Ui::MainWindow *ui;

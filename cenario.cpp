@@ -102,3 +102,63 @@ RGB* Cenario::Ray_Pix_Ilm(Point px){
 
     return RayPix;
 }
+
+
+
+void Cenario::CuboUni(){
+    Objeto *cubo = new Objeto();
+
+    cubo->addPoint(-0.5,-0.5,0.5);
+    cubo->addPoint(0.5,-0.5,0.5);
+    cubo->addPoint(0.5,-0.5,-0.5);
+    cubo->addPoint(-0.5,-0.5,-0.5);
+    cubo->addPoint(-0.5,0.5,0.5);
+    cubo->addPoint(0.5,0.5,0.5);
+    cubo->addPoint(0.5,0.5,-0.5);
+    cubo->addPoint(-0.5,0.5,-0.5);
+
+    cubo->addFace2(0,3,1);
+    cubo->addFace2(1,3,2);
+    cubo->addFace2(4,0,1);
+    cubo->addFace2(1,5,4);
+    cubo->addFace2(5,1,2);
+    cubo->addFace2(2,6,5);
+    cubo->addFace2(6,2,3);
+    cubo->addFace2(3,7,6);
+    cubo->addFace2(3,0,4);
+    cubo->addFace2(4,7,3);
+    cubo->addFace2(4,5,7);
+    cubo->addFace2(5,6,7);
+
+    this->addObjeto(cubo);
+}
+
+void Cenario::CuboUni2(Material *M1,Material *M2,Material *M3,Material *M4,Material *M5,Material *M6) {
+    Objeto *cubo = new Objeto();
+
+    cubo->addPoint(-0.5,-0.5,0.5);
+    cubo->addPoint(0.5,-0.5,0.5);
+    cubo->addPoint(0.5,-0.5,-0.5);
+    cubo->addPoint(-0.5,-0.5,-0.5);
+    cubo->addPoint(-0.5,0.5,0.5);
+    cubo->addPoint(0.5,0.5,0.5);
+    cubo->addPoint(0.5,0.5,-0.5);
+    cubo->addPoint(-0.5,0.5,-0.5);
+
+    cubo->addFace(0,3,1,M1);
+    cubo->addFace(1,3,2,M1);
+    cubo->addFace(4,0,1,M2);
+    cubo->addFace(1,5,4,M2);
+    cubo->addFace(5,1,2,M3);
+    cubo->addFace(2,6,5,M3);
+    cubo->addFace(6,2,3,M4);
+    cubo->addFace(3,7,6,M4);
+    cubo->addFace(3,0,4,M5);
+    cubo->addFace(4,7,3,M5);
+    cubo->addFace(4,5,7,M6);
+    cubo->addFace(5,6,7,M6);
+
+    this->addObjeto(cubo);
+
+
+}

@@ -7,6 +7,7 @@
 #include "luz.h"
 #include "v3.h"
 #include "rgb.h"
+#include "material.h"
 
 class Cenario
 {
@@ -18,7 +19,8 @@ public:
     void Word_Cam(float **A);
     float Inter(Point Pij, int &iObj, int &iFace);
     RGB* Ray_Pix_Ilm(Point Pij);
-
+    void CuboUni();
+    void CuboUni2(Material *M1,Material *M2,Material *M3,Material *M4,Material *M5,Material *M6);
     RGB* BG;
     Observador *Obs;
     Camera *Cam;

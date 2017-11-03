@@ -23,81 +23,17 @@ MainWindow::MainWindow(QWidget *parent) :
     //initialize random seed
     srand (time(NULL));
 
-
     Point Eye(25,25,25);
     Point LA(0,0,0);
     Point VUp(0,50,0);
 
     Observador *Obs = new Observador(Eye,LA,VUp);
-    float** WC = Obs->Word_Cam();
     Camera *Cam = new Camera(0.5,0.5,-0.7,sizeX,sizeY,*Obs);
     RGB* Bg = new RGB(0.22,0.22,0.22);//(0.73,1,1);
 
     Cenario* scene = new Cenario(Obs, Cam, Bg);
 
-    RGB C(0.5,0.5,0.5);
-    RGB C2(0.3295,0.5451,0.3295);
-    RGB C3(0.5450,0.3529,0.1686);
-    RGB C5(0.5,0.5,0.5);
-
-    Material *M = new Material(C,C,C,0.5);
-    Material *M2 = new Material(C2,C2,C2,0.5);
-    Material *M3 = new Material(C3,C3,C3,0.5);
-    Material *M5 = new Material(C5,C5,C5,0.5);
-    Material *M6 = new Material(C2,C3,C5,0.5);
-
-    /*Tetraedro Regular
-    Objeto *obj = new Objeto();
-    obj->addPoint(0,0,0);
-    obj->addPoint(7.071,0,0);
-    obj->addPoint(0,7.071,0);
-    obj->addPoint(0,0,7.071);
-    obj->addFace(0,1,2,M);
-    obj->addFace(3,0,2,M2);
-    obj->addFace(0,3,1,M3);
-    obj->addFace(3,1,2, M4);
-    */
-
-    Objeto *cubo = new Objeto();
-
-    cubo->addPoint(-0.5,-0.5,0.5);
-    cubo->addPoint(0.5,-0.5,0.5);
-    cubo->addPoint(0.5,-0.5,-0.5);
-    cubo->addPoint(-0.5,-0.5,-0.5);
-    cubo->addPoint(-0.5,0.5,0.5);
-    cubo->addPoint(0.5,0.5,0.5);
-    cubo->addPoint(0.5,0.5,-0.5);
-    cubo->addPoint(-0.5,0.5,-0.5);
-
-    cubo->addFace(0,3,1,M);
-    cubo->addFace(1,3,2,M);
-    cubo->addFace(4,0,1,M2);
-    cubo->addFace(1,5,4,M2);
-    cubo->addFace(5,1,2,M3);
-    cubo->addFace(2,6,5,M3);
-    cubo->addFace(6,2,3,M3);
-    cubo->addFace(3,7,6,M3);
-    cubo->addFace(3,0,4,M5);
-    cubo->addFace(4,7,3,M5);
-    cubo->addFace(4,5,7,M6);
-    cubo->addFace(5,6,7,M6);
-
-    scene->addObjeto(cubo);
-
-    Operacoes Op;
-    float v[4]={20,20,0.5,1};
-    float **A = Op.Escala(4,v);//Op.Rotacao(3,1,90);
-    float **R = Op.Rotacao(3,2,-15);
-
-    scene->Objetos.at(0)->Transforoma(A);
-    scene->Objetos.at(0)->Transforoma(R);
-    scene->Word_Cam(WC);
-
-    RGB RL(0.7,0.7,0.7);
-    Point *P = new Point(50,0,50);
-    luz* Luz = new luz(RL,P);
-    scene->addFonte(Luz);
-
+    MontaCena(scene);
     Render(sizeX,sizeY, scene);
 
 }
@@ -134,4 +70,55 @@ void MainWindow::Render(int sizeX, int sizeY,Cenario *scene){
     graphic->addPixmap( QPixmap::fromImage( image ) );
 
     ui->graphicsView->setScene(graphic);
+}
+void MainWindow::MontaCena(Cenario *scene){
+
+
+    /*Tetraedro Regular
+    Objeto *obj = new Objeto();
+    obj->addPoint(0,0,0);
+    obj->addPoint(7.071,0,0);
+    obj->addPoint(0,7.071,0);
+    obj->addPoint(0,0,7.071);
+    obj->addFace(0,1,2,M);
+    obs->addFace(3,0,2,M2);
+    obj->addFace(0,3,1,M3);
+    obj->addFace(3,1,2, M4);
+    */
+
+    RGB C(0.5,0.5,0.5);
+    RGB C2(0.3295,0.5451,0.3295);
+    RGB C3(0.5450,0.3529,0.1686);
+    RGB C5(0.5,0.5,0.5);
+
+  //  Material *M1 = new Material(C,C,C,0.5);
+    Material *M2 = new Material(C2,C2,C2,0.5);
+    Material *M3 = new Material(C3,C3,C3,0.5);
+  //  Material *M5 = new Material(C5,C5,C5,0.5);
+   // Material *M6 = new Material(C2,C3,C5,0.5);
+    scene->CuboUni2(M3,M2,M3,M3,M3,M3);
+
+    Operacoes Op;
+    float v[4]={20,20,0.5,1};
+    float **A = Op.Escala(4,v);
+    float **R = Op.Rotacao(3,2,90);
+
+
+    //scene->addObjeto(cubo);
+    //scene->CuboUni();
+
+    scene->Objetos.at(0)->Transforoma(A);
+    //scene->Objetos.at(1)->Transforoma(A);
+    scene->Objetos.at(0)->Transforoma(R);
+
+
+    RGB RL(0.7,0.7,0.7);
+    Point *P = new Point(50,0,50);
+    luz* Luz = new luz(RL,P);
+    scene->addFonte(Luz);
+
+    float** WC = scene->Obs->Word_Cam();
+
+    scene->Word_Cam(WC);
+
 }

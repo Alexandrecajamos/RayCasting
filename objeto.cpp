@@ -104,9 +104,6 @@ std::string readFile(char* Cam){
     return std::string((std::istreambuf_iterator<char>(ifs)),
                   (std::istreambuf_iterator<char>()));
 }
-
-
-
 Objeto::Objeto(char *Caminho){
     std::string obj = readFile(Caminho);
 
@@ -121,6 +118,15 @@ Objeto::Objeto(char *Caminho){
     }
 
 }
+
+Objeto* Objeto::Copia(){
+    Objeto* novo = new Objeto();
+    for(std::vector<Point*>::iterator i = this->points.begin(); i!= this->points.end(); i++)
+        novo->addPoint((*i)->x,(*i)->y,(*i)->z);
+    return novo;
+}
+
+
 /*
 void Objeto::addFace(Point P1, Point P2, Point P3, Material M){
     Face *F = new Face(P1,P2,P3, M);

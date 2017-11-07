@@ -23,9 +23,9 @@ MainWindow::MainWindow(QWidget *parent) :
     //initialize random seed
     srand (time(NULL));
 
-    Point Eye(25,25,25);
+    Point Eye(5,50,5);
     Point LA(0,0,0);
-    Point VUp(0,50,0);
+    Point VUp(50,0,0);
 
     Observador *Obs = new Observador(Eye,LA,VUp);
     Camera *Cam = new Camera(0.5,0.5,-0.7,sizeX,sizeY,*Obs);
@@ -85,7 +85,7 @@ void MainWindow::MontaCena(Cenario *scene){
     obj->addFace(0,3,1,M3);
     obj->addFace(3,1,2, M4);
     */
-
+/*
     RGB C(0.5,0.5,0.5);
     RGB C2(0.3295,0.5451,0.3295);
     RGB C3(0.5450,0.3529,0.1686);
@@ -110,10 +110,18 @@ void MainWindow::MontaCena(Cenario *scene){
     scene->Objetos.at(0)->Transforoma(A);
     //scene->Objetos.at(1)->Transforoma(A);
     scene->Objetos.at(0)->Transforoma(R);
+*/
 
+    RGB C3(0.5450,0.3529,0.1686);
+    Material *M3 = new Material(C3,C3,C3,0.5);
+    Operacoes Op;
+    scene->Prisma_Triangular_Uni2(M3, M3,M3,M3,M3);
+    float v[4]={10,10,10,1};
+    float **A = Op.Escala(4,v);
+    scene->Objetos.at(0)->Transforoma(A);
 
     RGB RL(0.7,0.7,0.7);
-    Point *P = new Point(50,0,50);
+    Point *P = new Point(50,0,0);
     luz* Luz = new luz(RL,P);
     scene->addFonte(Luz);
 

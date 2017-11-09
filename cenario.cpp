@@ -17,11 +17,16 @@ void Cenario::addObjeto(Objeto *O){
 void Cenario::addFonte(luz *L){
     this->fontes_luminosas.push_back(L);
 }
+void Cenario::addSpot(Spot *S){
+    this->fontes_spot.push_back(S);
+}
+void Cenario::addFonte2(Point *P, RGB I){
+    luz* L = new luz(I,P);
+    this->fontes_luminosas.push_back(L);
+}
 void Cenario::Word_Cam(float **A){
 
     Operacoes Op;
-
-
     for(std::vector<Objeto*>::iterator i = this->Objetos.begin(); i!= this->Objetos.end(); i++){
         (*i)->Transforoma(A);
     }
@@ -30,11 +35,21 @@ void Cenario::Word_Cam(float **A){
         Point *P = (*i)->P;
         float** V = Op.VetorColuna(P);
         float** r = Op.mult(4,4,1,A,V);
-        P->x=r[0][0];
-        P->y=r[1][0];
-        P->z=r[2][0];
+        (*i)->P->x=r[0][0];
+        (*i)->P->y=r[1][0];
+        (*i)->P->z=r[2][0];
 
     }
+
+    for(std::vector<Spot*>::iterator i = this->fontes_spot.begin();i!=this->fontes_spot.end();i++){
+        Point *P = (*i)->Luz->P;
+        float** V = Op.VetorColuna(P);
+        float** r = Op.mult(4,4,1,A,V);
+        (*i)->Luz->P->x=r[0][0];
+        (*i)->Luz->P->y=r[1][0];
+        (*i)->Luz->P->z=r[2][0];
+    }
+
     Point *temp = new Point(Obs->Pos.x, Obs->Pos.y, Obs->Pos.z);
     float** obs = Op.VetorColuna(temp);
     float** r = Op.mult(4,4,1,A,obs);
@@ -65,9 +80,8 @@ float Cenario::Inter(Point Pij, int &Obj, int &Face){
     return Tint;
 
 }
-
 RGB* Cenario::Ray_Pix_Ilm(Point px){
-    RGB* RayPix = new RGB(this->BG->R, this->BG->G, this->BG->B); //(0.73,1,1); //Inicializa com background color;
+    RGB* RayPix = new RGB(this->BG->R, this->BG->G, this->BG->B); //Inicializa com background color;
 
     int iObj,iFace;
     float t = this->Inter(px, iObj,iFace);
@@ -82,6 +96,7 @@ RGB* Cenario::Ray_Pix_Ilm(Point px){
         nFace.normalize();
 
         RGB A(F->M->A.R*this->Amb->R,F->M->A.G*this->Amb->G,F->M->A.B*this->Amb->B);
+
         float Dr=0, Dg=0, Db=0, Er=0, Eg=0, Eb=0;
 
         for(std::vector<luz*>::iterator i=this->fontes_luminosas.begin();i!=fontes_luminosas.end();i++){
@@ -115,7 +130,7 @@ RGB* Cenario::Ray_Pix_Ilm(Point px){
         }
 
         RGB D(F->M->D.R*(Dr),F->M->D.G*(Dg),F->M->D.B*(Db));
-        RGB E (F->M->E.R*(Er),F->M->E.G*(Eg),F->M->E.B*(Eb));
+        RGB E(F->M->E.R*(Er),F->M->E.G*(Eg),F->M->E.B*(Eb));
 
         RayPix->R = A.R + D.R + E.R;
         RayPix->G = A.G + D.G + E.G;
@@ -126,9 +141,6 @@ RGB* Cenario::Ray_Pix_Ilm(Point px){
 
     return RayPix;
 }
-
-
-
 void Cenario::CuboUni(){
     Objeto *cubo = new Objeto();
 
@@ -156,7 +168,6 @@ void Cenario::CuboUni(){
 
     this->addObjeto(cubo);
 }
-
 void Cenario::CuboUni2(Material *M1,Material *M2,Material *M3,Material *M4,Material *M5,Material *M6) {
     Objeto *cubo = new Objeto();
 
@@ -186,7 +197,6 @@ void Cenario::CuboUni2(Material *M1,Material *M2,Material *M3,Material *M4,Mater
 
 
 }
-
 void Cenario::Prisma_Triangular_Uni(){
     Objeto *prism = new Objeto();
     prism->addPoint(-0.5,0,0.5);
@@ -209,7 +219,6 @@ void Cenario::Prisma_Triangular_Uni(){
     this->addObjeto(prism);
 
 }
-
 void Cenario::Prisma_Triangular_Uni2(Material *M1,Material *M2,Material *M3,Material *M4,Material *M5){
     Objeto *prism = new Objeto();
     prism->addPoint(-0.5,0,0.5);

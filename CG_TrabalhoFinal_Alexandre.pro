@@ -37,7 +37,8 @@ SOURCES += \
     objeto.cpp \
     camera.cpp \
     cenario.cpp \
-    v3.cpp
+    v3.cpp \
+    spot.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -52,7 +53,8 @@ HEADERS += \
     objeto.h \
     camera.h \
     cenario.h \
-    v3.h
+    v3.h \
+    spot.h
 
 FORMS += \
         mainwindow.ui

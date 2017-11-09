@@ -114,19 +114,20 @@ void MainWindow::MontaCena(Cenario *scene){
 
     RGB RL(1,0,0);
     Point *P = new Point(5,5,5);
-    luz* Luz = new luz(RL,P);
-    scene->addFonte(Luz);
+    scene->addFonte2(P,RL);
+
     RGB L2(0,1,0);
     Point *P2 = new Point(5,5,5);
-    luz* l2 = new luz(L2, P2);
-    scene->addFonte(l2);
+    scene->addFonte2(P2, L2);
+
     RGB L3(0,0,1);
     Point *P3 = new Point(5,5,5);
-    luz* l3 = new luz(L3, P3);
-    scene->addFonte(l3);
+    scene->addFonte2(P3, L3);
 
     float** WC = scene->Obs->Word_Cam();
 
     scene->Word_Cam(WC);
+
+
 
 }

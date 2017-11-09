@@ -20,18 +20,19 @@ MainWindow::MainWindow(QWidget *parent) :
     int sizeX = 650;
     int sizeY = 650;
 
+
     //initialize random seed
     srand (time(NULL));
 
-    Point Eye(5,50,5);
+    Point Eye(5,0,0);
     Point LA(0,0,0);
-    Point VUp(50,0,0);
+    Point VUp(0,50,0);
 
     Observador *Obs = new Observador(Eye,LA,VUp);
     Camera *Cam = new Camera(0.5,0.5,-0.7,sizeX,sizeY,*Obs);
     RGB* Bg = new RGB(0.22,0.22,0.22);//(0.73,1,1);
-
-    Cenario* scene = new Cenario(Obs, Cam, Bg);
+    RGB* Amb = new RGB(0.2,0.2,0.2);
+    Cenario* scene = new Cenario(Obs, Cam, Amb, Bg);
 
     MontaCena(scene);
     Render(sizeX,sizeY, scene);
@@ -58,8 +59,10 @@ void MainWindow::Render(int sizeX, int sizeY,Cenario *scene){
         {
             float Xj = (-scene->Cam->w/2)+(scene->Cam->DX/2)+(j*scene->Cam->DX);
             Point px(Xj,Yi,scene->Cam->d);
-            RGB* print = scene->Ray_Pix_Ilm(px);
-            image.setPixel( i, j, qRgb(print->R*255, print->G*255, print->B*255));
+                RGB* print = scene->Ray_Pix_Ilm(px);
+                image.setPixel( i, j, qRgb(print->R*255, print->G*255, print->B*255));
+
+
 
         }
     }
@@ -97,33 +100,30 @@ void MainWindow::MontaCena(Cenario *scene){
   //  Material *M5 = new Material(C5,C5,C5,0.5);
    // Material *M6 = new Material(C2,C3,C5,0.5);
     scene->CuboUni2(M3,M2,M3,M3,M3,M3);
-
-    Operacoes Op;
-    float v[4]={20,20,0.5,1};
-    float **A = Op.Escala(4,v);
-    float **R = Op.Rotacao(3,2,90);
-
-
-    //scene->addObjeto(cubo);
-    //scene->CuboUni();
-
-    scene->Objetos.at(0)->Transforoma(A);
-    //scene->Objetos.at(1)->Transforoma(A);
-    scene->Objetos.at(0)->Transforoma(R);
 */
 
     RGB C3(0.5450,0.3529,0.1686);
     Material *M3 = new Material(C3,C3,C3,0.5);
-    Operacoes Op;
-    scene->Prisma_Triangular_Uni2(M3, M3,M3,M3,M3);
-    float v[4]={10,10,10,1};
-    float **A = Op.Escala(4,v);
-    scene->Objetos.at(0)->Transforoma(A);
+    //Operacoes Op;
+    scene->CuboUni2(M3,M3,M3,M3,M3,M3);
 
-    RGB RL(0.7,0.7,0.7);
-    Point *P = new Point(50,0,0);
+    //scene->Prisma_Triangular_Uni2(M3, M3,M3,M3,M3);
+   // float v[4]={10,10,10,1};
+    //float **A = Op.Escala(4,v);
+   // scene->Objetos.at(0)->Transforoma(A);
+
+    RGB RL(1,0,0);
+    Point *P = new Point(5,5,5);
     luz* Luz = new luz(RL,P);
     scene->addFonte(Luz);
+    RGB L2(0,1,0);
+    Point *P2 = new Point(5,5,5);
+    luz* l2 = new luz(L2, P2);
+    scene->addFonte(l2);
+    RGB L3(0,0,1);
+    Point *P3 = new Point(5,5,5);
+    luz* l3 = new luz(L3, P3);
+    scene->addFonte(l3);
 
     float** WC = scene->Obs->Word_Cam();
 

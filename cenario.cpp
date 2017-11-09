@@ -5,25 +5,28 @@ Cenario::Cenario()
 
 }
 
-Cenario::Cenario(Observador *_Obs, Camera *_Cam, RGB *_BG){
+Cenario::Cenario(Observador *_Obs, Camera *_Cam, RGB*_Amb, RGB *_BG){
     this->Obs=_Obs;
     this->Cam=_Cam;
+    this->Amb=_Amb;
     this->BG=_BG;
 }
-
 void Cenario::addObjeto(Objeto *O){
     this->Objetos.push_back(O);
 }
-
 void Cenario::addFonte(luz *L){
     this->fontes_luminosas.push_back(L);
 }
 void Cenario::Word_Cam(float **A){
+
+    Operacoes Op;
+
+
     for(std::vector<Objeto*>::iterator i = this->Objetos.begin(); i!= this->Objetos.end(); i++){
         (*i)->Transforoma(A);
     }
     for(std::vector<luz*>::iterator i = this->fontes_luminosas.begin();i!= this->fontes_luminosas.end();i++){
-        Operacoes Op;
+
         Point *P = (*i)->P;
         float** V = Op.VetorColuna(P);
         float** r = Op.mult(4,4,1,A,V);
@@ -32,8 +35,13 @@ void Cenario::Word_Cam(float **A){
         P->z=r[2][0];
 
     }
+    Point *temp = new Point(Obs->Pos.x, Obs->Pos.y, Obs->Pos.z);
+    float** obs = Op.VetorColuna(temp);
+    float** r = Op.mult(4,4,1,A,obs);
+    Obs->Pos.x=r[0][0];
+    Obs->Pos.y=r[1][0];
+    Obs->Pos.z=r[2][0];
 }
-
 float Cenario::Inter(Point Pij, int &Obj, int &Face){
 
     float Tint=999;
@@ -65,38 +73,54 @@ RGB* Cenario::Ray_Pix_Ilm(Point px){
     float t = this->Inter(px, iObj,iFace);
 
     if(t!=-1 && t>1){
+
         Point Pint = px;
         Pint.operator *=(t);
 
-        Face* F = this->Objetos.at(iObj)->faces.at(iFace); //obj->faces.at(ind);
-        luz* Luz = this->fontes_luminosas.at(0);
-
+        Face* F = this->Objetos.at(iObj)->faces.at(iFace);
         Point nFace = F->calcNormal();
         nFace.normalize();
-        Point Fonte = (*Luz->P);
-        // Já que não estou transformando a posição da luz W_to_Cam;
-        Fonte.operator -=(Pint);
-        Fonte.normalize();
-        float xDif = nFace.ProdutoEscalar(Fonte);
 
-        Point v =*Luz->P;
-        v.operator -=(Pint);
-        v.normalize();
-        Point r = nFace;
-        r.operator *=(2*xDif);
-        r.operator -=(Fonte);
-        r.normalize();
-        float xEsp=v.ProdutoEscalar(r);
-        xEsp=pow(xEsp,F->M->m);
+        RGB A(F->M->A.R*this->Amb->R,F->M->A.G*this->Amb->G,F->M->A.B*this->Amb->B);
+        float Dr=0, Dg=0, Db=0, Er=0, Eg=0, Eb=0;
 
+        for(std::vector<luz*>::iterator i=this->fontes_luminosas.begin();i!=fontes_luminosas.end();i++){
 
-        RGB A(F->M->A.R*Luz->F.R,F->M->A.G*Luz->F.G,F->M->A.B*Luz->F.B);
-        RGB D(F->M->D.R*(Luz->F.R*xDif),F->M->D.G*(Luz->F.G*xDif),F->M->D.B*(Luz->F.B*xDif));
-        RGB E (F->M->E.R*(Luz->F.R*xEsp),F->M->E.G*(Luz->F.G*xEsp),F->M->E.B*(Luz->F.B*xEsp));
+            luz* Luz = (*i);
+            Point Fonte = (*Luz->P);
+            Fonte.operator -=(Pint);
+            Fonte.normalize();
+            float xDif = nFace.ProdutoEscalar(Fonte);
+
+            Point v = this->Obs->Pos;  //Luz->P;
+            v.operator -=(Pint);
+            v.normalize();
+            Point r = nFace;
+            r.operator *=(2*xDif);
+            r.operator -=(Fonte);
+            r.normalize();
+            float xEsp=v.ProdutoEscalar(r);
+            xEsp=pow(xEsp,F->M->m);
+
+            if(xDif > 0){
+                Dr += Luz->F.R*xDif;
+                Dg += Luz->F.G*xDif;
+                Db += Luz->F.B*xDif;
+            }
+            if(xEsp > 0){
+                Er += Luz->F.R*xEsp;
+                Eg += Luz->F.G*xEsp;
+                Eb += Luz->F.B*xEsp;
+            }
+        }
+
+        RGB D(F->M->D.R*(Dr),F->M->D.G*(Dg),F->M->D.B*(Db));
+        RGB E (F->M->E.R*(Er),F->M->E.G*(Eg),F->M->E.B*(Eb));
 
         RayPix->R = A.R + D.R + E.R;
         RayPix->G = A.G + D.G + E.G;
         RayPix->B = A.B + D.B + E.B;
+
         RayPix->Normalize();
     }
 

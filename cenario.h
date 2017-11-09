@@ -13,7 +13,7 @@ class Cenario
 {
 public:
     Cenario();
-    Cenario(Observador *_Obs, Camera *_Cam, RGB* BackGround);
+    Cenario(Observador *_Obs, Camera *_Cam,RGB* Ambiente ,RGB* BackGround);
     void addObjeto(Objeto *O);
     void addFonte(luz *L);
     void Word_Cam(float **A);
@@ -23,6 +23,7 @@ public:
     void CuboUni2(Material *M1,Material *M2,Material *M3,Material *M4,Material *M5,Material *M6);
     void Prisma_Triangular_Uni();
     void Prisma_Triangular_Uni2(Material *M1,Material *M2,Material *M3,Material *M4,Material *M5);
+    RGB* Amb;
     RGB* BG;
     Observador *Obs;
     Camera *Cam;

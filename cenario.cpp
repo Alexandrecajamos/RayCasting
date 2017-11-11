@@ -1,5 +1,5 @@
 #include "cenario.h"
-
+#define PI 3.14159265
 Cenario::Cenario()
 {
 
@@ -56,6 +56,7 @@ void Cenario::Word_Cam(float **A){
     Obs->Pos.x=r[0][0];
     Obs->Pos.y=r[1][0];
     Obs->Pos.z=r[2][0];
+
 }
 float Cenario::Inter(Point Pij, int &Obj, int &Face){
 
@@ -87,10 +88,8 @@ RGB* Cenario::Ray_Pix_Ilm(Point px){
     float t = this->Inter(px, iObj,iFace);
 
     if(t!=-1 && t>1){
-
         Point Pint = px;
         Pint.operator *=(t);
-
         Face* F = this->Objetos.at(iObj)->faces.at(iFace);
         Point nFace = F->calcNormal();
         nFace.normalize();
@@ -129,17 +128,172 @@ RGB* Cenario::Ray_Pix_Ilm(Point px){
             }
         }
 
+        for(std::vector<Spot*>::iterator i=this->fontes_spot.begin();i!=fontes_spot.end();i++){
+
+            luz* Luz = (*i)->Luz;
+            Point Fonte = (*Luz->P);
+            Fonte.operator -=(Pint);
+            Fonte.normalize();
+
+            Point *D = (*i)->Direcao;
+            D->x = -D->x; D->y = -D->y; D->z = -D->z;
+            float cos = Fonte.ProdutoEscalar(*D);
+
+            if(cos>0){
+
+                float Teta = acos (cos) * 180.0 / PI;
+
+                if(Teta < (*i)->Abertura){
+
+                    float R = Luz->F.R*cos;
+                    float G = Luz->F.G*cos;
+                    float B = Luz->F.B*cos;
+
+                    float xDif = nFace.ProdutoEscalar(Fonte);
+
+                    Point v = this->Obs->Pos;  //Luz->P;
+                    v.operator -=(Pint);
+                    v.normalize();
+                    Point r = nFace;
+                    r.operator *=(2*xDif);
+                    r.operator -=(Fonte);
+                    r.normalize();
+                    float xEsp=v.ProdutoEscalar(r);
+                    xEsp=pow(xEsp,F->M->m);
+
+                    if(xDif > 0){
+                        Dr += R*xDif;
+                        Dg += G*xDif;
+                        Db += B*xDif;
+                    }
+                    if(xEsp > 0){
+                        Er += R*xEsp;
+                        Eg += G*xEsp;
+                        Eb += B*xEsp;
+                    }
+                }
+            }
+
+
+
+        }
+
+
         RGB D(F->M->D.R*(Dr),F->M->D.G*(Dg),F->M->D.B*(Db));
         RGB E(F->M->E.R*(Er),F->M->E.G*(Eg),F->M->E.B*(Eb));
 
         RayPix->R = A.R + D.R + E.R;
         RayPix->G = A.G + D.G + E.G;
         RayPix->B = A.B + D.B + E.B;
-
         RayPix->Normalize();
     }
 
     return RayPix;
+}
+
+RGB* Cenario::Ilm_Pint(Point Pint, Face *F){
+    RGB* RayPix = new RGB(this->BG->R, this->BG->G, this->BG->B); //Inicializa com background color;
+
+    Point nFace = F->calcNormal();
+    nFace.normalize();
+
+    RGB A(F->M->A.R*this->Amb->R,F->M->A.G*this->Amb->G,F->M->A.B*this->Amb->B);
+
+    float Dr=0, Dg=0, Db=0, Er=0, Eg=0, Eb=0;
+
+        for(std::vector<luz*>::iterator i=this->fontes_luminosas.begin();i!=fontes_luminosas.end();i++){
+
+            luz* Luz = (*i);
+            Point Fonte = (*Luz->P);
+            Fonte.operator -=(Pint);
+            Fonte.normalize();
+            float xDif = nFace.ProdutoEscalar(Fonte);
+
+            Point v = this->Obs->Pos;  //Luz->P;
+            v.operator -=(Pint);
+            v.normalize();
+            Point r = nFace;
+            r.operator *=(2*xDif);
+            r.operator -=(Fonte);
+            r.normalize();
+            float xEsp=v.ProdutoEscalar(r);
+            xEsp=pow(xEsp,F->M->m);
+
+            if(xDif > 0){
+                Dr += Luz->F.R*xDif;
+                Dg += Luz->F.G*xDif;
+                Db += Luz->F.B*xDif;
+            }
+            if(xEsp > 0){
+                Er += Luz->F.R*xEsp;
+                Eg += Luz->F.G*xEsp;
+                Eb += Luz->F.B*xEsp;
+            }
+        }
+
+        //std::cout << "\n Dr: " << Dr<< ", Dg: " << Dg << ", Db: " << Db;
+        for(std::vector<Spot*>::iterator i=this->fontes_spot.begin();i!=fontes_spot.end();i++){
+
+            luz* Luz = (*i)->Luz;
+            Point Fonte = (*Luz->P);
+            Fonte.operator -=(Pint);
+            Fonte.normalize();
+
+            Point *D = (*i)->Direcao;
+            D->x = -D->x; D->y = -D->y; D->z = -D->z;
+            float cos = Fonte.ProdutoEscalar(*D);
+
+            if(cos>0){
+                float Teta = acos (cos) * 180.0 / PI;
+                std::cout << "Teta: " << Teta;
+                if(Teta < (*i)->Abertura){
+
+                    float R = Luz->F.R*cos;
+                    float G = Luz->F.G*cos;
+                    float B = Luz->F.B*cos;
+
+                    float xDif = nFace.ProdutoEscalar(Fonte);
+
+                    Point v = this->Obs->Pos;  //Luz->P;
+                    v.operator -=(Pint);
+                    v.normalize();
+                    Point r = nFace;
+                    r.operator *=(2*xDif);
+                    r.operator -=(Fonte);
+                    r.normalize();
+                    float xEsp=v.ProdutoEscalar(r);
+                    xEsp=pow(xEsp,F->M->m);
+
+                    if(xDif > 0){
+                        Dr += R*xDif;
+                        Dg += G*xDif;
+                        Db += B*xDif;
+                    }
+                    if(xEsp > 0){
+                        Er += R*xEsp;
+                        Eg += G*xEsp;
+                        Eb += B*xEsp;
+                    }
+                }
+
+
+            }
+
+
+
+        }
+        //std::cout << "\n Dr: " << Dr<< ", Dg: " << Dg << ", Db: " << Db;
+
+        RGB D(F->M->D.R*(Dr),F->M->D.G*(Dg),F->M->D.B*(Db));
+        RGB E(F->M->E.R*(Er),F->M->E.G*(Eg),F->M->E.B*(Eb));
+
+        RayPix->R = A.R + D.R + E.R;
+        RayPix->G = A.G + D.G + E.G;
+        RayPix->B = A.B + D.B + E.B;
+        RayPix->Normalize();
+
+    return RayPix;
+
 }
 void Cenario::CuboUni(){
     Objeto *cubo = new Objeto();

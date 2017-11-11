@@ -10,6 +10,7 @@ public:
     luz(RGB R, Point *Pos);
     RGB F;
     Point *P;
+    void Imp();
 };
 
 #endif // LUZ_H

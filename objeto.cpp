@@ -99,25 +99,6 @@ void Objeto::Transforoma(float **A){
 
 }
 
-std::string readFile(char* Cam){
-    std::ifstream ifs(Cam);
-    return std::string((std::istreambuf_iterator<char>(ifs)),
-                  (std::istreambuf_iterator<char>()));
-}
-Objeto::Objeto(char *Caminho){
-    std::string obj = readFile(Caminho);
-
-    for(int i=0; i<obj.length();i++){
-        if(obj.at(i)=='v'){
-            std::string temp;
-            int k=(i+2);
-            while(obj.at(k)!= ';')
-                temp.at(k)=obj[k];
-
-        }
-    }
-
-}
 
 Objeto* Objeto::Copia(){
     Objeto* novo = new Objeto();
@@ -126,6 +107,17 @@ Objeto* Objeto::Copia(){
     return novo;
 }
 
+
+void Objeto::ImpPoints(){
+    std::cout << "\n Imprimindo Pontos do Objeto: \n";
+    for(std::vector<Point*>::iterator i = this->points.begin(); i!= this->points.end(); i++)
+    {
+        Point *P = (*i);
+        std::cout << "\nx,y,z = " << P->x << ", " << P->y << ", " << P->z <<";";
+
+    }
+
+}
 
 /*
 void Objeto::addFace(Point P1, Point P2, Point P3, Material M){

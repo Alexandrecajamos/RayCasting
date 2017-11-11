@@ -15,6 +15,7 @@ public:
     float* Gauss(int N, float **A, float *b);
     float* Vetor(Point P);
     Point normal(Point a, Point b);
+    void ImprimeMat(int M, int N, float** Mat);
 
     void pEscalar(float E, int M, int N, float**A);
     float** sub(int M, int N, float** A, float** B);

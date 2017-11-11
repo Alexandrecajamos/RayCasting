@@ -167,7 +167,17 @@ float Operacoes::NormaVetor(int N, float* V){
     return norma;
 }
 
+void Operacoes::ImprimeMat(int L, int C, float **Mat){
+    std::cout << "\n Matriz M : \n";
+    for(int i=0;i<L;i++){
+        std::cout << "\nLinha "<<i<<": ";
+        for(int j=0;j<C;j++){
+            std::cout << Mat[i][j] << " ";
+        }
 
+    }
+
+}
 
 float** Operacoes::Mat_Left_Quat(float* Q){
     float** q = this->Identidade(4);
@@ -216,9 +226,9 @@ float** Operacoes::Cisalhamento(float A, int I1, int I2){
     return C;
 }
 float** Operacoes::Translacao(int N, float* V){
-    float** T = this->Identidade(N+1);
+    float** T = this->Identidade(N);
     for(int i=0;i<N;i++)
-        T[i][N]=V[i];
+        T[i][N-1]=V[i];
     return T;
 }
 

@@ -24,7 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //initialize random seed
     srand (time(NULL));
 
-    Point Eye(5,0,0);
+    Point Eye(5,5,5);
     Point LA(0,0,0);
     Point VUp(0,50,0);
 
@@ -35,6 +35,24 @@ MainWindow::MainWindow(QWidget *parent) :
     Cenario* scene = new Cenario(Obs, Cam, Amb, Bg);
 
     MontaCena(scene);
+/*
+    float i=325;float j=325;
+    float Yi= (scene->Cam->h/2)-(scene->Cam->DY/2)-(i*scene->Cam->DY);
+    float Xj = (-scene->Cam->w/2)+(scene->Cam->DX/2)+(j*scene->Cam->DX);
+    Point px(Xj,Yi,scene->Cam->d);
+    int iObj, iFace;
+    float t = scene->Inter(px,iObj,iFace);
+    std::cout<<" Teste T: " << t;
+
+    if(t!=-1 && t>1){
+        Point Pint=px;
+        Pint.operator *=(t);
+        Face *F = scene->Objetos.at(iObj)->faces.at(iFace);
+        RGB *Ilm = scene->Ilm_Pint(Pint, F);
+        std::cout <<"\nIluminacao Pint: " << Ilm->R << ", " << Ilm->G <<", " << Ilm->B<< ";";
+    }
+
+*/
     Render(sizeX,sizeY, scene);
 
 }
@@ -61,8 +79,8 @@ void MainWindow::Render(int sizeX, int sizeY,Cenario *scene){
             Point px(Xj,Yi,scene->Cam->d);
                 RGB* print = scene->Ray_Pix_Ilm(px);
                 image.setPixel( i, j, qRgb(print->R*255, print->G*255, print->B*255));
-
-
+                if(i==j && j==325)
+                     std::cout <<"\nIluminacao Pint: " << print->R << ", " << print->G <<", " << print->B<< ";";
 
         }
     }
@@ -124,8 +142,16 @@ void MainWindow::MontaCena(Cenario *scene){
     Point *P3 = new Point(5,5,5);
     scene->addFonte2(P3, L3);
 
-    float** WC = scene->Obs->Word_Cam();
+    RGB L4(1,1,1);
+    Point *P4 = new Point(5,5,5);
+    Point *Dir = new Point(0,0,0);
+    Dir->operator -=(*P4);
+    Dir->normalize();
+    luz *L = new luz(L4, P4);
+    Spot *Sp = new Spot(L,Dir,60);
+    scene->addSpot(Sp);
 
+    float** WC = scene->Obs->Word_Cam();
     scene->Word_Cam(WC);
 
 

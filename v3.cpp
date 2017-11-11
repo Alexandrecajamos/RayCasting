@@ -14,3 +14,6 @@ float Point::ProdutoEscalar(Point P){
     float x= (this->x*P.x)+(this->y*P.y)+(this->z*P.z);
     return x;
 }
+void Point::ImpPoint(){
+    std::cout << "\nCoor.: " << this->x <<", "<< this->y<<", "<< this->z <<"; ";
+}

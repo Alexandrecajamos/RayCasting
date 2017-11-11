@@ -13,7 +13,7 @@ class Objeto
 {
 public:
     Objeto();
-    Objeto(char* Caminho);
+
         //void addPoint(Point P);
         //void addFace(Point p1, Point p2, Point p3, Material M);
         //void addFace2(Face F);
@@ -26,7 +26,7 @@ public:
     void calc_Esfera();
     void Transforoma(float** A);
     Objeto* Copia();
-
+    void ImpPoints();
     Esfera Esf;
     std::vector<Point*> points;
     std::vector<Face*> faces;

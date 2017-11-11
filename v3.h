@@ -1,7 +1,7 @@
 #ifndef POINT_H
 #define POINT_H
 #include "cmath"
-
+#include <iostream>
 class Point
 {
 public:
@@ -37,7 +37,7 @@ public:
               x/=len; y /= len; z /= len;
           }
           float ProdutoEscalar(Point P2);
-
+          void ImpPoint();
 
         float x,y,z;
 };

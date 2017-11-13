@@ -13,6 +13,7 @@ float** Operacoes::mult(int M, int N, int P, float **A, float **B)
     C = (float **)malloc(sizeof(float)*M);
     for (int i = 0; i < M; i++)
         C[i] = (float *)malloc(sizeof(float)*P);
+
     for (int i = 0; i < M; i++)
         for (int j = 0; j < P; j++) {
             C[i][j] = 0;
@@ -233,16 +234,12 @@ float** Operacoes::Translacao(int N, float* V){
 }
 
 float** Operacoes::EspelhoArb(int N, float** V){
-    float** E = this->Identidade(N+1); //E = I -2n*nt
+    float** E = this->Identidade(N); //E = I -2n*nt
+    V[3][0]=0;
     float** nt = this->Transposta(N,1,V);
     float** H = this->mult(N,1,N,V,nt);
     this->pEscalar(2,N,N,H);
-    H[N]=(float*)malloc(sizeof(float)*N);
-    for(int i=0;i<=N;i++){
-        H[i][N]=0;
-        H[N][i]=0;
-    }
-    E=this->sub(N+1,N+1,E,H);
+    E=this->sub(N,N,E,H);
     return E;
 }
 

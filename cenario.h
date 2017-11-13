@@ -21,7 +21,7 @@ public:
     void Word_Cam(float **A);
     float Inter(Point Pij, int &iObj, int &iFace);
     RGB* Ray_Pix_Ilm(Point Pij);
-    RGB* Ilm_Pint(Point Pint, Face *F);
+    RGB* Ilm_Pint(Point Pint, Point nFace, Material *MF);
     void CuboUni();
     void CuboUni2(Material *M1,Material *M2,Material *M3,Material *M4,Material *M5,Material *M6);
     void Prisma_Triangular_Uni();

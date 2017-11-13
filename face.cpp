@@ -66,11 +66,11 @@ float Face::Inter(Point P){
     float t = -1;
     Point nF = this->calcNormal();
     nF.normalize();
-    Point Pint= P;
+    Point Pint = P;
     Point po(0,0,0);
     Pint.operator -=(po);
     Pint.normalize();
-    //t=nF.ProdutoEscalar(*(this->P1))/nF.ProdutoEscalar(Pint);
+
     float PE = Pint.ProdutoEscalar(nF);
     if(PE<0){
         Point v1 = p3;

@@ -191,13 +191,10 @@ RGB* Cenario::Ray_Pix_Ilm(Point px){
     return RayPix;
 }
 
-RGB* Cenario::Ilm_Pint(Point Pint, Face *F){
+RGB* Cenario::Ilm_Pint(Point Pint, Point nFace, Material *MF){
     RGB* RayPix = new RGB(this->BG->R, this->BG->G, this->BG->B); //Inicializa com background color;
 
-    Point nFace = F->calcNormal();
-    nFace.normalize();
-
-    RGB A(F->M->A.R*this->Amb->R,F->M->A.G*this->Amb->G,F->M->A.B*this->Amb->B);
+    RGB A(MF->A.R*this->Amb->R,MF->A.G*this->Amb->G,MF->A.B*this->Amb->B);
 
     float Dr=0, Dg=0, Db=0, Er=0, Eg=0, Eb=0;
 
@@ -217,7 +214,7 @@ RGB* Cenario::Ilm_Pint(Point Pint, Face *F){
             r.operator -=(Fonte);
             r.normalize();
             float xEsp=v.ProdutoEscalar(r);
-            xEsp=pow(xEsp,F->M->m);
+            xEsp=pow(xEsp,MF->m);
 
             if(xDif > 0){
                 Dr += Luz->F.R*xDif;
@@ -262,7 +259,7 @@ RGB* Cenario::Ilm_Pint(Point Pint, Face *F){
                     r.operator -=(Fonte);
                     r.normalize();
                     float xEsp=v.ProdutoEscalar(r);
-                    xEsp=pow(xEsp,F->M->m);
+                    xEsp=pow(xEsp,MF->m);
 
                     if(xDif > 0){
                         Dr += R*xDif;
@@ -284,8 +281,8 @@ RGB* Cenario::Ilm_Pint(Point Pint, Face *F){
         }
         //std::cout << "\n Dr: " << Dr<< ", Dg: " << Dg << ", Db: " << Db;
 
-        RGB D(F->M->D.R*(Dr),F->M->D.G*(Dg),F->M->D.B*(Db));
-        RGB E(F->M->E.R*(Er),F->M->E.G*(Eg),F->M->E.B*(Eb));
+        RGB D(MF->D.R*(Dr),MF->D.G*(Dg),MF->D.B*(Db));
+        RGB E(MF->E.R*(Er),MF->E.G*(Eg),MF->E.B*(Eb));
 
         RayPix->R = A.R + D.R + E.R;
         RayPix->G = A.G + D.G + E.G;

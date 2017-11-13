@@ -17,43 +17,102 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    int sizeX = 650;
-    int sizeY = 650;
-
+    int sizeX = 1000;
+    int sizeY = 1000;
+    int A,B,C,D,E,F;
+    A=7; B = 8; C = 5; D = 1; E = 0; F = 4;
 
     //initialize random seed
     srand (time(NULL));
 
-    Point Eye(5,5,5);
-    Point LA(0,0,0);
-    Point VUp(0,50,0);
+    Point Eye((A+D+2)*4,(B+E+3)*4,(C+F+5)*4);
+    Point LA(D,E,F);
+    Point AVUp(A,B,C);
 
-    Observador *Obs = new Observador(Eye,LA,VUp);
-    Camera *Cam = new Camera(0.5,0.5,-0.7,sizeX,sizeY,*Obs);
-    RGB* Bg = new RGB(0.22,0.22,0.22);//(0.73,1,1);
-    RGB* Amb = new RGB(0.2,0.2,0.2);
+
+    Observador *Obs = new Observador(Eye,LA,AVUp);
+    Camera *Cam = new Camera(10,10,-4,sizeX,sizeY,*Obs);
+
+    RGB* Bg = new RGB(0.22,0.22,0.22);
+    RGB* Amb = new RGB(A/10,B/10,C/10);
     Cenario* scene = new Cenario(Obs, Cam, Amb, Bg);
+    float** WC = scene->Obs->Word_Cam();
+    Operacoes Oper;
+    Oper.ImprimeMat(4,4,WC);
 
-    MontaCena(scene);
-/*
-    float i=325;float j=325;
+    RGB RL(0.8,0.6,0.4);
+    Point *P = new Point(10,10,-20);
+    scene->addFonte2(P,RL);
+    scene->Word_Cam(WC);
+
+    //MontaCena(scene);
+
+    float i=(A+B+C);float j=(D+E+F);
     float Yi= (scene->Cam->h/2)-(scene->Cam->DY/2)-(i*scene->Cam->DY);
     float Xj = (-scene->Cam->w/2)+(scene->Cam->DX/2)+(j*scene->Cam->DX);
     Point px(Xj,Yi,scene->Cam->d);
-    int iObj, iFace;
-    float t = scene->Inter(px,iObj,iFace);
-    std::cout<<" Teste T: " << t;
+
+    px.ImpPoint();
+
+    float t = 20;
+    std::cout<<" \nTeste T: " << t;
+
 
     if(t!=-1 && t>1){
         Point Pint=px;
+        Pint.normalize();
         Pint.operator *=(t);
-        Face *F = scene->Objetos.at(iObj)->faces.at(iFace);
-        RGB *Ilm = scene->Ilm_Pint(Pint, F);
+        Pint.ImpPoint();
+        Point nFace(5,5,-4);
+        nFace.operator -=(Pint);
+        nFace.normalize();
+
+        RGB K(D/10,E/10,F/10);
+        Material *MF = new Material(K,K,K,F);
+
+        RGB *Ilm = scene->Ilm_Pint(Pint,nFace,MF);
+
         std::cout <<"\nIluminacao Pint: " << Ilm->R << ", " << Ilm->G <<", " << Ilm->B<< ";";
+
+
+        Operacoes Op;
+        std::cout<< "\nUltima questão\ns";
+        Objeto *O = new Objeto();
+        O->addPoint(-5,-5,-4);
+        O->addPoint(5,5,-4);
+        O->addPoint(0,5,-20);
+        O->addPoint(Pint.x, Pint.y,Pint.z);
+        O->addFace2(0,1,2);
+        O->ImpPoints();
+        Point tr = *O->points.at(0);
+        float vT[4] = {(0-tr.x),(0-tr.y),(0-tr.z),1};
+        float** T = Op.Translacao(4,vT);
+        Point n = O->faces.at(0)->calcNormal();
+        n.normalize();
+        Point *N = new Point(n.x, n.y, n.z);
+        float** vEs= Op.VetorColuna(N);
+        float** Esp = Op.EspelhoArb(4,vEs);
+        float *v2 = Op.Vetor(tr);
+        v2[3]=1;
+        float** T2 = Op.Translacao(4,v2);
+        float** Tran = Op.mult(4,4,4,T2,Esp);
+        Tran = Op.mult(4,4,4,Tran,T);
+        O->Transforoma(Tran);
+        Op.ImprimeMat(4,4,Tran);
+        O->ImpPoints();
+
+
+
+
+
+
+
+
+
     }
 
-*/
-    Render(sizeX,sizeY, scene);
+
+   // Render(sizeX,sizeY, scene);
 
 }
 
@@ -77,6 +136,7 @@ void MainWindow::Render(int sizeX, int sizeY,Cenario *scene){
         {
             float Xj = (-scene->Cam->w/2)+(scene->Cam->DX/2)+(j*scene->Cam->DX);
             Point px(Xj,Yi,scene->Cam->d);
+
                 RGB* print = scene->Ray_Pix_Ilm(px);
                 image.setPixel( i, j, qRgb(print->R*255, print->G*255, print->B*255));
                 if(i==j && j==325)

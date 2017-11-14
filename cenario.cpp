@@ -204,9 +204,10 @@ RGB* Cenario::Ilm_Pint(Point Pint, Point nFace, Material *MF){
             Point Fonte = (*Luz->P);
             Fonte.operator -=(Pint);
             Fonte.normalize();
+            Fonte.ImpPoint();
             float xDif = nFace.ProdutoEscalar(Fonte);
-
-            Point v = this->Obs->Pos;  //Luz->P;
+            std::cout<< "\nXDif" << xDif;
+            Point v = this->Obs->Pos;
             v.operator -=(Pint);
             v.normalize();
             Point r = nFace;
@@ -215,7 +216,7 @@ RGB* Cenario::Ilm_Pint(Point Pint, Point nFace, Material *MF){
             r.normalize();
             float xEsp=v.ProdutoEscalar(r);
             xEsp=pow(xEsp,MF->m);
-
+            std::cout << "\nXEsp" << xEsp;
             if(xDif > 0){
                 Dr += Luz->F.R*xDif;
                 Dg += Luz->F.G*xDif;
@@ -276,18 +277,22 @@ RGB* Cenario::Ilm_Pint(Point Pint, Point nFace, Material *MF){
 
             }
 
-
-
         }
         //std::cout << "\n Dr: " << Dr<< ", Dg: " << Dg << ", Db: " << Db;
 
         RGB D(MF->D.R*(Dr),MF->D.G*(Dg),MF->D.B*(Db));
         RGB E(MF->E.R*(Er),MF->E.G*(Eg),MF->E.B*(Eb));
 
+
         RayPix->R = A.R + D.R + E.R;
         RayPix->G = A.G + D.G + E.G;
         RayPix->B = A.B + D.B + E.B;
         RayPix->Normalize();
+
+        std::cout <<"\nIluminacao Amb: " << A.R << ", " << A.G <<", " << A.B<< ";";
+        std::cout <<"\nIluminacao Dif: " << D.R << ", " << D.G <<", " << D.B << ";";
+        std::cout <<"\nIluminacao Esp: " << E.R << ", " << E.G <<", " << E.B<< ";";
+
 
     return RayPix;
 

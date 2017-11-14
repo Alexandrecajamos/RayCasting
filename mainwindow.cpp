@@ -17,65 +17,79 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    int sizeX = 1000;
-    int sizeY = 1000;
-    int A,B,C,D,E,F;
-    A=7; B = 8; C = 5; D = 1; E = 0; F = 4;
+    int sizeX = 800;
+    int sizeY = 800;
+    float W = 8;
+    float H = 8;
+    float d = 3;
 
+    float A,B,C,D,E,F;
+    //A=7; B = 8; C = 5; D = 1; E = 0; F = 4;
+    A=4;  B=0;
+    C=0; D=1;  E=5;  F=7;
     //initialize random seed
     srand (time(NULL));
 
-    Point Eye((A+D+2)*4,(B+E+3)*4,(C+F+5)*4);
+    Point Eye(0,0,0);//((A+D+2)*4,(B+E+3)*4,(C+F+5)*4);
     Point LA(D,E,F);
     Point AVUp(A,B,C);
 
-
+    Operacoes Op;
     Observador *Obs = new Observador(Eye,LA,AVUp);
-    Camera *Cam = new Camera(10,10,-4,sizeX,sizeY,*Obs);
+    Camera *Cam = new Camera(W,H,-d,sizeX,sizeY,*Obs);
 
     RGB* Bg = new RGB(0.22,0.22,0.22);
-    RGB* Amb = new RGB(A/10,B/10,C/10);
-    Cenario* scene = new Cenario(Obs, Cam, Amb, Bg);
-    float** WC = scene->Obs->Word_Cam();
-    Operacoes Oper;
-    Oper.ImprimeMat(4,4,WC);
+    RGB* Amb = new RGB(0.5, 0.5, 0.5);
+    //std::cout <<"\nIluminacao Amb: " << Amb->R << ", " << Amb->G <<", " << Amb->B<< ";";
 
-    RGB RL(0.8,0.6,0.4);
-    Point *P = new Point(10,10,-20);
+    Cenario* scene = new Cenario(Obs, Cam, Amb, Bg);
+    float** CW = scene->Obs->Cam_Word();
+    float** WC = scene->Obs->Word_Cam();
+
+    Op.ImprimeMat(4,4,CW);
+    Op.ImprimeMat(4,4,WC);
+
+    RGB RL(0.9,0.8,1);
+
+    Point *P = new Point(-4,6,-3);
+
     scene->addFonte2(P,RL);
+
     scene->Word_Cam(WC);
 
     //MontaCena(scene);
 
-    float i=(A+B+C);float j=(D+E+F);
+    float i=2;float j=4;
     float Yi= (scene->Cam->h/2)-(scene->Cam->DY/2)-(i*scene->Cam->DY);
     float Xj = (-scene->Cam->w/2)+(scene->Cam->DX/2)+(j*scene->Cam->DX);
     Point px(Xj,Yi,scene->Cam->d);
 
     px.ImpPoint();
 
-    float t = 20;
+    float t = 12;
     std::cout<<" \nTeste T: " << t;
 
 
     if(t!=-1 && t>1){
+
         Point Pint=px;
         Pint.normalize();
         Pint.operator *=(t);
         Pint.ImpPoint();
-        Point nFace(5,5,-4);
+        Point nFace(-4,4,-3);
         nFace.operator -=(Pint);
         nFace.normalize();
+        nFace.ImpPoint();
 
-        RGB K(D/10,E/10,F/10);
-        Material *MF = new Material(K,K,K,F);
+        RGB K(0.8, 0.3, 0.2);
+
+        Material *MF = new Material(K,K,K,2);
 
         RGB *Ilm = scene->Ilm_Pint(Pint,nFace,MF);
 
         std::cout <<"\nIluminacao Pint: " << Ilm->R << ", " << Ilm->G <<", " << Ilm->B<< ";";
 
-
-        Operacoes Op;
+        /*
         std::cout<< "\nUltima questão\ns";
         Objeto *O = new Objeto();
         O->addPoint(-5,-5,-4);
@@ -100,7 +114,7 @@ MainWindow::MainWindow(QWidget *parent) :
         O->Transforoma(Tran);
         Op.ImprimeMat(4,4,Tran);
         O->ImpPoints();
-
+*/
 
 
 

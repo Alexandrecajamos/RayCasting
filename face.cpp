@@ -70,7 +70,6 @@ float Face::Inter(Point P){
     Point po(0,0,0);
     Pint.operator -=(po);
     Pint.normalize();
-
     float PE = Pint.ProdutoEscalar(nF);
     if(PE<0){
         Point v1 = p3;
@@ -89,8 +88,8 @@ float Face::Inter(Point P){
         float* B = Op.Vetor(p3);
         float* lamb = Op.Gauss(3,A,B);
         if(lamb[2]>=0){
-        float l3 = 1-(lamb[0]+lamb[1]);
-        if(lamb[0]>=0 && lamb[0]<=1 && lamb[1]>=0 && lamb[1]<=1 && l3>=0 && l3<=1)
+            float l3 = 1-(lamb[0]+lamb[1]);
+            if(lamb[0]>=0 && lamb[0]<=1 && lamb[1]>=0 && lamb[1]<=1 && l3>=0 && l3<=1)
             t=lamb[2];
         }
 

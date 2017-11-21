@@ -85,11 +85,15 @@ RGB* Cenario::Ray_Pix_Ilm(Point px){
     RGB* RayPix = new RGB(this->BG->R, this->BG->G, this->BG->B); //Inicializa com background color;
 
     int iObj,iFace;
+
     float t = this->Inter(px, iObj,iFace);
 
-    if(t!=-1 && t>1){
+    if(t!=-1 && t>0){
+        std::cout << "Face F: " << iFace;
         Point Pint = px;
+        Pint.normalize();
         Pint.operator *=(t);
+        Pint.ImpPoint();
         Face* F = this->Objetos.at(iObj)->faces.at(iFace);
         Point nFace = F->calcNormal();
         nFace.normalize();
@@ -186,6 +190,11 @@ RGB* Cenario::Ray_Pix_Ilm(Point px){
         RayPix->G = A.G + D.G + E.G;
         RayPix->B = A.B + D.B + E.B;
         RayPix->Normalize();
+
+        std::cout <<"\nIluminacao Amb: " << A.R << ", " << A.G <<", " << A.B<< ";";
+        std::cout <<"\nIluminacao Dif: " << D.R << ", " << D.G <<", " << D.B << ";";
+        std::cout <<"\nIluminacao Esp: " << E.R << ", " << E.G <<", " << E.B<< ";";
+
     }
 
     return RayPix;
@@ -204,9 +213,10 @@ RGB* Cenario::Ilm_Pint(Point Pint, Point nFace, Material *MF){
             Point Fonte = (*Luz->P);
             Fonte.operator -=(Pint);
             Fonte.normalize();
-            Fonte.ImpPoint();
+            //Fonte.ImpPoint();
             float xDif = nFace.ProdutoEscalar(Fonte);
-            std::cout<< "\nXDif" << xDif;
+            //std::cout<< "\nXDif" << xDif;
+
             Point v = this->Obs->Pos;
             v.operator -=(Pint);
             v.normalize();
@@ -216,7 +226,7 @@ RGB* Cenario::Ilm_Pint(Point Pint, Point nFace, Material *MF){
             r.normalize();
             float xEsp=v.ProdutoEscalar(r);
             xEsp=pow(xEsp,MF->m);
-            std::cout << "\nXEsp" << xEsp;
+            //std::cout << "\nXEsp" << xEsp;
             if(xDif > 0){
                 Dr += Luz->F.R*xDif;
                 Dg += Luz->F.G*xDif;
@@ -287,7 +297,7 @@ RGB* Cenario::Ilm_Pint(Point Pint, Point nFace, Material *MF){
         RayPix->R = A.R + D.R + E.R;
         RayPix->G = A.G + D.G + E.G;
         RayPix->B = A.B + D.B + E.B;
-        RayPix->Normalize();
+        //RayPix->Normalize();
 
         std::cout <<"\nIluminacao Amb: " << A.R << ", " << A.G <<", " << A.B<< ";";
         std::cout <<"\nIluminacao Dif: " << D.R << ", " << D.G <<", " << D.B << ";";

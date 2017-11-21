@@ -8,6 +8,7 @@ class Observador
 public:
     Observador();
     Observador(Point Pos, Point Look_At, Point A_View_UP);
+    Observador(Point Pos, Point Look_At);
     Point Pos,i,j,k;
     float** Word_Cam();
     float** Cam_Word();

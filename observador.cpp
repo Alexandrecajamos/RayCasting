@@ -29,6 +29,17 @@ Observador::Observador(Point _pos, Point Look_At, Point A_View_UP){
 
 }
 
+Observador::Observador(Point _pos, Point Look_At){
+    Operacoes Op;
+    this->Pos=_pos;
+    Point pk = _pos;
+    pk.operator -=(Look_At);
+    pk.normalize();
+    this->k=pk;
+
+
+}
+
 float** Observador::Cam_Word(){
     Operacoes Op;
     float** A = Op.Identidade(4);

@@ -10,9 +10,11 @@ public:
     Face(Point *P1, Point *P2, Point *P3, Material *M);
     Face(Point *P1, Point *P2, Point *P3);
     Point calcNormal();
+    void atNormal();
     float Inter(Point P);
-    Point *P1,*P2,*P3;
+    Point *P1,*P2,*P3, *N;
     Material *M;
+
 };
 
 #endif // FACE_H

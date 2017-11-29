@@ -73,7 +73,7 @@ float Objeto::Inter(Point Pint, int *idx){
     this->calc_Esfera();
     if(this->Esf.Interseccao(Pint)){
         for(std::vector<Face*>::iterator i = this->faces.begin(); i!= this->faces.end(); i++){
-
+            (*i)->atNormal();
             float x = (*i)->Inter(Pint);
             if(x != -1 && x<Menor_T){
                 Menor_T = x;
@@ -96,7 +96,9 @@ void Objeto::Transforoma(float **A){
         (*i)->y=r[1][0];
         (*i)->z=r[2][0];
     }
-
+    for(std::vector<Face*>::iterator i = this->faces.begin(); i!= this->faces.end(); i++){
+        //(*i)->atNormal();
+    }
 }
 
 

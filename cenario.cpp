@@ -85,20 +85,14 @@ RGB* Cenario::Ray_Pix_Ilm(Point px){
     RGB* RayPix = new RGB(this->BG->R, this->BG->G, this->BG->B); //Inicializa com background color;
 
     int iObj,iFace;
-
     float t = this->Inter(px, iObj,iFace);
-
-
     if(t!=-1 && t>0){
 
         Point Pint = px;
-        //Pint.normalize();
         Pint.operator *=(t);
-
-        //std::cout << "\nPint (Pij*t) em coordenada de câmera, para t = " << t;
-        //Pint.ImpPoint();
         Face* F = this->Objetos.at(iObj)->faces.at(iFace);
-        Point nFace = F->calcNormal();
+        //F->atNormal();
+        Point nFace = F->calcNormal();//(F->N->x,F->N->y,F->N->z);
         nFace.normalize();
 
         RGB A(F->M->A.R*this->Amb->R,F->M->A.G*this->Amb->G,F->M->A.B*this->Amb->B);
@@ -193,10 +187,6 @@ RGB* Cenario::Ray_Pix_Ilm(Point px){
         RayPix->G = A.G + D.G + E.G;
         RayPix->B = A.B + D.B + E.B;
         RayPix->Normalize();
-
-        //std::cout <<"\nIluminacao Amb: " << A.R << ", " << A.G <<", " << A.B<< ";";
-        //std::cout <<"\nIluminacao Dif: " << D.R << ", " << D.G <<", " << D.B << ";";
-        //std::cout <<"\nIluminacao Esp: " << E.R << ", " << E.G <<", " << E.B<< ";";
 
     }
 
@@ -442,21 +432,23 @@ void Cenario::Prisma_Triangular_Uni2(Material *M1,Material *M2,Material *M3,Mate
 void Cenario::Prisma_Triangular_Uni3(Material *M){
 
     Objeto *prism = new Objeto();
-    prism->addPoint(0,0,1);
-    prism->addPoint(1,0,1);
     prism->addPoint(1,0,0);
+    prism->addPoint(1,0,1);
+    prism->addPoint(0,0,1);
     prism->addPoint(0,0,0);
-    prism->addPoint(0,1,0);
-    prism->addPoint(1,1,0);
+    prism->addPoint(1,1,0.5);
+    prism->addPoint(0,1,0.5);
 
-    prism->addFace(3,2,1, M);
-    prism->addFace(1,0,3, M);
-    prism->addFace(3,0,4, M);
-    prism->addFace(1,2,5, M);
-    prism->addFace(4,0,1, M);
-    prism->addFace(5,4,1, M);
-    prism->addFace(5,2,3, M);
-    prism->addFace(4,5,3, M);
+
+
+    prism->addFace(1,3,0, M);
+    prism->addFace(0,4,1, M);
+    prism->addFace(4,2,1, M);
+    prism->addFace(2,5,3, M);
+    prism->addFace(0,5,4, M);
+    prism->addFace(1,2,3, M);
+    prism->addFace(4,5,2, M);
+    prism->addFace(0,3,5, M);
 
     this->addObjeto(prism);
 

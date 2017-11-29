@@ -17,14 +17,14 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    int sizeX = 500;
-    int sizeY = 500;
+    int sizeX = 200;
+    int sizeY = 200;
     float W = 0.5;
     float H = 0.5;
     float d = 3;
 
     Point Eye(50,1000,50);
-    Point LA(50,2,50);
+    Point LA(50,5,50);
     Point AVUp(50,0,0);
 
     Observador *Obs = new Observador(Eye,LA,AVUp);
@@ -34,6 +34,7 @@ MainWindow::MainWindow(QWidget *parent) :
     RGB* Amb = new RGB(0.4, 0.4, 0.4);
 
     Cenario* scene = new Cenario(Obs, Cam, Amb, Bg);
+
     MontaCena(scene);
 
     Render(sizeX,sizeY, scene);
@@ -80,14 +81,15 @@ void MainWindow::MontaCena(Cenario *scene){
 
     Operacoes Opr;
 
-
-
+    RGB Te(0.5054,0.2705,0.0745);
     RGB G(0.4196,0.5568,0.1372);
     RGB Pis(0.3235, 0.3823, 0.4450);
     RGB C1(0.6,0.2,0.2);
+
     Material *Grama = new Material(G,G,G,1);
     Material *Pista = new Material(Pis,Pis,Pis,1);
     Material *Casa1 = new Material(C1,C1,C1,1);
+    Material* Telha = new Material(Te,Te,Te,1);
 
     scene->CuboUni3(Grama);
     float ve[4] = {100,0.8,100,1};
@@ -95,9 +97,8 @@ void MainWindow::MontaCena(Cenario *scene){
     scene->Objetos.at(0)->Transforoma(E);
 
     scene->CuboUni3(Pista);
-    float ve2[4]= {10,0.2,100,1};
+    float ve2[4]= {10,0.2,55,1};
     E = Opr.Escala(4, ve2);
-    //scene->Objetos.at(1)->Transforoma(E);
     float vt2[4] = {45,0.8,0,1};
     float **T = Opr.Translacao(4,vt2);
     T = Opr.mult(4,4,4,T,E);
@@ -109,24 +110,21 @@ void MainWindow::MontaCena(Cenario *scene){
     scene->Objetos.at(2)->Transforoma(E);
     float vt3[4]= {0,0.8,55,1};
     T = Opr.Translacao(4,vt3);
-    //T = Opr.mult(4,4,4,T,E);
     scene->Objetos.at(2)->Transforoma(T);
 
     scene->CuboUni3(Casa1);
     float ve4[4]= {20,2,20,1};
     E = Opr.Escala(4, ve4);
-    //scene->Objetos.at(3)->Transforoma(E);
     float vt4[4] = {70,0.8,5,1};
     T = Opr.Translacao(4,vt4);
     T = Opr.mult(4,4,4,T,E);
     scene->Objetos.at(3)->Transforoma(T);
 
-    scene->Prisma_Triangular_Uni3(Casa1);
+    scene->Prisma_Triangular_Uni3(Telha);
     vt4[1]=2.8;
     T = Opr.Translacao(4,vt4);
     T = Opr.mult(4,4,4,T,E);
     scene->Objetos.at(4)->Transforoma(T);
-    //scene->Objetos.at(4)->ImpPoints();
 
     scene->CuboUni3(Casa1);
     vt4[1]=0.8;
@@ -135,15 +133,70 @@ void MainWindow::MontaCena(Cenario *scene){
     T = Opr.mult(4,4,4,T,E);
     scene->Objetos.at(5)->Transforoma(T);
 
-    scene->Prisma_Triangular_Uni3(Casa1);
+    scene->Prisma_Triangular_Uni3(Telha);
     vt4[1]=2.8;
     T = Opr.Translacao(4,vt4);
     T = Opr.mult(4,4,4,T,E);
     scene->Objetos.at(6)->Transforoma(T);
 
+    scene->CuboUni3(Casa1);
+    float ve5[4]= {20,20,20,1};
+    E = Opr.Escala(4, ve5);
+    float vt5[4] = {50,0.8,70,1};
+    T = Opr.Translacao(4,vt5);
+    T = Opr.mult(4,4,4,T,E);
+    scene->Objetos.at(7)->Transforoma(T);
+
+    scene->Prisma_Triangular_Uni3(Telha);
+    float ve6[4]= {20,3,20,1};
+    E = Opr.Escala(4, ve6);
+    float vt6[4] = {50,20.8,70,1};
+    T = Opr.Translacao(4,vt6);
+    T = Opr.mult(4,4,4,T,E);
+    scene->Objetos.at(8)->Transforoma(T);
+
+    scene->CuboUni3(Casa1);
+    E = Opr.Escala(4, ve4);
+    float vt7[4] = {75,0.8,70,1};
+    T = Opr.Translacao(4,vt7);
+    T = Opr.mult(4,4,4,T,E);
+    scene->Objetos.at(9)->Transforoma(T);
+
+    scene->Prisma_Triangular_Uni3(Telha);
+    vt7[1]=2.8;
+    T = Opr.Translacao(4,vt7);
+    T = Opr.mult(4,4,4,T,E);
+    scene->Objetos.at(10)->Transforoma(T);
+
+    scene->CuboUni3(Casa1);
+    E = Opr.Escala(4, ve5);
+    float vt8[4] = {5,0.8,70,1};
+    T = Opr.Translacao(4,vt8);
+    T = Opr.mult(4,4,4,T,E);
+    scene->Objetos.at(11)->Transforoma(T);
+
+    scene->Prisma_Triangular_Uni3(Telha);
+    ve5[1]=3;
+    E = Opr.Escala(4, ve5);
+    vt8[1]=20.8;
+    T = Opr.Translacao(4,vt8);
+    T = Opr.mult(4,4,4,T,E);
+    scene->Objetos.at(12)->Transforoma(T);
+
+    scene->CuboUni3(Casa1);
+    float ve7[4]={20,2,20};
+    E = Opr.Escala(4, ve7);
+    float vt9[4] = {25,0.8,80,1};
+    scene->Objetos.at(13)->Transforoma(E);
+    T = Opr.Translacao(4,vt9);
+   // T = Opr.mult(4,4,4,T,E);
+    scene->Objetos.at(13)->Transforoma(T);
+
+
     RGB RL(0.8,0.8,0.8);
     Point *P = new Point(50,80,50);
     scene->addFonte2(P,RL);
+
 /*
     RGB L2(0,1,0);
     Point *P2 = new Point(50,80,50);

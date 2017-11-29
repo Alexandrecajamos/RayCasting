@@ -10,6 +10,7 @@ Face::Face(Point _P1, Point _P2, Point _P3, Material *_M){
     this->P2=&_P2;
     this->P3=&_P3;
     this->M =_M;
+    this->atNormal();
 }
 
 
@@ -18,6 +19,7 @@ Face::Face(Point *_P1, Point *_P2, Point *_P3, Material *_M){
     this->P2=_P2;
     this->P3=_P3;
     this->M =_M;
+    this->atNormal();
 }
 
 Face::Face(Point *_P1, Point *_P2, Point *_P3)
@@ -27,6 +29,7 @@ Face::Face(Point *_P1, Point *_P2, Point *_P3)
     this->P3=_P3;
     RGB pad(0.81176,0.81176,0.81176);
     this->M = new Material(pad,pad,pad,0.5);
+    this->atNormal();
 
 }
 Point Face::calcNormal(){
@@ -64,7 +67,7 @@ float Face::Inter(Point P){
     p2= *(this->P2);
     p3= *(this->P3);
     float t = -1;
-    Point nF = this->calcNormal();
+    Point nF = this->calcNormal();//(this->N->x,this->N->y,this->N->z);
     nF.normalize();
     Point Pint = P;
     Pint.normalize();
@@ -94,4 +97,9 @@ float Face::Inter(Point P){
     }
     return t;
 
+}
+
+void Face::atNormal(){
+    Point Norm = this->calcNormal();
+    this->N = &Norm;
 }

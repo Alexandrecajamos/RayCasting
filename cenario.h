@@ -24,9 +24,10 @@ public:
     RGB* Ilm_Pint(Point Pint, Point nFace, Material *MF);
     void CuboUni();
     void CuboUni2(Material *M1,Material *M2,Material *M3,Material *M4,Material *M5,Material *M6);
+    void CuboUni3(Material *M);
     void Prisma_Triangular_Uni();
     void Prisma_Triangular_Uni2(Material *M1,Material *M2,Material *M3,Material *M4,Material *M5);
-
+    void Prisma_Triangular_Uni3(Material *M);
     RGB* Amb;
     RGB* BG;
     Observador *Obs;

@@ -67,8 +67,6 @@ float Face::Inter(Point P){
     Point nF = this->calcNormal();
     nF.normalize();
     Point Pint = P;
-    Point po(0,0,0);
-    Pint.operator -=(po);
     Pint.normalize();
     float PE = Pint.ProdutoEscalar(nF);
     if(PE<0){

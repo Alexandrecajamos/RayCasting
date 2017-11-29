@@ -98,7 +98,7 @@ void MainWindow::MontaCena(Cenario *scene){
     float ve2[4]= {10,0.2,100,1};
     E = Opr.Escala(4, ve2);
     //scene->Objetos.at(1)->Transforoma(E);
-    float vt2[4] = {46,0.8,0,1};
+    float vt2[4] = {45,0.8,0,1};
     float **T = Opr.Translacao(4,vt2);
     T = Opr.mult(4,4,4,T,E);
     scene->Objetos.at(1)->Transforoma(T);
@@ -122,8 +122,6 @@ void MainWindow::MontaCena(Cenario *scene){
     scene->Objetos.at(3)->Transforoma(T);
 
     scene->Prisma_Triangular_Uni3(Casa1);
-    //E = Opr.Escala(4, ve4);
-    //scene->Objetos.at(4)->Transforoma(E);
     vt4[1]=2.8;
     T = Opr.Translacao(4,vt4);
     T = Opr.mult(4,4,4,T,E);
@@ -131,10 +129,17 @@ void MainWindow::MontaCena(Cenario *scene){
     //scene->Objetos.at(4)->ImpPoints();
 
     scene->CuboUni3(Casa1);
+    vt4[1]=0.8;
     vt4[2] = 30;
     T = Opr.Translacao(4,vt4);
     T = Opr.mult(4,4,4,T,E);
     scene->Objetos.at(5)->Transforoma(T);
+
+    scene->Prisma_Triangular_Uni3(Casa1);
+    vt4[1]=2.8;
+    T = Opr.Translacao(4,vt4);
+    T = Opr.mult(4,4,4,T,E);
+    scene->Objetos.at(6)->Transforoma(T);
 
     RGB RL(0.8,0.8,0.8);
     Point *P = new Point(50,80,50);

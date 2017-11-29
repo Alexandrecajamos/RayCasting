@@ -21,11 +21,11 @@ MainWindow::MainWindow(QWidget *parent) :
     int sizeY = 200;
     float W = 0.5;
     float H = 0.5;
-    float d = 3;
+    float d = 1;
 
-    Point Eye(50,1000,50);
+    Point Eye(200,50,200);
     Point LA(50,5,50);
-    Point AVUp(50,0,0);
+    Point AVUp(200,0,0);
 
     Observador *Obs = new Observador(Eye,LA,AVUp);
     Camera *Cam = new Camera(W,H,-d,sizeX,sizeY,*Obs);
@@ -95,6 +95,7 @@ void MainWindow::MontaCena(Cenario *scene){
     float ve[4] = {100,0.8,100,1};
     float** E = Opr.Escala(4, ve);
     scene->Objetos.at(0)->Transforoma(E);
+
 
     scene->CuboUni3(Pista);
     float ve2[4]= {10,0.2,55,1};
@@ -196,6 +197,7 @@ void MainWindow::MontaCena(Cenario *scene){
     RGB RL(0.8,0.8,0.8);
     Point *P = new Point(50,80,50);
     scene->addFonte2(P,RL);
+
 
 /*
     RGB L2(0,1,0);

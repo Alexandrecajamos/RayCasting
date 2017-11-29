@@ -38,6 +38,8 @@ void Cenario::Word_Cam(float **A){
         (*i)->P->x=r[0][0];
         (*i)->P->y=r[1][0];
         (*i)->P->z=r[2][0];
+        free(V[1]);free(V[2]);free(V[3]);
+        free(r[1]);free(r[2]);free(r[3]);
 
     }
 
@@ -48,6 +50,8 @@ void Cenario::Word_Cam(float **A){
         (*i)->Luz->P->x=r[0][0];
         (*i)->Luz->P->y=r[1][0];
         (*i)->Luz->P->z=r[2][0];
+        free(V[1]);free(V[2]);free(V[3]);
+        free(r[1]);free(r[2]);free(r[3]);
     }
 
     Point *temp = new Point(Obs->Pos.x, Obs->Pos.y, Obs->Pos.z);
@@ -56,6 +60,7 @@ void Cenario::Word_Cam(float **A){
     Obs->Pos.x=r[0][0];
     Obs->Pos.y=r[1][0];
     Obs->Pos.z=r[2][0];
+    free(r[1]);free(r[2]);free(r[3]);
 
 }
 float Cenario::Inter(Point Pij, int &Obj, int &Face){
@@ -195,7 +200,6 @@ RGB* Cenario::Ray_Pix_Ilm(Point px){
 
 RGB* Cenario::Ilm_Pint(Point Pint, Point nFace, Material *MF){
     RGB* RayPix = new RGB(this->BG->R, this->BG->G, this->BG->B); //Inicializa com background color;
-
     RGB A(MF->A.R*this->Amb->R,MF->A.G*this->Amb->G,MF->A.B*this->Amb->B);
 
     float Dr=0, Dg=0, Db=0, Er=0, Eg=0, Eb=0;

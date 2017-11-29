@@ -33,6 +33,7 @@ public:
     float** Rotacao2(int N, int E, float Sen, float Cos);
     float** RotacaoArb(int N, float A, float* V);
     float** RQ(float A, float* V);
+    void freeMat(int L, float** M);
 };
 
 #endif // OPERACOES_H

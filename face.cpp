@@ -93,6 +93,12 @@ float Face::Inter(Point P){
             if(lamb[0]>=0 && lamb[0]<=1 && lamb[1]>=0 && lamb[1]<=1 && l3>=0 && l3<=1)
             t=lamb[2];
         }
+        Op.freeMat(3, A);
+        free(C_1);
+        free(C_2);
+        free(C_3);
+        free(B);
+        free(lamb);
 
     }
     return t;

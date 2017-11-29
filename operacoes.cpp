@@ -116,7 +116,8 @@ float* Operacoes::Gauss (int N, float **matA, float *vet2){
     for(int k=0;k<N;k++){
         vet1[k]=vet2[vetAux[k]];
     }
-
+    free(vetAux);
+    vetAux = NULL;
     return vet1;
 }
 float* Operacoes::Vetor(Point P){
@@ -341,3 +342,8 @@ float** Operacoes::RQ(float A, float* V){
     return rot;
 }
 
+void Operacoes::freeMat(int L, float **M){
+    for(int i =0; i<L; i++)
+        free(M[i]);
+    M=NULL;
+}

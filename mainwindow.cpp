@@ -23,8 +23,8 @@ MainWindow::MainWindow(QWidget *parent) :
     float H = 0.5;
     float d = 2;
 
-    Point Eye(150,400,150);
-    Point LA(50,5,50);
+    Point Eye(350,300,-350);
+    Point LA(50,05,50);
     Point AVUp(50,0,0);
 
     Observador *Obs = new Observador(Eye,LA,AVUp);
@@ -84,6 +84,8 @@ void MainWindow::MontaCena(Cenario *scene){
     bool casas = true;
     bool telhados = true;
     bool arvores = true;
+    bool portas = true;
+    bool janelas = true;
 
     RGB RL(0.6,0.6,0.6);
     Point *P = new Point(100,80,100);
@@ -94,6 +96,7 @@ void MainWindow::MontaCena(Cenario *scene){
     //RGB Te(0.5054,0.2705,0.0745);
     RGB G(0.4196,0.5568,0.1372);
     RGB Pis(0.3235, 0.3823, 0.4450);
+    RGB PisT(205/255,184/255,180/255);
     RGB Arv(0.4196,0.7568,0.1372);
     RGB C1(0.1843, 0.3098, 0.3098);
     RGB C2(0.8235, 0.4118, 0.1176);
@@ -102,6 +105,10 @@ void MainWindow::MontaCena(Cenario *scene){
     RGB C5(0.9569, 0.6431, 0.3765);
     RGB C6(0.9608, 0.9608, 0.8627);
     RGB Az(72/255,118/255,1); //72 118 255
+    RGB J(1,1,1);
+    RGB P1(1,0,0);
+    RGB P2(0,1,0);
+    RGB P3(0,0,1);
 
     Material *Casa1 = new Material(C1,C1,C1,1);
     Material *Casa2 = new Material(C2,C2,C2,1);
@@ -115,9 +122,15 @@ void MainWindow::MontaCena(Cenario *scene){
     Material* Telha1 = new Material(C1,C1,C1,1);
     Material* Telha2 = new Material(Az,Az,Az,1);
 
+    Material* Porta1 = new Material(P1,P1,P1,1);
+    Material* Porta2 = new Material(P2,P2,P2,1);
+    Material* Porta3 = new Material(P3,P3,P3,1);
+    Material* Janela = new Material(J,J,J,1);
+
 
     Material *Grama = new Material(G,G,G,1);
     Material *Pista = new Material(Pis,Pis,Pis,1);
+    Material *Terra = new Material(PisT,PisT,PisT,1);
     Material *Arvore = new Material(Arv,Arv,Arv,1);
 
     float **E, **T, **MT;
@@ -131,7 +144,7 @@ void MainWindow::MontaCena(Cenario *scene){
 
     if(solo){
         scene->CuboUni3(Grama);
-        ve[0] = 100;ve[1] = 0.8; ve[2] = 100;
+        ve[0] = 100;ve[1] = 0.8; ve[2] = 95;
         E = Opr.Escala(4, ve);
         scene->Objetos.at(iobj)->Transforoma(E);
         iobj++;
@@ -172,6 +185,22 @@ void MainWindow::MontaCena(Cenario *scene){
         MT = Opr.mult(4,4,4,T,E);
         scene->Objetos.at(iobj)->Transforoma(MT);
         iobj++;
+        float vx[4] ={7, 27, 55,85};
+        for(int i=0; i<4; i++){
+            scene->CuboUni3(Terra);
+            ve[0]=4;ve[1]=0.1; ve[2]=6;
+            if(i==1)
+                ve[2]=11;
+            vt[0]=vx[i];vt[1]=0.8;vt[2]=65;
+            E = Opr.Escala(4,ve);
+            T = Opr.Translacao(4,vt);
+            MT = Opr.mult(4,4,4,T,E);
+            scene->Objetos.at(iobj)->Transforoma(MT);
+            iobj++;
+        }
+
+
+
     }
     if(casas){
 
@@ -213,7 +242,7 @@ void MainWindow::MontaCena(Cenario *scene){
         iobj++;
 
         scene->CuboUni3(Casa5);
-        ve[0]=20;ve[1]=3;ve[2]=15;
+        ve[0]=15;ve[1]=3;ve[2]=15;
         vt[0]=21;vt[1]=0.8;vt[2]=75;
         E = Opr.Escala(4, ve);
         T = Opr.Translacao(4,vt);
@@ -241,7 +270,7 @@ void MainWindow::MontaCena(Cenario *scene){
 
         scene->CuboUni3(Casa6);
         ve[0]=15;ve[1]=3;ve[2]=15;
-        vt[0]=5;vt[1]=0.8;vt[2]=5;
+        vt[0]=5;vt[1]=0.8;vt[2]=6;
         E = Opr.Escala(4, ve);
         T = Opr.Translacao(4,vt);
         MT = Opr.mult(4,4,4,T,E);
@@ -288,7 +317,7 @@ void MainWindow::MontaCena(Cenario *scene){
 
 
         scene->Prisma_Triangular_Uni3(Telha2);
-        ve[0]=20;ve[1]=2;ve[2]=15;
+        ve[0]=15;ve[1]=2;ve[2]=15;
         vt[0]=21;vt[1]=3.8;vt[2]=75;
         E = Opr.Escala(4, ve);
         T = Opr.Translacao(4,vt);
@@ -316,7 +345,7 @@ void MainWindow::MontaCena(Cenario *scene){
 
         scene->Prisma_Triangular_Uni3(Telha1);
         ve[0]=15;ve[1]=3;ve[2]=15;
-        vt[0]=5;vt[1]=3.8;vt[2]=5;
+        vt[0]=5;vt[1]=3.8;vt[2]=6;
         E = Opr.Escala(4, ve);
         T = Opr.Translacao(4,vt);
         MT = Opr.mult(4,4,4,T,E);
@@ -326,138 +355,110 @@ void MainWindow::MontaCena(Cenario *scene){
 
     }
     if(arvores){
-        scene->CuboUni3(Arvore);
-        ve[0]=1.5;ve[1]=7;ve[2]=1.5;
-        vt[0]=8;vt[1]=0.8;vt[2]=42;
+
+        float z[4] = {8,14,40,60};
+        for(int i=0; i<3; i++){
+            for(int j=0; j<4;j++){
+                scene->CuboUni3(Arvore);
+                ve[0]=1.5;ve[1]=7;ve[2]=1.5;
+                vt[0]=z[j];vt[1]=0.8;vt[2]=(i*5)+42;
+                E = Opr.Escala(4, ve);
+                T= Opr.Translacao(4,vt);
+                MT = Opr.mult(4,4,4,T,E);
+                scene->Objetos.at(iobj)->Transforoma(MT);
+                iobj++;
+            }
+            scene->CuboUni3(Arvore);
+            ve[0]=1.5;ve[1]=7;ve[2]=1.5;
+            vt[0]=72;vt[1]=0.8;vt[2]=(i*5)+75;
+            E = Opr.Escala(4, ve);
+            T= Opr.Translacao(4,vt);
+            MT = Opr.mult(4,4,4,T,E);
+            scene->Objetos.at(iobj)->Transforoma(MT);
+            iobj++;
+
+            scene->CuboUni3(Arvore);
+            ve[0]=1.5;ve[1]=2;ve[2]=1.5;
+            vt[0]=40;vt[1]=0.8;vt[2]=(i*5)+75;
+            E = Opr.Escala(4, ve);
+            T= Opr.Translacao(4,vt);
+            MT = Opr.mult(4,4,4,T,E);
+            scene->Objetos.at(iobj)->Transforoma(MT);
+            iobj++;
+
+            for(int j=0; j<2;j++){
+                scene->CuboUni3(Arvore);
+                ve[0]=1.5;ve[1]=2;ve[2]=1.5;
+                vt[0]=(j*20)+40;vt[1]=0.8;vt[2]=(i*5)+5;
+                E = Opr.Escala(4, ve);
+                T= Opr.Translacao(4,vt);
+                MT = Opr.mult(4,4,4,T,E);
+                scene->Objetos.at(iobj)->Transforoma(MT);
+                iobj++;
+            }
+
+
+        }
+
+    }
+    if(portas){
+        scene->CuboUni3(Porta1);
+        ve[0]=1;ve[1]=2;ve[2]=0.1;
+        vt[0]=80;vt[1]=0.8;vt[2]=25;
         E = Opr.Escala(4, ve);
         T= Opr.Translacao(4,vt);
         MT = Opr.mult(4,4,4,T,E);
         scene->Objetos.at(iobj)->Transforoma(MT);
         iobj++;
 
-        scene->CuboUni3(Arvore);
-        ve[0]=1.5;ve[1]=7;ve[2]=1.5;
-        vt[0]=14;vt[1]=0.8;vt[2]=42;
+        scene->CuboUni3(Porta1);
+        ve[0]=1;ve[1]=2;ve[2]=0.1;
+        vt[0]=80;vt[1]=0.8;vt[2]=29.8;
         E = Opr.Escala(4, ve);
         T= Opr.Translacao(4,vt);
         MT = Opr.mult(4,4,4,T,E);
         scene->Objetos.at(iobj)->Transforoma(MT);
         iobj++;
 
-        scene->CuboUni3(Arvore);
-        ve[0]=1.5;ve[1]=7;ve[2]=1.5;
-        vt[0]=40;vt[1]=0.8;vt[2]=42;
+        scene->CuboUni3(Porta1);
+        ve[0]=2;ve[1]=2;ve[2]=0.1;
+        vt[0]=85;vt[1]=0.8;vt[2]=69.8;
         E = Opr.Escala(4, ve);
         T= Opr.Translacao(4,vt);
         MT = Opr.mult(4,4,4,T,E);
         scene->Objetos.at(iobj)->Transforoma(MT);
         iobj++;
 
-        scene->CuboUni3(Arvore);
-        ve[0]=1.5;ve[1]=7;ve[2]=1.5;
-        vt[0]=8;vt[1]=0.8;vt[2]=47;
+        scene->CuboUni3(Porta1);
+        ve[0]=4;ve[1]=2.5;ve[2]=0.1;
+        vt[0]=55;vt[1]=0.8;vt[2]=69.8;
         E = Opr.Escala(4, ve);
         T= Opr.Translacao(4,vt);
         MT = Opr.mult(4,4,4,T,E);
         scene->Objetos.at(iobj)->Transforoma(MT);
         iobj++;
 
-        scene->CuboUni3(Arvore);
-        ve[0]=1.5;ve[1]=7;ve[2]=1.5;
-        vt[0]=14;vt[1]=0.8;vt[2]=47;
+        scene->CuboUni3(Porta1);
+        ve[0]=3;ve[1]=2;ve[2]=0.1;
+        vt[0]=27;vt[1]=0.8;vt[2]=74.8;
         E = Opr.Escala(4, ve);
         T= Opr.Translacao(4,vt);
         MT = Opr.mult(4,4,4,T,E);
         scene->Objetos.at(iobj)->Transforoma(MT);
         iobj++;
 
-        scene->CuboUni3(Arvore);
-        ve[0]=1.5;ve[1]=7;ve[2]=1.5;
-        vt[0]=40;vt[1]=0.8;vt[2]=47;
+        scene->CuboUni3(Porta2);
+        ve[0]=4;ve[1]=2.5;ve[2]=0.1;
+        vt[0]=7;vt[1]=0.8;vt[2]=69.8;
         E = Opr.Escala(4, ve);
         T= Opr.Translacao(4,vt);
         MT = Opr.mult(4,4,4,T,E);
         scene->Objetos.at(iobj)->Transforoma(MT);
         iobj++;
 
-
-        scene->CuboUni3(Arvore);
-        ve[0]=1.5;ve[1]=7;ve[2]=1.5;
-        vt[0]=8;vt[1]=0.8;vt[2]=52;
-        E = Opr.Escala(4, ve);
-        T= Opr.Translacao(4,vt);
-        MT = Opr.mult(4,4,4,T,E);
-        scene->Objetos.at(iobj)->Transforoma(MT);
-        iobj++;
-
-        scene->CuboUni3(Arvore);
-        ve[0]=1.5;ve[1]=7;ve[2]=1.5;
-        vt[0]=14;vt[1]=0.8;vt[2]=52;
-        E = Opr.Escala(4, ve);
-        T= Opr.Translacao(4,vt);
-        MT = Opr.mult(4,4,4,T,E);
-        scene->Objetos.at(iobj)->Transforoma(MT);
-        iobj++;
-
-        scene->CuboUni3(Arvore);
-        ve[0]=1.5;ve[1]=7;ve[2]=1.5;
-        vt[0]=40;vt[1]=0.8;vt[2]=52;
-        E = Opr.Escala(4, ve);
-        T= Opr.Translacao(4,vt);
-        MT = Opr.mult(4,4,4,T,E);
-        scene->Objetos.at(iobj)->Transforoma(MT);
-        iobj++;
-
-
-        scene->CuboUni3(Arvore);
-        ve[0]=1.5;ve[1]=7;ve[2]=1.5;
-        vt[0]=60;vt[1]=0.8;vt[2]=42;
-        E = Opr.Escala(4, ve);
-        T= Opr.Translacao(4,vt);
-        MT = Opr.mult(4,4,4,T,E);
-        scene->Objetos.at(iobj)->Transforoma(MT);
-        iobj++;
-
-        scene->CuboUni3(Arvore);
-        ve[0]=1.5;ve[1]=7;ve[2]=1.5;
-        vt[0]=60;vt[1]=0.8;vt[2]=47;
-        E = Opr.Escala(4, ve);
-        T= Opr.Translacao(4,vt);
-        MT = Opr.mult(4,4,4,T,E);
-        scene->Objetos.at(iobj)->Transforoma(MT);
-        iobj++;
-
-        scene->CuboUni3(Arvore);
-        ve[0]=1.5;ve[1]=7;ve[2]=1.5;
-        vt[0]=60;vt[1]=0.8;vt[2]=52;
-        E = Opr.Escala(4, ve);
-        T= Opr.Translacao(4,vt);
-        MT = Opr.mult(4,4,4,T,E);
-        scene->Objetos.at(iobj)->Transforoma(MT);
-        iobj++;
-
-
-        scene->CuboUni3(Arvore);
-        ve[0]=1.5;ve[1]=7;ve[2]=1.5;
-        vt[0]=72;vt[1]=0.8;vt[2]=75;
-        E = Opr.Escala(4, ve);
-        T= Opr.Translacao(4,vt);
-        MT = Opr.mult(4,4,4,T,E);
-        scene->Objetos.at(iobj)->Transforoma(MT);
-        iobj++;
-
-        scene->CuboUni3(Arvore);
-        ve[0]=1.5;ve[1]=7;ve[2]=1.5;
-        vt[0]=72;vt[1]=0.8;vt[2]=80;
-        E = Opr.Escala(4, ve);
-        T= Opr.Translacao(4,vt);
-        MT = Opr.mult(4,4,4,T,E);
-        scene->Objetos.at(iobj)->Transforoma(MT);
-        iobj++;
-
-        scene->CuboUni3(Arvore);
-        ve[0]=1.5;ve[1]=7;ve[2]=1.5;
-        vt[0]=72;vt[1]=0.8;vt[2]=85;
+        scene->CuboUni3(Porta3);
+        ve[0]=0.1;ve[1]=2;ve[2]=1.5;
+        vt[0]=30;vt[1]=0.8;vt[2]=30;
         E = Opr.Escala(4, ve);
         T= Opr.Translacao(4,vt);
         MT = Opr.mult(4,4,4,T,E);
@@ -466,33 +467,66 @@ void MainWindow::MontaCena(Cenario *scene){
 
 
 
+    }
+    if(janelas){
 
-        scene->CuboUni3(Arvore);
-        ve[0]=1.5;ve[1]=2;ve[2]=1.5;
-        vt[0]=60;vt[1]=0.8;vt[2]=5;
-        E = Opr.Escala(4, ve);
-        T= Opr.Translacao(4,vt);
-        MT = Opr.mult(4,4,4,T,E);
-        scene->Objetos.at(iobj)->Transforoma(MT);
-        iobj++;
+        for(int i=0; i<3;i++){
+            for(int j=0; j<4;j++){
 
-        scene->CuboUni3(Arvore);
-        ve[0]=1.5;ve[1]=2;ve[2]=1.5;
-        vt[0]=60;vt[1]=0.8;vt[2]=10;
-        E = Opr.Escala(4, ve);
-        T= Opr.Translacao(4,vt);
-        MT = Opr.mult(4,4,4,T,E);
-        scene->Objetos.at(iobj)->Transforoma(MT);
-        iobj++;
+                scene->CuboUni3(Janela);
+                ve[0]=2;ve[1]=2;ve[2]=0.1;
+                vt[0]=(i*5)+6;vt[1]=(j*3)+6.8;vt[2]=69.8;
+                E = Opr.Escala(4, ve);
+                T= Opr.Translacao(4,vt);
+                MT = Opr.mult(4,4,4,T,E);
+                scene->Objetos.at(iobj)->Transforoma(MT);
+                iobj++;
 
-        scene->CuboUni3(Arvore);
-        ve[0]=1.5;ve[1]=2;ve[2]=1.5;
-        vt[0]=60;vt[1]=0.8;vt[2]=15;
-        E = Opr.Escala(4, ve);
-        T= Opr.Translacao(4,vt);
-        MT = Opr.mult(4,4,4,T,E);
-        scene->Objetos.at(iobj)->Transforoma(MT);
-        iobj++;
+                scene->CuboUni3(Janela);
+                ve[0]=0.1;ve[1]=2;ve[2]=1;
+                vt[0]=70;vt[1]=(j*3)+6.8;vt[2]=(i*5)+72;
+                E = Opr.Escala(4, ve);
+                T= Opr.Translacao(4,vt);
+                MT = Opr.mult(4,4,4,T,E);
+                scene->Objetos.at(iobj)->Transforoma(MT);
+                iobj++;
+
+            }
+
+            scene->CuboUni3(Janela);
+            ve[0]=0.1;ve[1]=1;ve[2]=1;
+            vt[0]=90;vt[1]=1.8;vt[2]=(i*5)+10;
+            E = Opr.Escala(4, ve);
+            T= Opr.Translacao(4,vt);
+            MT = Opr.mult(4,4,4,T,E);
+            scene->Objetos.at(iobj)->Transforoma(MT);
+            iobj++;
+
+            scene->CuboUni3(Janela);
+            vt[2]=(i*5)+35;
+            E = Opr.Escala(4, ve);
+            T= Opr.Translacao(4,vt);
+            MT = Opr.mult(4,4,4,T,E);
+            scene->Objetos.at(iobj)->Transforoma(MT);
+            iobj++;
+
+            scene->CuboUni3(Janela);
+            vt[0]=95;vt[2]=(i*5)+75;
+            E = Opr.Escala(4, ve);
+            T= Opr.Translacao(4,vt);
+            MT = Opr.mult(4,4,4,T,E);
+            scene->Objetos.at(iobj)->Transforoma(MT);
+            iobj++;
+
+            scene->CuboUni3(Porta1);
+            ve[0]=2;ve[1]=2;ve[2]=0.1;
+            vt[0]=(i*5)+3;vt[1]=1.8;vt[2]=5.9;
+            E = Opr.Escala(4, ve);
+            T= Opr.Translacao(4,vt);
+            MT = Opr.mult(4,4,4,T,E);
+            scene->Objetos.at(iobj)->Transforoma(MT);
+            iobj++;
+        }
     }
 
 

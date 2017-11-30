@@ -18,7 +18,7 @@ public:
     void addFonte(luz *L);
     void addFonte2(Point *P, RGB I);
     void addSpot(Spot *S);
-    void Word_Cam(float **A);
+    void Word_Cam();
     float Inter(Point Pij, int &iObj, int &iFace);
     RGB* Ray_Pix_Ilm(Point Pij);
     RGB* Ilm_Pint(Point Pint, Point nFace, Material *MF);

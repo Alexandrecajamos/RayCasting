@@ -24,8 +24,8 @@ void Cenario::addFonte2(Point *P, RGB I){
     luz* L = new luz(I,P);
     this->fontes_luminosas.push_back(L);
 }
-void Cenario::Word_Cam(float **A){
-
+void Cenario::Word_Cam(){
+    float **A = this->Obs->Word_Cam();
     Operacoes Op;
     for(std::vector<Objeto*>::iterator i = this->Objetos.begin(); i!= this->Objetos.end(); i++){
         (*i)->Transforoma(A);

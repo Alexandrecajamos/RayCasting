@@ -17,10 +17,13 @@ float** Operacoes::mult(int M, int N, int P, float **A, float **B)
     for (int i = 0; i < M; i++)
         for (int j = 0; j < P; j++) {
             C[i][j] = 0;
-            for (int k = 0; k < N; k++)
-                C[i][j] += A[i][k] * B[k][j];
+            for (int k = 0; k < N; k++){
+                float t = A[i][k] * B[k][j];
+                C[i][j] += t;
+            }
                //printf("\ni = %d; j=%d; C[i][j] = %f", i,j, matC[i][j]);
         }
+
     return C;
 }
 float** Operacoes::Identidade(int N)

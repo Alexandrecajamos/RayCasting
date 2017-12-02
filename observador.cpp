@@ -1,5 +1,5 @@
 #include "observador.h"
-
+#include "operacoes.h"
 Observador::Observador()
 {
     Point _pos(0,0,0);
@@ -40,15 +40,15 @@ Observador::Observador(Point _pos, Point Look_At){
 
 }
 
-float** Observador::Cam_Word(){
-    Operacoes Op;
-    float** A = Op.Identidade(4);
-    float* I = Op.Vetor(this->i);
-    float* J = Op.Vetor(this->j);
-    float* K = Op.Vetor(this->k);
-    float* P = Op.Vetor(this->Pos);
-    P[3] = 1; // Corrigir Erro;
-    for(int i=0;i<4;i++){
+void Observador::Cam_Word(float A[TAM][TAM]){
+    transformacoes t;
+    float I[3] = {i.x,i.y, i.z};
+    float J[3] = {j.x,j.y, j.z};
+    float K[3] = {k.x,k.y, k.z};
+    float P[3] = {Pos.x,Pos.y, Pos.z};
+    t.Identidade(A);
+
+    for(int i=0;i<3;i++){
         A[i][0]=I[i];
         A[i][1]=J[i];
         A[i][2]=K[i];
@@ -56,16 +56,16 @@ float** Observador::Cam_Word(){
 
     }
 
-    return A;
 }
 
-float** Observador::Word_Cam(){
-    Operacoes Op;
-    float** A = Op.Identidade(4);
-    float* I = Op.Vetor(this->i);
-    float* J = Op.Vetor(this->j);
-    float* K = Op.Vetor(this->k);
-    for(int i=0;i<4;i++){
+void Observador::Word_Cam(float A[TAM][TAM]){
+    transformacoes t;
+    float I[3] = {i.x,i.y, i.z};
+    float J[3] = {j.x,j.y, j.z};
+    float K[3] = {k.x,k.y, k.z};
+    //float P[3] = {Pos.x,Pos.y, Pos.z};
+    t.Identidade(A);
+    for(int i=0;i<3;i++){
         A[0][i]=I[i];
         A[1][i]=J[i];
         A[2][i]=K[i];
@@ -76,5 +76,4 @@ float** Observador::Word_Cam(){
     A[0][3]=-x;
     A[1][3]=-y;
     A[2][3]=-z;
-    return A;
 }

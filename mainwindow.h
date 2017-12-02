@@ -54,8 +54,12 @@ public:
 
     RGB* Bg;//(0.250980, 0.87843137, 0.815686275);
     RGB* Amb;
-
+    std::vector<Objeto*> WObj;
     Cenario* scene;
+
+    Objeto* CuboUni3(Material *M);
+    Objeto* Prisma_Triangular_Uni3(Material *M);
+    void cWord();
 
 private:
     Ui::MainWindow *ui;

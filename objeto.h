@@ -8,6 +8,8 @@
 #include "operacoes.h"
 #include "material.h"
 #include <fstream>
+#include "transformacoes.h"
+#define TAM 4
 
 class Objeto
 {
@@ -24,9 +26,10 @@ public:
     void addFace3(Point *P1, Point *P2, Point *P3, Material*M);
     float Inter(Point Pint, int *ind);
     void calc_Esfera();
-    void Transforoma(float** A);
+    void Transforoma(float A[TAM][TAM]);
     Objeto* Copia();
     void ImpPoints();
+    void Libera();
     Esfera Esf;
     std::vector<Point*> points;
     std::vector<Face*> faces;

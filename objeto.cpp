@@ -87,17 +87,10 @@ float Objeto::Inter(Point Pint, int *idx){
 
     return t;
 }
-void Objeto::Transforoma(float **A){
-    Operacoes Op;
+void Objeto::Transforoma(float A[TAM][TAM]){
+    transformacoes t;
     for(std::vector<Point*>::iterator i = this->points.begin(); i!= this->points.end(); i++){
-        float** V = Op.VetorColuna((*i));
-        float** r = Op.mult(4,4,1,A,V);
-        (*i)->x=r[0][0];
-        (*i)->y=r[1][0];
-        (*i)->z=r[2][0];
-    }
-    for(std::vector<Face*>::iterator i = this->faces.begin(); i!= this->faces.end(); i++){
-        //(*i)->atNormal();
+        t.MxV(A,(*i));
     }
 }
 
@@ -135,3 +128,19 @@ void Objeto::addPoint(Point P){
 }*/
 
 
+void Objeto::Libera(){
+    for(std::vector<Point*>::iterator i = this->points.begin(); i!= this->points.end(); i++)
+    {
+        free(*i);
+        (*i)=NULL;
+    }
+    for(std::vector<Face*>::iterator i = this->faces.begin(); i!= this->faces.end(); i++){
+        (*i)->M=NULL;
+        (*i)->P1=NULL;
+        (*i)->P2=NULL;
+        (*i)->P3=NULL;
+        (*i)->N=NULL;
+        free(*i);
+        (*i)=NULL;
+    }
+}

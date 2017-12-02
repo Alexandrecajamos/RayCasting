@@ -25,42 +25,23 @@ void Cenario::addFonte2(Point *P, RGB I){
     this->fontes_luminosas.push_back(L);
 }
 void Cenario::Word_Cam(){
-    float **A = this->Obs->Word_Cam();
-    Operacoes Op;
+    transformacoes t;
+    float WC[4][4];
+    this->Obs->Word_Cam(WC);
+
     for(std::vector<Objeto*>::iterator i = this->Objetos.begin(); i!= this->Objetos.end(); i++){
-        (*i)->Transforoma(A);
+        (*i)->Transforoma(WC);
     }
     for(std::vector<luz*>::iterator i = this->fontes_luminosas.begin();i!= this->fontes_luminosas.end();i++){
-
-        Point *P = (*i)->P;
-        float** V = Op.VetorColuna(P);
-        float** r = Op.mult(4,4,1,A,V);
-        (*i)->P->x=r[0][0];
-        (*i)->P->y=r[1][0];
-        (*i)->P->z=r[2][0];
-        free(V[1]);free(V[2]);free(V[3]);
-        free(r[1]);free(r[2]);free(r[3]);
+        t.MxV(WC,(*i)->P);
 
     }
 
     for(std::vector<Spot*>::iterator i = this->fontes_spot.begin();i!=this->fontes_spot.end();i++){
-        Point *P = (*i)->Luz->P;
-        float** V = Op.VetorColuna(P);
-        float** r = Op.mult(4,4,1,A,V);
-        (*i)->Luz->P->x=r[0][0];
-        (*i)->Luz->P->y=r[1][0];
-        (*i)->Luz->P->z=r[2][0];
-        free(V[1]);free(V[2]);free(V[3]);
-        free(r[1]);free(r[2]);free(r[3]);
+        t.MxV(WC,(*i)->Luz->P);
     }
-
-    Point *temp = new Point(Obs->Pos.x, Obs->Pos.y, Obs->Pos.z);
-    float** obs = Op.VetorColuna(temp);
-    float** r = Op.mult(4,4,1,A,obs);
-    Obs->Pos.x=r[0][0];
-    Obs->Pos.y=r[1][0];
-    Obs->Pos.z=r[2][0];
-    free(r[1]);free(r[2]);free(r[3]);
+    Point *p = &Obs->Pos;
+    t.MxV(WC,p);
 
 }
 float Cenario::Inter(Point Pij, int &Obj, int &Face){
@@ -387,51 +368,6 @@ void Cenario::CuboUni3(Material *M){
     cubo->addFace(2,7,3,M);
 
     this->addObjeto(cubo);
-}
-void Cenario::Prisma_Triangular_Uni(){
-    Objeto *prism = new Objeto();
-
-    prism->addPoint(0,0,1);
-    prism->addPoint(1,0,1);
-    prism->addPoint(1,0,0);
-    prism->addPoint(0,0,0);
-    prism->addPoint(0,1,0);
-    prism->addPoint(1,1,0);
-
-    prism->addFace2(1,2,5);
-    prism->addFace2(3,0,4);
-    prism->addFace2(3,2,1);
-    prism->addFace2(1,0,3);
-
-    prism->addFace2(4,0,1);
-    prism->addFace2(5,4,1);
-    prism->addFace2(5,2,3);
-    prism->addFace2(4,5,3);
-
-    this->addObjeto(prism);
-
-}
-void Cenario::Prisma_Triangular_Uni2(Material *M1,Material *M2,Material *M3,Material *M4,Material *M5){
-    Objeto *prism = new Objeto();
-    prism->addPoint(-0.5,0,0.5);
-    prism->addPoint(0.5,0,0.5);
-    prism->addPoint(0.5,0,-0.5);
-    prism->addPoint(-0.5,0,-0.5);
-    prism->addPoint(-0.5,1,0);
-    prism->addPoint(0.5,1,0);
-
-
-    prism->addFace(3,2,1, M1);
-    prism->addFace(1,0,3, M1);
-    prism->addFace(3,0,4, M2);
-    prism->addFace(1,2,5, M3);
-    prism->addFace(4,0,1, M4);
-    prism->addFace(5,4,1, M4);
-    prism->addFace(5,2,3, M5);
-    prism->addFace(4,5,3, M5);
-
-    this->addObjeto(prism);
-
 }
 void Cenario::Prisma_Triangular_Uni3(Material *M){
 

@@ -61,8 +61,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     connect(ui->render,SIGNAL(pressed()),this,SLOT(Render()));
-    connect(ui->montar,SIGNAL(pressed()),this,SLOT(MontaCena()));
-    connect(ui->Cam,SIGNAL(pressed()),this,SLOT(CamT()));
+    //connect(ui->montar,SIGNAL(pressed()),this,SLOT(MontaCena()));
+    //connect(ui->Cam,SIGNAL(pressed()),this,SLOT(CamT()));
     connect(ui->Sair,SIGNAL(pressed()),this,SLOT(Sair()));
 
 
@@ -138,6 +138,8 @@ void MainWindow::cWord(){
     WObj.clear();
 }
 void MainWindow::Render(){
+    CamT();
+    MontaCena();
     scene->Word_Cam();
     QImage image = QImage( sizeX, sizeY, QImage::Format_RGB32 );
 
@@ -169,7 +171,8 @@ void MainWindow::Render(){
 }
 void MainWindow::MontaCena(){
 
-    WObj.clear();
+    //WObj.clear();
+    scene->Objetos.clear();
     float E[4][4], T[4][4], MT[4][4];
     float ve[4],vt[4];
     Objeto *O;
@@ -181,8 +184,9 @@ void MainWindow::MontaCena(){
         ve[0] = 100;ve[1] = 0.8; ve[2] = 95;
         t.Escala(E,ve);
         O->Transforoma(E);
-        WObj.push_back(O);
-        free(O);
+        //WObj.push_back(O);
+        scene->Objetos.push_back(O);
+        //free(O);
         iobj++;
     }
     if(pistas){
@@ -190,59 +194,64 @@ void MainWindow::MontaCena(){
         ve[0]=10;ve[1]=0.2;ve[2]=55;
         vt[0]=45;vt[1]=0.8;vt[2]=0;
         t.Escala(E,ve);
-        t.Escala(T,vt);
+        t.Translacao(T,vt);
         t.MxM(T,E,MT);
         O->Transforoma(MT);
-        WObj.push_back(O);
-        free(O);
+        //WObj.push_back(O);
+        scene->Objetos.push_back(O);
+        //free(O);
         iobj++;
 
         O = CuboUni3(Pista);
         ve[0]=100;ve[1]=0.2;ve[2]=10;
         vt[0]=0;vt[1]=0.8;vt[2]=55;
         t.Escala(E,ve);
-        t.Escala(T,vt);
+        t.Translacao(T,vt);
         t.MxM(T,E,MT);
         O->Transforoma(MT);
-        WObj.push_back(O);
-        free(O);
+        scene->Objetos.push_back(O);
+        //WObj.push_back(O);
+        //free(O);
         iobj++;
 
         O = CuboUni3(Pista);
         ve[0]=30;ve[1]=0.2;ve[2]=5;
         vt[0]=55;vt[1]=0.8;vt[2]=25;
         t.Escala(E,ve);
-        t.Escala(T,vt);
+        t.Translacao(T,vt);
         t.MxM(T,E,MT);
         O->Transforoma(MT);
-        WObj.push_back(O);
-        free(O);
+        scene->Objetos.push_back(O);
+        //WObj.push_back(O);
+        //free(O);
         iobj++;
 
         O = CuboUni3(Pista);
         ve[0]=15;ve[1]=0.2;ve[2]=4;
         vt[0]=30;vt[1]=0.8;vt[2]=28;
         t.Escala(E,ve);
-        t.Escala(T,vt);
+        t.Translacao(T,vt);
         t.MxM(T,E,MT);
         O->Transforoma(MT);
-        WObj.push_back(O);
-        free(O);
+        scene->Objetos.push_back(O);
+        //WObj.push_back(O);
+        //free(O);
         iobj++;
 
         float vx[4] ={7, 27, 55,85};
         for(int i=0; i<4; i++){
-            CuboUni3(Terra);
+            O = CuboUni3(Terra);
             ve[0]=4;ve[1]=0.1; ve[2]=6;
             if(i==1)
                 ve[2]=11;
             vt[0]=vx[i];vt[1]=0.8;vt[2]=65;
             t.Escala(E,ve);
-            t.Escala(T,vt);
+            t.Translacao(T,vt);
             t.MxM(T,E,MT);
             O->Transforoma(MT);
-            WObj.push_back(O);
-            free(O);
+            scene->Objetos.push_back(O);
+            //WObj.push_back(O);
+            //free(O);
             iobj++;
         }
 
@@ -256,88 +265,82 @@ void MainWindow::MontaCena(){
             ve[0]=20;ve[1]=2.5;ve[2]=20;
             vt[0]=70;vt[1]=0.8;vt[2]=5;
             t.Escala(E,ve);
-            t.Escala(T,vt);
+            t.Translacao(T,vt);
             t.MxM(T,E,MT);
             O->Transforoma(MT);
-            WObj.push_back(O);
-            free(O);
+            scene->Objetos.push_back(O);
+            //free(O);
             iobj++;
 
             O = CuboUni3(Casa2);
             ve[0]=20;ve[1]=2.5;ve[2]=20;
             vt[0]=70;vt[1]=0.8;vt[2]=30;
             t.Escala(E,ve);
-            t.Escala(T,vt);
+            t.Translacao(T,vt);
             t.MxM(T,E,MT);
             O->Transforoma(MT);
-            WObj.push_back(O);
-            free(O);
+            scene->Objetos.push_back(O);
+            //free(O);
             iobj++;
 
             O = CuboUni3(Casa3);
             ve[0]=20;ve[1]=2.5;ve[2]=20;
             vt[0]=75;vt[1]=0.8;vt[2]=70;
             t.Escala(E,ve);
-            t.Escala(T,vt);
+            t.Translacao(T,vt);
             t.MxM(T,E,MT);
             O->Transforoma(MT);
-            WObj.push_back(O);
-            free(O);
+            scene->Objetos.push_back(O);
             iobj++;
 
             O = CuboUni3(Casa4);
             ve[0]=20;ve[1]=20;ve[2]=20;
             vt[0]=50;vt[1]=0.8;vt[2]=70;
             t.Escala(E,ve);
-            t.Escala(T,vt);
+            t.Translacao(T,vt);
             t.MxM(T,E,MT);
             O->Transforoma(MT);
-            WObj.push_back(O);
-            free(O);
+            scene->Objetos.push_back(O);
             iobj++;
 
             O = CuboUni3(Casa5);
             ve[0]=15;ve[1]=3;ve[2]=15;
             vt[0]=21;vt[1]=0.8;vt[2]=75;
             t.Escala(E,ve);
-            t.Escala(T,vt);
+            t.Translacao(T,vt);
             t.MxM(T,E,MT);
             O->Transforoma(MT);
-            WObj.push_back(O);
-            free(O);
+            scene->Objetos.push_back(O);
             iobj++;
 
             O = CuboUni3(Casa5);
             ve[0]=20;ve[1]=20;ve[2]=20;
             vt[0]=2;vt[1]=0.8;vt[2]=70;
             t.Escala(E,ve);
-            t.Escala(T,vt);
+            t.Translacao(T,vt);
             t.MxM(T,E,MT);
             O->Transforoma(MT);
-            WObj.push_back(O);
-            free(O);
+            scene->Objetos.push_back(O);
             iobj++;
 
             O = CuboUni3(Casa6);
             ve[0]=25;ve[1]=3;ve[2]=20;
             vt[0]=5;vt[1]=0.8;vt[2]=20;
             t.Escala(E,ve);
-            t.Escala(T,vt);
+            t.Translacao(T,vt);
             t.MxM(T,E,MT);
             O->Transforoma(MT);
-            WObj.push_back(O);
-            free(O);
+            scene->Objetos.push_back(O);
             iobj++;
 
             O = CuboUni3(Casa6);
             ve[0]=15;ve[1]=3;ve[2]=15;
             vt[0]=5;vt[1]=0.8;vt[2]=6;
             t.Escala(E,ve);
-            t.Escala(T,vt);
+            t.Translacao(T,vt);
             t.MxM(T,E,MT);
             O->Transforoma(MT);
-            WObj.push_back(O);
-            free(O);
+            scene->Objetos.push_back(O);
             iobj++;
 
         }
@@ -346,44 +349,40 @@ void MainWindow::MontaCena(){
             ve[0]=20;ve[1]=2;ve[2]=20;
             vt[0]=70;vt[1]=3.3;vt[2]=5;
             t.Escala(E,ve);
-            t.Escala(T,vt);
+            t.Translacao(T,vt);
             t.MxM(T,E,MT);
             O->Transforoma(MT);
-            WObj.push_back(O);
-            free(O);
+            scene->Objetos.push_back(O);
             iobj++;
 
             O = Prisma_Triangular_Uni3(Telha2);
             ve[0]=20;ve[1]=2;ve[2]=20;
             vt[0]=70;vt[1]=3.3;vt[2]=30;
             t.Escala(E,ve);
-            t.Escala(T,vt);
+            t.Translacao(T,vt);
             t.MxM(T,E,MT);
             O->Transforoma(MT);
-            WObj.push_back(O);
-            free(O);
+            scene->Objetos.push_back(O);
             iobj++;
 
-            Prisma_Triangular_Uni3(Telha1);
+            O = Prisma_Triangular_Uni3(Telha1);
             ve[0]=20;ve[1]=2;ve[2]=20;
             vt[0]=75;vt[1]=3.3;vt[2]=70;
             t.Escala(E,ve);
-            t.Escala(T,vt);
+            t.Translacao(T,vt);
             t.MxM(T,E,MT);
             O->Transforoma(MT);
-            WObj.push_back(O);
-            free(O);
+            scene->Objetos.push_back(O);
             iobj++;
 
             O = Prisma_Triangular_Uni3(Telha1);
             ve[0]=20;ve[1]=3;ve[2]=20;
             vt[0]=50;vt[1]=20.7;vt[2]=70;
             t.Escala(E,ve);
-            t.Escala(T,vt);
+            t.Translacao(T,vt);
             t.MxM(T,E,MT);
             O->Transforoma(MT);
-            WObj.push_back(O);
-            free(O);
+            scene->Objetos.push_back(O);
             iobj++;
 
 
@@ -391,44 +390,40 @@ void MainWindow::MontaCena(){
             ve[0]=15;ve[1]=2;ve[2]=15;
             vt[0]=21;vt[1]=3.8;vt[2]=75;
             t.Escala(E,ve);
-            t.Escala(T,vt);
+            t.Translacao(T,vt);
             t.MxM(T,E,MT);
             O->Transforoma(MT);
-            WObj.push_back(O);
-            free(O);
+            scene->Objetos.push_back(O);
             iobj++;
 
             O = Prisma_Triangular_Uni3(Telha2);
             ve[0]=20;ve[1]=3;ve[2]=20;
             vt[0]=2;vt[1]=20.8;vt[2]=70;
             t.Escala(E,ve);
-            t.Escala(T,vt);
+            t.Translacao(T,vt);
             t.MxM(T,E,MT);
             O->Transforoma(MT);
-            WObj.push_back(O);
-            free(O);
+            scene->Objetos.push_back(O);
             iobj++;
 
             O = Prisma_Triangular_Uni3(Telha1);
             ve[0]=25;ve[1]=3;ve[2]=20;
             vt[0]=5;vt[1]=3.8;vt[2]=20;
             t.Escala(E,ve);
-            t.Escala(T,vt);
+            t.Translacao(T,vt);
             t.MxM(T,E,MT);
             O->Transforoma(MT);
-            WObj.push_back(O);
-            free(O);
+            scene->Objetos.push_back(O);
             iobj++;
 
             O = Prisma_Triangular_Uni3(Telha1);
             ve[0]=15;ve[1]=3;ve[2]=15;
             vt[0]=5;vt[1]=3.8;vt[2]=6;
             t.Escala(E,ve);
-            t.Escala(T,vt);
+            t.Translacao(T,vt);
             t.MxM(T,E,MT);
             O->Transforoma(MT);
-            WObj.push_back(O);
-            free(O);
+            scene->Objetos.push_back(O);
             iobj++;
 
 
@@ -442,33 +437,30 @@ void MainWindow::MontaCena(){
                    ve[0]=1.5;ve[1]=7;ve[2]=1.5;
                    vt[0]=z[j];vt[1]=0.8;vt[2]=(i*5)+42;
                    t.Escala(E,ve);
-                   t.Escala(T,vt);
+                   t.Translacao(T,vt);
                    t.MxM(T,E,MT);
                    O->Transforoma(MT);
-                   WObj.push_back(O);
-                   free(O);
+                   scene->Objetos.push_back(O);
                    iobj++;
                }
                O = CuboUni3(Arvore);
                ve[0]=1.5;ve[1]=7;ve[2]=1.5;
                vt[0]=72;vt[1]=0.8;vt[2]=(i*5)+75;
                t.Escala(E,ve);
-               t.Escala(T,vt);
+               t.Translacao(T,vt);
                t.MxM(T,E,MT);
                O->Transforoma(MT);
-               WObj.push_back(O);
-               free(O);
+               scene->Objetos.push_back(O);
                iobj++;
 
                O = CuboUni3(Arvore);
                ve[0]=1.5;ve[1]=2;ve[2]=1.5;
                vt[0]=40;vt[1]=0.8;vt[2]=(i*5)+75;
                t.Escala(E,ve);
-               t.Escala(T,vt);
+               t.Translacao(T,vt);
                t.MxM(T,E,MT);
                O->Transforoma(MT);
-               WObj.push_back(O);
-               free(O);
+               scene->Objetos.push_back(O);
                iobj++;
 
                for(int j=0; j<2;j++){
@@ -476,11 +468,10 @@ void MainWindow::MontaCena(){
                    ve[0]=1.5;ve[1]=2;ve[2]=1.5;
                    vt[0]=(j*20)+40;vt[1]=0.8;vt[2]=(i*5)+5;
                    t.Escala(E,ve);
-                   t.Escala(T,vt);
+                   t.Translacao(T,vt);
                    t.MxM(T,E,MT);
                    O->Transforoma(MT);
-                   WObj.push_back(O);
-                   free(O);
+                   scene->Objetos.push_back(O);
                    iobj++;
                }
 
@@ -493,77 +484,70 @@ void MainWindow::MontaCena(){
          ve[0]=1;ve[1]=2;ve[2]=0.1;
          vt[0]=80;vt[1]=0.8;vt[2]=25;
          t.Escala(E,ve);
-         t.Escala(T,vt);
+         t.Translacao(T,vt);
          t.MxM(T,E,MT);
          O->Transforoma(MT);
-         WObj.push_back(O);
-         free(O);
+         scene->Objetos.push_back(O);
          iobj++;
 
          O = CuboUni3(Porta1);
          ve[0]=1;ve[1]=2;ve[2]=0.1;
          vt[0]=80;vt[1]=0.8;vt[2]=29.8;
          t.Escala(E,ve);
-         t.Escala(T,vt);
+         t.Translacao(T,vt);
          t.MxM(T,E,MT);
          O->Transforoma(MT);
-         WObj.push_back(O);
-         free(O);
+         scene->Objetos.push_back(O);
          iobj++;
 
          O = CuboUni3(Porta1);
          ve[0]=2;ve[1]=2;ve[2]=0.1;
          vt[0]=85;vt[1]=0.8;vt[2]=69.8;
          t.Escala(E,ve);
-         t.Escala(T,vt);
+         t.Translacao(T,vt);
          t.MxM(T,E,MT);
          O->Transforoma(MT);
-         WObj.push_back(O);
-         free(O);
+         scene->Objetos.push_back(O);
          iobj++;
 
          O = CuboUni3(Porta1);
          ve[0]=4;ve[1]=2.5;ve[2]=0.1;
          vt[0]=55;vt[1]=0.8;vt[2]=69.8;
          t.Escala(E,ve);
-         t.Escala(T,vt);
+         t.Translacao(T,vt);
          t.MxM(T,E,MT);
          O->Transforoma(MT);
-         WObj.push_back(O);
-         free(O);
+         scene->Objetos.push_back(O);
          iobj++;
 
          O = CuboUni3(Porta1);
          ve[0]=3;ve[1]=2;ve[2]=0.1;
          vt[0]=27;vt[1]=0.8;vt[2]=74.8;
          t.Escala(E,ve);
-         t.Escala(T,vt);
+         t.Translacao(T,vt);
          t.MxM(T,E,MT);
          O->Transforoma(MT);
-         WObj.push_back(O);
-         free(O);
+         scene->Objetos.push_back(O);
          iobj++;
 
          O = CuboUni3(Porta2);
          ve[0]=4;ve[1]=2.5;ve[2]=0.1;
          vt[0]=7;vt[1]=0.8;vt[2]=69.8;
          t.Escala(E,ve);
-         t.Escala(T,vt);
+         t.Translacao(T,vt);
          t.MxM(T,E,MT);
          O->Transforoma(MT);
-         WObj.push_back(O);
-         free(O);
+        scene->Objetos.push_back(O);
          iobj++;
 
          O = CuboUni3(Porta3);
          ve[0]=0.1;ve[1]=2;ve[2]=1.5;
          vt[0]=30;vt[1]=0.8;vt[2]=30;
          t.Escala(E,ve);
-         t.Escala(T,vt);
+         t.Translacao(T,vt);
          t.MxM(T,E,MT);
          O->Transforoma(MT);
-         WObj.push_back(O);
-         free(O);
+        scene->Objetos.push_back(O);
          iobj++;
 
 
@@ -578,22 +562,20 @@ void MainWindow::MontaCena(){
                     ve[0]=2;ve[1]=2;ve[2]=0.1;
                     vt[0]=(i*5)+6;vt[1]=(j*3)+6.8;vt[2]=69.8;
                     t.Escala(E,ve);
-                    t.Escala(T,vt);
+                    t.Translacao(T,vt);
                     t.MxM(T,E,MT);
                     O->Transforoma(MT);
-                    WObj.push_back(O);
-                    free(O);
+                    scene->Objetos.push_back(O);
                     iobj++;
 
                     O = CuboUni3(Janela);
                     ve[0]=0.1;ve[1]=2;ve[2]=1;
                     vt[0]=70;vt[1]=(j*3)+6.8;vt[2]=(i*5)+72;
                     t.Escala(E,ve);
-                    t.Escala(T,vt);
+                    t.Translacao(T,vt);
                     t.MxM(T,E,MT);
                     O->Transforoma(MT);
-                    WObj.push_back(O);
-                    free(O);
+                    scene->Objetos.push_back(O);
                     iobj++;
 
                 }
@@ -602,42 +584,38 @@ void MainWindow::MontaCena(){
                 ve[0]=0.1;ve[1]=1;ve[2]=1;
                 vt[0]=90;vt[1]=1.8;vt[2]=(i*5)+10;
                 t.Escala(E,ve);
-                t.Escala(T,vt);
+                t.Translacao(T,vt);
                 t.MxM(T,E,MT);
                 O->Transforoma(MT);
-                WObj.push_back(O);
-                free(O);
+               scene->Objetos.push_back(O);
                 iobj++;
 
                 O = CuboUni3(Janela);
                 vt[2]=(i*5)+35;
                 t.Escala(E,ve);
-                t.Escala(T,vt);
+                t.Translacao(T,vt);
                 t.MxM(T,E,MT);
                 O->Transforoma(MT);
-                WObj.push_back(O);
-                free(O);
+                scene->Objetos.push_back(O);
                 iobj++;
 
                 O = CuboUni3(Janela);
                 vt[0]=95;vt[2]=(i*5)+75;
                 t.Escala(E,ve);
-                t.Escala(T,vt);
+                t.Translacao(T,vt);
                 t.MxM(T,E,MT);
                 O->Transforoma(MT);
-                WObj.push_back(O);
-                free(O);
+               scene->Objetos.push_back(O);
                 iobj++;
 
                 O = CuboUni3(Porta1);
                 ve[0]=2;ve[1]=2;ve[2]=0.1;
                 vt[0]=(i*5)+6;vt[1]=1.8;vt[2]=5.9;
                 t.Escala(E,ve);
-                t.Escala(T,vt);
+                t.Translacao(T,vt);
                 t.MxM(T,E,MT);
                 O->Transforoma(MT);
-                WObj.push_back(O);
-                free(O);
+               scene->Objetos.push_back(O);
                 iobj++;
             }
         }
@@ -655,6 +633,10 @@ void MainWindow::CamT(){
     Cam = new Camera(W,H,-d,sizeX,sizeY,*Obs);
 
     scene = new Cenario(Obs, Cam, Amb, Bg);
+
+    RGB RL(0.6,0.6,0.6);
+    Point *P = new Point(100,80,100);
+    scene->addFonte2(P,RL);
 }
 void MainWindow::Sair(){
     free(Casa1);

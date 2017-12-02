@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>650</width>
+    <width>923</width>
     <height>650</height>
    </rect>
   </property>
@@ -33,14 +33,14 @@
        <widget class="QPushButton" name="render">
         <property name="geometry">
          <rect>
-          <x>490</x>
-          <y>510</y>
+          <x>620</x>
+          <y>30</y>
           <width>111</width>
           <height>51</height>
          </rect>
         </property>
         <property name="text">
-         <string>Foto</string>
+         <string>Fotografar</string>
         </property>
        </widget>
        <widget class="QDoubleSpinBox" name="Eye_x">
@@ -484,8 +484,8 @@
        <widget class="QCheckBox" name="solo">
         <property name="geometry">
          <rect>
-          <x>290</x>
-          <y>260</y>
+          <x>250</x>
+          <y>220</y>
           <width>92</width>
           <height>23</height>
          </rect>
@@ -497,8 +497,8 @@
        <widget class="QCheckBox" name="pistas">
         <property name="geometry">
          <rect>
-          <x>290</x>
-          <y>290</y>
+          <x>250</x>
+          <y>250</y>
           <width>92</width>
           <height>23</height>
          </rect>
@@ -510,8 +510,8 @@
        <widget class="QCheckBox" name="paredes">
         <property name="geometry">
          <rect>
-          <x>290</x>
-          <y>320</y>
+          <x>250</x>
+          <y>280</y>
           <width>92</width>
           <height>23</height>
          </rect>
@@ -523,8 +523,8 @@
        <widget class="QCheckBox" name="telhados">
         <property name="geometry">
          <rect>
-          <x>290</x>
-          <y>350</y>
+          <x>250</x>
+          <y>310</y>
           <width>92</width>
           <height>23</height>
          </rect>
@@ -536,8 +536,8 @@
        <widget class="QCheckBox" name="portas">
         <property name="geometry">
          <rect>
-          <x>290</x>
-          <y>380</y>
+          <x>250</x>
+          <y>340</y>
           <width>92</width>
           <height>23</height>
          </rect>
@@ -549,8 +549,8 @@
        <widget class="QCheckBox" name="janelas">
         <property name="geometry">
          <rect>
-          <x>290</x>
-          <y>410</y>
+          <x>250</x>
+          <y>370</y>
           <width>92</width>
           <height>23</height>
          </rect>
@@ -562,8 +562,8 @@
        <widget class="QCheckBox" name="arvores">
         <property name="geometry">
          <rect>
-          <x>290</x>
-          <y>440</y>
+          <x>250</x>
+          <y>400</y>
           <width>92</width>
           <height>23</height>
          </rect>
@@ -575,7 +575,7 @@
        <widget class="QLabel" name="label_16">
         <property name="geometry">
          <rect>
-          <x>80</x>
+          <x>20</x>
           <y>30</y>
           <width>421</width>
           <height>41</height>
@@ -590,7 +590,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Configurações de Renderização e Cenário</string>
+         <string>Configurações de Renderização</string>
         </property>
        </widget>
        <widget class="QDoubleSpinBox" name="w">
@@ -714,37 +714,11 @@
          <string>d</string>
         </property>
        </widget>
-       <widget class="QPushButton" name="montar">
-        <property name="geometry">
-         <rect>
-          <x>280</x>
-          <y>510</y>
-          <width>111</width>
-          <height>51</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Montar</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="Cam">
-        <property name="geometry">
-         <rect>
-          <x>70</x>
-          <y>510</y>
-          <width>111</width>
-          <height>51</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Inicializa</string>
-        </property>
-       </widget>
        <widget class="QPushButton" name="Sair">
         <property name="geometry">
          <rect>
-          <x>490</x>
-          <y>440</y>
+          <x>760</x>
+          <y>30</y>
           <width>111</width>
           <height>51</height>
          </rect>
@@ -753,72 +727,16 @@
          <string>Sair</string>
         </property>
        </widget>
-       <widget class="Line" name="line">
-        <property name="geometry">
-         <rect>
-          <x>250</x>
-          <y>220</y>
-          <width>21</width>
-          <height>261</height>
-         </rect>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-       </widget>
-       <widget class="Line" name="line_2">
-        <property name="geometry">
-         <rect>
-          <x>260</x>
-          <y>205</y>
-          <width>101</width>
-          <height>31</height>
-         </rect>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </widget>
-      <widget class="QWidget" name="tab">
-       <attribute name="title">
-        <string>Tab 1</string>
-       </attribute>
        <widget class="QGraphicsView" name="graphicsView">
         <property name="geometry">
          <rect>
-          <x>-50</x>
-          <y>50</y>
-          <width>711</width>
-          <height>531</height>
+          <x>430</x>
+          <y>90</y>
+          <width>451</width>
+          <height>391</height>
          </rect>
         </property>
        </widget>
-       <widget class="QLabel" name="label_17">
-        <property name="geometry">
-         <rect>
-          <x>200</x>
-          <y>10</y>
-          <width>181</width>
-          <height>31</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>13</pointsize>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="text">
-         <string>Fotografia do Cenário</string>
-        </property>
-       </widget>
-      </widget>
-      <widget class="QWidget" name="tab_3">
-       <attribute name="title">
-        <string>Page</string>
-       </attribute>
       </widget>
      </widget>
     </item>
@@ -829,7 +747,7 @@
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
-    <bool>false</bool>
+    <bool>true</bool>
    </attribute>
   </widget>
  </widget>

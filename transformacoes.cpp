@@ -56,6 +56,6 @@ void transformacoes::Imp(float M[TAM][TAM]){
     for(int i=0; i<TAM;i++){
         std::cout << "\n";
         for(int j=0;j<TAM;j++)
-            std::cout << M[i][j];
+            std::cout << M[i][j] << " | ";
     }
 }

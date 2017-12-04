@@ -40,7 +40,9 @@ Material *Grama = new Material(G,G,G,1);
 Material *Pista = new Material(Pis,Pis,Pis,1);
 Material *Terra = new Material(PisT,PisT,PisT,1);
 Material *Arvore = new Material(Arv,Arv,Arv,1);
-
+  float E[4][4], T[4][4], MT[4][4];
+  float ve[4],vt[4];
+  Objeto *O;
 
  transformacoes t;
 
@@ -109,21 +111,8 @@ MainWindow::MainWindow(QWidget *parent) :
     Cam = new Camera(W,H,-d,sizeX,sizeY,*Obs);
 
     scene = new Cenario(Obs, Cam, Amb, Bg);
-    RGB RL(0.6,0.6,0.6);
-    Point *P = new Point(100,80,100);
-    scene->addFonte2(P,RL);
-
-    float ve[4], vt[4];
-
-    float E[4][4], T[4][4], M[4][4];
 
 
-    CuboUni3(Pista);
-    ve[0]=10;ve[1]=0.2;ve[2]=55;
-    vt[0]=45;vt[1]=0.8;vt[2]=0;
-    t.Escala(E, ve);
-    t.Translacao(T,vt);
-    t.MxM(T,E,M);
 
 
 
@@ -172,11 +161,9 @@ void MainWindow::Render(){
 void MainWindow::MontaCena(){
 
     //WObj.clear();
-    scene->Objetos.clear();
-    float E[4][4], T[4][4], MT[4][4];
-    float ve[4],vt[4];
-    Objeto *O;
+    //scene->Objetos.clear();
     ve[3] = 1; vt[3]=1;
+
     int iobj =-1;
 
     if(solo){
@@ -619,10 +606,16 @@ void MainWindow::MontaCena(){
                 iobj++;
             }
         }
+
+
+
+
 }
 void MainWindow::CamT(){
     free(Obs);
     free(Cam);
+    scene->Objetos.clear();
+    scene->fontes_luminosas.clear();
     free(scene);
 
     Point Eye(Ex, Ey, Ez);
@@ -660,6 +653,7 @@ void MainWindow::Sair(){
     free(Amb);
     free(Cam);
     free(Obs);
+    scene->Objetos.clear();
     free(scene);
     WObj.clear();
     exit(0);

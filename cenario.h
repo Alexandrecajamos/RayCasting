@@ -27,6 +27,7 @@ public:
     void CuboUni2(Material *M1,Material *M2,Material *M3,Material *M4,Material *M5,Material *M6);
     void CuboUni3(Material *M);
     void Prisma_Triangular_Uni3(Material *M);
+    void Libera();
     RGB* Amb;
     RGB* BG;
     Observador *Obs;

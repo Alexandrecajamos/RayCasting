@@ -15,7 +15,6 @@
 #include "cenario.h"
 #include "rgb.h"
 
-
 namespace Ui {
 class MainWindow;
 }
@@ -54,8 +53,17 @@ public:
 
     RGB* Bg;//(0.250980, 0.87843137, 0.815686275);
     RGB* Amb;
-    std::vector<Objeto*> WObj;
     Cenario* scene;
+
+    Point *pF1;
+    Point *pF2;
+    Point *pF3;
+    Point *pF4;
+    Point *pF5;
+
+    float rF1=0, rF2=0, rF3=0, rF4=0, rF5=0;
+    float gF1=0, gF2=0, gF3=0, gF4=0, gF5=0;
+    float bF1=0, bF2=0, bF3=0, bF4=0, bF5=0;
 
     Objeto* CuboUni3(Material *M);
     Objeto* Prisma_Triangular_Uni3(Material *M);
@@ -69,6 +77,41 @@ public slots:
     void MontaCena();
     void CamT();
     void Sair();
+
+    void setPF1x(double);
+    void setPF2x(double);
+    void setPF3x(double);
+    void setPF4x(double);
+    void setPF5x(double);
+
+    void setPF1y(double);
+    void setPF2y(double);
+    void setPF3y(double);
+    void setPF4y(double);
+    void setPF5y(double);
+
+    void setPF1z(double);
+    void setPF2z(double);
+    void setPF3z(double);
+    void setPF4z(double);
+    void setPF5z(double);
+
+
+    void setF1r(int);
+    void setF1g(int);
+    void setF1b(int);
+    void setF2r(int);
+    void setF2g(int);
+    void setF2b(int);
+    void setF3r(int);
+    void setF3g(int);
+    void setF3b(int);
+    void setF4r(int);
+    void setF4g(int);
+    void setF4b(int);
+    void setF5r(int);
+    void setF5g(int);
+    void setF5b(int);
 
     void setBG_R(int);
     void setBG_G(int);

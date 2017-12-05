@@ -28,7 +28,6 @@ void Cenario::Word_Cam(){
     transformacoes t;
     float WC[4][4];
     this->Obs->Word_Cam(WC);
-
     for(std::vector<Objeto*>::iterator i = this->Objetos.begin(); i!= this->Objetos.end(); i++){
         (*i)->Transforoma(WC);
     }
@@ -84,10 +83,10 @@ RGB* Cenario::Ray_Pix_Ilm(Point px){
         RGB A(F->M->A.R*this->Amb->R,F->M->A.G*this->Amb->G,F->M->A.B*this->Amb->B);
 
         float Dr=0, Dg=0, Db=0, Er=0, Eg=0, Eb=0;
-
+        luz* Luz;
         for(std::vector<luz*>::iterator i=this->fontes_luminosas.begin();i!=fontes_luminosas.end();i++){
 
-            luz* Luz = (*i);
+            Luz = (*i);
             Point Fonte = (*Luz->P);
             Fonte.operator -=(Pint);
             Fonte.normalize();
@@ -113,11 +112,12 @@ RGB* Cenario::Ray_Pix_Ilm(Point px){
                 Eg += Luz->F.G*xEsp;
                 Eb += Luz->F.B*xEsp;
             }
+
         }
 
         for(std::vector<Spot*>::iterator i=this->fontes_spot.begin();i!=fontes_spot.end();i++){
 
-            luz* Luz = (*i)->Luz;
+            Luz = (*i)->Luz;
             Point Fonte = (*Luz->P);
             Fonte.operator -=(Pint);
             Fonte.normalize();
@@ -163,8 +163,8 @@ RGB* Cenario::Ray_Pix_Ilm(Point px){
 
 
 
-        }
 
+        }
 
         RGB D(F->M->D.R*(Dr),F->M->D.G*(Dg),F->M->D.B*(Db));
         RGB E(F->M->E.R*(Er),F->M->E.G*(Eg),F->M->E.B*(Eb));
@@ -391,5 +391,24 @@ void Cenario::Prisma_Triangular_Uni3(Material *M){
     prism->addFace(0,3,5, M);
 
     this->addObjeto(prism);
+
+}
+
+void Cenario::Libera(){
+    //free(Amb);
+    //free(BG);
+
+    for(std::vector<Objeto*>::iterator i=this->Objetos.begin();i!=Objetos.end();i++){
+        (*i)->Libera();
+        free(*i);
+    }
+    Objetos.clear();
+
+    for(std::vector<luz*>::iterator i=this->fontes_luminosas.begin();i!=fontes_luminosas.end();i++){
+        free(*i);
+    }
+    fontes_luminosas.clear();
+    free(Obs);
+    free(Cam);
 
 }

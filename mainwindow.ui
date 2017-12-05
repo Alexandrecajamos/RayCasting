@@ -265,22 +265,6 @@
          <string>z</string>
         </property>
        </widget>
-       <widget class="QSlider" name="bgR">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>360</y>
-          <width>21</width>
-          <height>91</height>
-         </rect>
-        </property>
-        <property name="maximum">
-         <number>255</number>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-       </widget>
        <widget class="QSlider" name="bgG">
         <property name="geometry">
          <rect>
@@ -737,12 +721,31 @@
          </rect>
         </property>
        </widget>
+       <widget class="QSlider" name="bgR">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>360</y>
+          <width>20</width>
+          <height>91</height>
+         </rect>
+        </property>
+        <property name="maximum">
+         <number>255</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+       </widget>
       </widget>
       <widget class="QWidget" name="tab">
        <attribute name="title">
         <string>Page</string>
        </attribute>
-       <widget class="QDoubleSpinBox" name="Eye_y_2">
+       <widget class="QDoubleSpinBox" name="yF1">
         <property name="geometry">
          <rect>
           <x>200</x>
@@ -771,7 +774,7 @@
          <string>y</string>
         </property>
        </widget>
-       <widget class="QDoubleSpinBox" name="Eye_x_2">
+       <widget class="QDoubleSpinBox" name="xF1">
         <property name="geometry">
          <rect>
           <x>120</x>
@@ -800,7 +803,7 @@
          <string>x</string>
         </property>
        </widget>
-       <widget class="QDoubleSpinBox" name="Eye_z_2">
+       <widget class="QDoubleSpinBox" name="zF1">
         <property name="geometry">
          <rect>
           <x>280</x>
@@ -922,7 +925,7 @@
          <string>Posição</string>
         </property>
        </widget>
-       <widget class="QDoubleSpinBox" name="Eye_z_3">
+       <widget class="QDoubleSpinBox" name="zF2">
         <property name="geometry">
          <rect>
           <x>280</x>
@@ -938,7 +941,7 @@
          <double>9999.989999999999782</double>
         </property>
        </widget>
-       <widget class="QDoubleSpinBox" name="Eye_x_6">
+       <widget class="QDoubleSpinBox" name="xF2">
         <property name="geometry">
          <rect>
           <x>120</x>
@@ -972,7 +975,7 @@
          <string>Fonte 2</string>
         </property>
        </widget>
-       <widget class="QDoubleSpinBox" name="Eye_y_3">
+       <widget class="QDoubleSpinBox" name="yF2">
         <property name="geometry">
          <rect>
           <x>200</x>
@@ -988,7 +991,7 @@
          <double>9999.989999999999782</double>
         </property>
        </widget>
-       <widget class="QDoubleSpinBox" name="Eye_z_4">
+       <widget class="QDoubleSpinBox" name="zF3">
         <property name="geometry">
          <rect>
           <x>280</x>
@@ -1004,7 +1007,7 @@
          <double>9999.989999999999782</double>
         </property>
        </widget>
-       <widget class="QDoubleSpinBox" name="Eye_x_10">
+       <widget class="QDoubleSpinBox" name="xF3">
         <property name="geometry">
          <rect>
           <x>120</x>
@@ -1038,7 +1041,7 @@
          <string>Fonte 3</string>
         </property>
        </widget>
-       <widget class="QDoubleSpinBox" name="Eye_y_4">
+       <widget class="QDoubleSpinBox" name="yF3">
         <property name="geometry">
          <rect>
           <x>200</x>
@@ -1054,7 +1057,7 @@
          <double>9999.989999999999782</double>
         </property>
        </widget>
-       <widget class="QDoubleSpinBox" name="Eye_z_5">
+       <widget class="QDoubleSpinBox" name="zF4">
         <property name="geometry">
          <rect>
           <x>280</x>
@@ -1070,7 +1073,7 @@
          <double>9999.989999999999782</double>
         </property>
        </widget>
-       <widget class="QDoubleSpinBox" name="Eye_x_14">
+       <widget class="QDoubleSpinBox" name="xF4">
         <property name="geometry">
          <rect>
           <x>120</x>
@@ -1104,7 +1107,7 @@
          <string>Fonte 4</string>
         </property>
        </widget>
-       <widget class="QDoubleSpinBox" name="Eye_y_5">
+       <widget class="QDoubleSpinBox" name="yF4">
         <property name="geometry">
          <rect>
           <x>200</x>
@@ -1120,7 +1123,7 @@
          <double>9999.989999999999782</double>
         </property>
        </widget>
-       <widget class="QDoubleSpinBox" name="Eye_z_6">
+       <widget class="QDoubleSpinBox" name="zF5">
         <property name="geometry">
          <rect>
           <x>280</x>
@@ -1136,7 +1139,7 @@
          <double>9999.989999999999782</double>
         </property>
        </widget>
-       <widget class="QDoubleSpinBox" name="Eye_x_18">
+       <widget class="QDoubleSpinBox" name="xF5">
         <property name="geometry">
          <rect>
           <x>120</x>
@@ -1170,7 +1173,7 @@
          <string>Fonte 5</string>
         </property>
        </widget>
-       <widget class="QDoubleSpinBox" name="Eye_y_6">
+       <widget class="QDoubleSpinBox" name="yF5">
         <property name="geometry">
          <rect>
           <x>200</x>
@@ -1204,7 +1207,7 @@
          <string>  Intensidade</string>
         </property>
        </widget>
-       <widget class="QSpinBox" name="spinBox">
+       <widget class="QSpinBox" name="rF1">
         <property name="geometry">
          <rect>
           <x>390</x>
@@ -1217,7 +1220,7 @@
          <number>255</number>
         </property>
        </widget>
-       <widget class="QSpinBox" name="spinBox_2">
+       <widget class="QSpinBox" name="gF1">
         <property name="geometry">
          <rect>
           <x>460</x>
@@ -1230,7 +1233,7 @@
          <number>255</number>
         </property>
        </widget>
-       <widget class="QSpinBox" name="spinBox_3">
+       <widget class="QSpinBox" name="bF1">
         <property name="geometry">
          <rect>
           <x>540</x>
@@ -1243,7 +1246,7 @@
          <number>255</number>
         </property>
        </widget>
-       <widget class="QSpinBox" name="spinBox_4">
+       <widget class="QSpinBox" name="bF2">
         <property name="geometry">
          <rect>
           <x>540</x>
@@ -1256,7 +1259,7 @@
          <number>255</number>
         </property>
        </widget>
-       <widget class="QSpinBox" name="spinBox_5">
+       <widget class="QSpinBox" name="gF2">
         <property name="geometry">
          <rect>
           <x>460</x>
@@ -1269,7 +1272,7 @@
          <number>255</number>
         </property>
        </widget>
-       <widget class="QSpinBox" name="spinBox_6">
+       <widget class="QSpinBox" name="rF2">
         <property name="geometry">
          <rect>
           <x>390</x>
@@ -1282,7 +1285,7 @@
          <number>255</number>
         </property>
        </widget>
-       <widget class="QSpinBox" name="spinBox_7">
+       <widget class="QSpinBox" name="bF3">
         <property name="geometry">
          <rect>
           <x>540</x>
@@ -1295,7 +1298,7 @@
          <number>255</number>
         </property>
        </widget>
-       <widget class="QSpinBox" name="spinBox_8">
+       <widget class="QSpinBox" name="gF3">
         <property name="geometry">
          <rect>
           <x>460</x>
@@ -1308,7 +1311,7 @@
          <number>255</number>
         </property>
        </widget>
-       <widget class="QSpinBox" name="spinBox_9">
+       <widget class="QSpinBox" name="rF3">
         <property name="geometry">
          <rect>
           <x>390</x>
@@ -1321,7 +1324,7 @@
          <number>255</number>
         </property>
        </widget>
-       <widget class="QSpinBox" name="spinBox_10">
+       <widget class="QSpinBox" name="bF5">
         <property name="geometry">
          <rect>
           <x>540</x>
@@ -1334,7 +1337,7 @@
          <number>255</number>
         </property>
        </widget>
-       <widget class="QSpinBox" name="spinBox_11">
+       <widget class="QSpinBox" name="gF5">
         <property name="geometry">
          <rect>
           <x>460</x>
@@ -1347,7 +1350,7 @@
          <number>255</number>
         </property>
        </widget>
-       <widget class="QSpinBox" name="spinBox_12">
+       <widget class="QSpinBox" name="bF4">
         <property name="geometry">
          <rect>
           <x>540</x>
@@ -1360,7 +1363,7 @@
          <number>255</number>
         </property>
        </widget>
-       <widget class="QSpinBox" name="spinBox_13">
+       <widget class="QSpinBox" name="gF4">
         <property name="geometry">
          <rect>
           <x>460</x>
@@ -1373,7 +1376,7 @@
          <number>255</number>
         </property>
        </widget>
-       <widget class="QSpinBox" name="spinBox_14">
+       <widget class="QSpinBox" name="rF4">
         <property name="geometry">
          <rect>
           <x>390</x>
@@ -1386,7 +1389,7 @@
          <number>255</number>
         </property>
        </widget>
-       <widget class="QSpinBox" name="spinBox_15">
+       <widget class="QSpinBox" name="rF5">
         <property name="geometry">
          <rect>
           <x>390</x>

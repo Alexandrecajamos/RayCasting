@@ -81,6 +81,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->Eye_y,SIGNAL(valueChanged(double)), this, SLOT(Eye_Y(double)));
     connect(ui->Eye_z,SIGNAL(valueChanged(double)), this, SLOT(Eye_Z(double)));
 
+
+
     connect(ui->La_x,SIGNAL(valueChanged(double)), this, SLOT(Lo_X(double)));
     connect(ui->La_y,SIGNAL(valueChanged(double)), this, SLOT(Lo_Y(double)));
     connect(ui->La_z,SIGNAL(valueChanged(double)), this, SLOT(Lo_Z(double)));
@@ -103,6 +105,38 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->iaG,SIGNAL(valueChanged(int)), this, SLOT(IA_G(int)));
     connect(ui->iaB,SIGNAL(valueChanged(int)), this, SLOT(IA_B(int)));
 
+    connect(ui->rF1,SIGNAL(valueChanged(int)), this, SLOT(setF1r(int)));
+    connect(ui->gF1,SIGNAL(valueChanged(int)), this, SLOT(setF1g(int)));
+    connect(ui->bF1,SIGNAL(valueChanged(int)), this, SLOT(setF1b(int)));
+    connect(ui->rF2,SIGNAL(valueChanged(int)), this, SLOT(setF2r(int)));
+    connect(ui->gF2,SIGNAL(valueChanged(int)), this, SLOT(setF2g(int)));
+    connect(ui->bF2,SIGNAL(valueChanged(int)), this, SLOT(setF2b(int)));
+    connect(ui->rF3,SIGNAL(valueChanged(int)), this, SLOT(setF3r(int)));
+    connect(ui->gF3,SIGNAL(valueChanged(int)), this, SLOT(setF3g(int)));
+    connect(ui->bF3,SIGNAL(valueChanged(int)), this, SLOT(setF3b(int)));
+    connect(ui->rF4,SIGNAL(valueChanged(int)), this, SLOT(setF4r(int)));
+    connect(ui->gF4,SIGNAL(valueChanged(int)), this, SLOT(setF4g(int)));
+    connect(ui->bF4,SIGNAL(valueChanged(int)), this, SLOT(setF4b(int)));
+    connect(ui->rF5,SIGNAL(valueChanged(int)), this, SLOT(setF5r(int)));
+    connect(ui->gF5,SIGNAL(valueChanged(int)), this, SLOT(setF5g(int)));
+    connect(ui->bF5,SIGNAL(valueChanged(int)), this, SLOT(setF5b(int)));
+
+    connect(ui->xF1,SIGNAL(valueChanged(double)), this, SLOT(setPF1x(double)));
+    connect(ui->yF1,SIGNAL(valueChanged(double)), this, SLOT(setPF1y(double)));
+    connect(ui->zF1,SIGNAL(valueChanged(double)), this, SLOT(setPF1z(double)));
+    connect(ui->xF2,SIGNAL(valueChanged(double)), this, SLOT(setPF2x(double)));
+    connect(ui->yF2,SIGNAL(valueChanged(double)), this, SLOT(setPF2y(double)));
+    connect(ui->zF2,SIGNAL(valueChanged(double)), this, SLOT(setPF2z(double)));
+    connect(ui->xF3,SIGNAL(valueChanged(double)), this, SLOT(setPF3x(double)));
+    connect(ui->yF3,SIGNAL(valueChanged(double)), this, SLOT(setPF3y(double)));
+    connect(ui->zF3,SIGNAL(valueChanged(double)), this, SLOT(setPF3z(double)));
+    connect(ui->xF4,SIGNAL(valueChanged(double)), this, SLOT(setPF4x(double)));
+    connect(ui->yF4,SIGNAL(valueChanged(double)), this, SLOT(setPF4y(double)));
+    connect(ui->zF4,SIGNAL(valueChanged(double)), this, SLOT(setPF4z(double)));
+    connect(ui->xF5,SIGNAL(valueChanged(double)), this, SLOT(setPF5x(double)));
+    connect(ui->yF5,SIGNAL(valueChanged(double)), this, SLOT(setPF5y(double)));
+    connect(ui->zF5,SIGNAL(valueChanged(double)), this, SLOT(setPF5z(double)));
+
     Point Eye(Ex, Ey, Ez);
     Point LA(Lox,Loy,Loz);
     Point AVUp(Avx,Avy,Avz);
@@ -112,10 +146,23 @@ MainWindow::MainWindow(QWidget *parent) :
 
     scene = new Cenario(Obs, Cam, Amb, Bg);
 
+    pF1 = new Point(0,0,0);
+    pF2 = new Point(0,0,0);
+    pF3 = new Point(0,0,0);
+    pF4 = new Point(0,0,0);
+    pF5 = new Point(0,0,0);
+    /*
+    solo = true;
+    pistas = true;
+    casas = true;
+    telhados = true;
+    arvores = true;
+    portas = true;
+    janelas = true;
 
-
-
-
+    MontaCena();
+    scene->Word_Cam();
+    */
 }
 
 MainWindow::~MainWindow()
@@ -123,9 +170,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::cWord(){
-    WObj.clear();
-}
 void MainWindow::Render(){
     CamT();
     MontaCena();
@@ -145,33 +189,23 @@ void MainWindow::Render(){
 
                 RGB* print = scene->Ray_Pix_Ilm(px);
                 image.setPixel( i, j, qRgb(print->R*255, print->G*255, print->B*255));
-                //if(i==j && j==325)
-                     //std::cout <<"\nIluminacao Pint: " << print->R << ", " << print->G <<", " << print->B<< ";";
-
         }
     }
-
-
     QGraphicsScene * graphic = new QGraphicsScene( this );
-
     graphic->addPixmap( QPixmap::fromImage( image ) );
-
     ui->graphicsView->setScene(graphic);
+    scene->Libera();
+    free(scene);
 }
 void MainWindow::MontaCena(){
 
-    //WObj.clear();
-    //scene->Objetos.clear();
     ve[3] = 1; vt[3]=1;
-
     int iobj =-1;
-
     if(solo){
         O = CuboUni3(Grama);
         ve[0] = 100;ve[1] = 0.8; ve[2] = 95;
         t.Escala(E,ve);
         O->Transforoma(E);
-        //WObj.push_back(O);
         scene->Objetos.push_back(O);
         //free(O);
         iobj++;
@@ -607,16 +641,9 @@ void MainWindow::MontaCena(){
             }
         }
 
-
-
-
 }
 void MainWindow::CamT(){
-    free(Obs);
-    free(Cam);
-    scene->Objetos.clear();
-    scene->fontes_luminosas.clear();
-    free(scene);
+
 
     Point Eye(Ex, Ey, Ez);
     Point LA(Lox,Loy,Loz);
@@ -627,9 +654,19 @@ void MainWindow::CamT(){
 
     scene = new Cenario(Obs, Cam, Amb, Bg);
 
-    RGB RL(0.6,0.6,0.6);
-    Point *P = new Point(100,80,100);
-    scene->addFonte2(P,RL);
+    RGB iF1(rF1,gF1,bF1);
+    RGB iF2(rF2,gF2,bF2);
+    RGB iF3(rF3,gF3,bF3);
+    RGB iF4(rF4,gF4,bF4);
+    RGB iF5(rF5,gF5,bF5);
+
+    scene->addFonte2(pF1,iF1);
+    scene->addFonte2(pF2,iF2);
+    scene->addFonte2(pF3,iF3);
+    scene->addFonte2(pF4,iF4);
+    scene->addFonte2(pF5,iF5);
+
+
 }
 void MainWindow::Sair(){
     free(Casa1);
@@ -655,31 +692,127 @@ void MainWindow::Sair(){
     free(Obs);
     scene->Objetos.clear();
     free(scene);
-    WObj.clear();
     exit(0);
 
 }
 
+void MainWindow::setPF1x(double d){
+    pF1->x=d;
+}
+void MainWindow::setPF1y(double d){
+    pF1->y=d;
+}
+void MainWindow::setPF1z(double d){
+    pF1->z=d;
+}
+void MainWindow::setF1r(int x){
+    rF1 = (float)x/255;
+}
+void MainWindow::setF1g(int x){
+    gF1 = (float)x/255;
+}
+void MainWindow::setF1b(int x){
+    bF1 = (float)x/255;
+}
+
+void MainWindow::setPF2x(double d){
+    pF2->x=d;
+}
+void MainWindow::setPF2y(double d){
+    pF2->y=d;
+}
+void MainWindow::setPF2z(double d){
+    pF2->z=d;
+}
+void MainWindow::setF2r(int x){
+    rF2 = (float)x/255;
+}
+void MainWindow::setF2g(int x){
+    gF2 = (float)x/255;
+}
+void MainWindow::setF2b(int x){
+    bF2 = (float)x/255;
+}
+
+void MainWindow::setPF3x(double d){
+    pF3->x=d;
+}
+void MainWindow::setPF3y(double d){
+    pF3->y=d;
+}
+void MainWindow::setPF3z(double d){
+    pF3->z=d;
+}
+void MainWindow::setF3r(int x){
+    rF3 = (float)x/255;
+}
+void MainWindow::setF3g(int x){
+    gF3 = (float)x/255;
+}
+void MainWindow::setF3b(int x){
+    bF3 = (float)x/255;
+}
+
+
+void MainWindow::setPF4x(double d){
+    pF4->x=d;
+}
+void MainWindow::setPF4y(double d){
+    pF4->y=d;
+}
+void MainWindow::setPF4z(double d){
+    pF4->z=d;
+}
+void MainWindow::setF4r(int x){
+    rF4 = (float)x/255;
+}
+void MainWindow::setF4g(int x){
+    gF4 = (float)x/255;
+}
+void MainWindow::setF4b(int x){
+    bF4 = (float)x/255;
+}
+
+
+void MainWindow::setPF5x(double d){
+    pF5->x=d;
+}
+void MainWindow::setPF5y(double d){
+    pF5->y=d;
+}
+void MainWindow::setPF5z(double d){
+    pF5->z=d;
+}
+void MainWindow::setF5r(int x){
+    rF5 = (float)x/255;
+}
+void MainWindow::setF5g(int x){
+    gF5 = (float)x/255;
+}
+void MainWindow::setF5b(int x){
+    bF5 = (float)x/255;
+}
+
+
 
 void MainWindow::setBG_R(int I){
-    Bg->R=I/255;
+    Bg->R=(float)I/255;
 }
 void MainWindow::setBG_G(int I){
-    Bg->G=I/255;
+    Bg->G=(float)I/255;
 }
 void MainWindow::setBG_B(int I){
-    Bg->B=I/255;
+    Bg->B=(float)I/255;
 }
 
 void MainWindow::IA_R(int I){
-    Amb->R= I/255;
-    std::cout<<"\n t = : " << Amb->R;
+    Amb->R= (float)I/255;
 }
 void MainWindow::IA_G(int I){
-    Amb->G= I/255;
+    Amb->G= (float)I/255;
 }
 void MainWindow::IA_B(int I){
-    Amb->B= I/255;
+    Amb->B= (float)I/255;
 }
 
 void MainWindow::setSolo(bool b){

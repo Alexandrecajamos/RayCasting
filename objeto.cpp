@@ -8,8 +8,6 @@ Objeto::Objeto()
     this->Esf.raio=0;
 }
 
-
-
 void Objeto::addPoint(float x, float y, float z){
     Point *p = new Point(x,y,z);
     this->points.push_back(p);
@@ -102,7 +100,6 @@ Objeto* Objeto::Copia(){
     return novo;
 }
 
-
 void Objeto::ImpPoints(){
     std::cout << "\n Imprimindo Pontos do Objeto: \n";
     for(std::vector<Point*>::iterator i = this->points.begin(); i!= this->points.end(); i++)
@@ -114,20 +111,6 @@ void Objeto::ImpPoints(){
 
 }
 
-/*
-void Objeto::addFace(Point P1, Point P2, Point P3, Material M){
-    Face *F = new Face(P1,P2,P3, M);
-    this->faces.push_back(F);
-
-}
-void Objeto::addFace2(Face F){
-    this->faces.push_back(&F);
-}
-void Objeto::addPoint(Point P){
-    this->points.push_back(&P);
-}*/
-
-
 void Objeto::Libera(){
     for(std::vector<Point*>::iterator i = this->points.begin(); i!= this->points.end(); i++)
     {
@@ -135,7 +118,7 @@ void Objeto::Libera(){
         (*i)=NULL;
     }
     for(std::vector<Face*>::iterator i = this->faces.begin(); i!= this->faces.end(); i++){
-        (*i)->M=NULL;
+        //(*i)->M=NULL;
         (*i)->P1=NULL;
         (*i)->P2=NULL;
         (*i)->P3=NULL;

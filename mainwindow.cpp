@@ -53,8 +53,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
 
-    Ex=350; Ey=300;Ez=-350;
-    Lox=100; Loy=5;Loz=50;
+    Ex=50; Ey=1000;Ez=50;
+    Lox=50; Loy=5;Loz=50;
     Avx=50; Avy=0; Avz=0;
     Bg = new RGB(0.22,0.22,0.22);//(0.250980, 0.87843137, 0.815686275);
     Amb = new RGB(0.4, 0.4, 0.4);
@@ -174,6 +174,7 @@ void MainWindow::Render(){
     CamT();
     MontaCena();
     scene->Word_Cam();
+   // scene->Objetos.at(0)->ImpPoints();
     QImage image = QImage( sizeX, sizeY, QImage::Format_RGB32 );
 
     //Ray Casting :
@@ -184,6 +185,9 @@ void MainWindow::Render(){
         float Yi= (scene->Cam->h/2)-(scene->Cam->DY/2)-(i*scene->Cam->DY);
         for( int j=0; j<sizeY; j++ )
         {
+            //if(i != 100 || j != 100)
+               //continue;
+
             float Xj = (-scene->Cam->w/2)+(scene->Cam->DX/2)+(j*scene->Cam->DX);
             Point px(Xj,Yi,scene->Cam->d);
 
@@ -191,6 +195,7 @@ void MainWindow::Render(){
                 image.setPixel( i, j, qRgb(print->R*255, print->G*255, print->B*255));
         }
     }
+
     QGraphicsScene * graphic = new QGraphicsScene( this );
     graphic->addPixmap( QPixmap::fromImage( image ) );
     ui->graphicsView->setScene(graphic);
@@ -688,10 +693,8 @@ void MainWindow::Sair(){
     free(Arvore);
     free(Bg);
     free(Amb);
-    free(Cam);
-    free(Obs);
-    scene->Objetos.clear();
-    free(scene);
+
+
     exit(0);
 
 }

@@ -57,12 +57,14 @@ float Cenario::Inter(Point Pij, int &Obj, int &Face){
             iObj=cont;
         }
         cont++;
+
     }
     if(Tint != 999){
         Face = iFace;
         Obj = iObj;
     }else
         Tint = -1;
+
     return Tint;
 
 }
@@ -71,10 +73,13 @@ RGB* Cenario::Ray_Pix_Ilm(Point px){
 
     int iObj,iFace;
     float t = this->Inter(px, iObj,iFace);
+
     if(t!=-1 && t>0){
 
         Point Pint = px;
+        Pint.normalize();
         Pint.operator *=(t);
+
         Face* F = this->Objetos.at(iObj)->faces.at(iFace);
         //F->atNormal();
         Point nFace = F->calcNormal();//(F->N->x,F->N->y,F->N->z);

@@ -42,7 +42,7 @@ public:
     int sizeY = 200;
     float W = 0.5;
     float H = 0.5;
-    float d = 4;
+    float d = 2;
 
     float Ex, Ey, Ez;
     float Lox, Loy, Loz;

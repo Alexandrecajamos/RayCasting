@@ -24,7 +24,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab_2">
        <attribute name="title">
@@ -58,6 +58,9 @@
         <property name="maximum">
          <double>9999.989999999999782</double>
         </property>
+        <property name="value">
+         <double>250.000000000000000</double>
+        </property>
        </widget>
        <widget class="QDoubleSpinBox" name="La_x">
         <property name="geometry">
@@ -73,6 +76,9 @@
         </property>
         <property name="maximum">
          <double>9999.989999999999782</double>
+        </property>
+        <property name="value">
+         <double>50.000000000000000</double>
         </property>
        </widget>
        <widget class="QDoubleSpinBox" name="Av_x">
@@ -138,6 +144,9 @@
         <property name="maximum">
          <double>9999.989999999999782</double>
         </property>
+        <property name="value">
+         <double>200.000000000000000</double>
+        </property>
        </widget>
        <widget class="QDoubleSpinBox" name="Av_z">
         <property name="geometry">
@@ -170,6 +179,9 @@
         <property name="maximum">
          <double>9999.989999999999782</double>
         </property>
+        <property name="value">
+         <double>50.000000000000000</double>
+        </property>
        </widget>
        <widget class="QDoubleSpinBox" name="Eye_z">
         <property name="geometry">
@@ -185,6 +197,9 @@
         </property>
         <property name="maximum">
          <double>9999.989999999999782</double>
+        </property>
+        <property name="value">
+         <double>-250.000000000000000</double>
         </property>
        </widget>
        <widget class="QLabel" name="label">
@@ -277,6 +292,9 @@
         <property name="maximum">
          <number>255</number>
         </property>
+        <property name="value">
+         <number>51</number>
+        </property>
         <property name="orientation">
          <enum>Qt::Vertical</enum>
         </property>
@@ -292,6 +310,9 @@
         </property>
         <property name="maximum">
          <number>255</number>
+        </property>
+        <property name="value">
+         <number>51</number>
         </property>
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -364,6 +385,9 @@
         <property name="maximum">
          <number>255</number>
         </property>
+        <property name="value">
+         <number>102</number>
+        </property>
         <property name="orientation">
          <enum>Qt::Vertical</enum>
         </property>
@@ -379,6 +403,9 @@
         </property>
         <property name="maximum">
          <number>255</number>
+        </property>
+        <property name="value">
+         <number>102</number>
         </property>
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -421,6 +448,9 @@
         </property>
         <property name="maximum">
          <number>255</number>
+        </property>
+        <property name="value">
+         <number>102</number>
         </property>
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -586,6 +616,9 @@
           <height>26</height>
          </rect>
         </property>
+        <property name="value">
+         <double>0.500000000000000</double>
+        </property>
        </widget>
        <widget class="QDoubleSpinBox" name="h">
         <property name="geometry">
@@ -595,6 +628,9 @@
           <width>69</width>
           <height>26</height>
          </rect>
+        </property>
+        <property name="value">
+         <double>0.500000000000000</double>
         </property>
        </widget>
        <widget class="QDoubleSpinBox" name="sizeY">
@@ -609,6 +645,9 @@
         <property name="maximum">
          <double>499.990000000000009</double>
         </property>
+        <property name="value">
+         <double>200.000000000000000</double>
+        </property>
        </widget>
        <widget class="QDoubleSpinBox" name="sizeX">
         <property name="geometry">
@@ -622,6 +661,9 @@
         <property name="maximum">
          <double>499.990000000000009</double>
         </property>
+        <property name="value">
+         <double>200.000000000000000</double>
+        </property>
        </widget>
        <widget class="QDoubleSpinBox" name="d">
         <property name="geometry">
@@ -631,6 +673,9 @@
           <width>69</width>
           <height>26</height>
          </rect>
+        </property>
+        <property name="value">
+         <double>1.500000000000000</double>
         </property>
        </widget>
        <widget class="QLabel" name="label_18">
@@ -736,8 +781,24 @@
         <property name="maximum">
          <number>255</number>
         </property>
+        <property name="value">
+         <number>51</number>
+        </property>
         <property name="orientation">
          <enum>Qt::Vertical</enum>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="Pad">
+        <property name="geometry">
+         <rect>
+          <x>110</x>
+          <y>510</y>
+          <width>111</width>
+          <height>51</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Conf. Padrão</string>
         </property>
        </widget>
       </widget>

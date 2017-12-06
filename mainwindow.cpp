@@ -53,9 +53,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
 
-    Ex=50; Ey=1000;Ez=50;
-    Lox=50; Loy=5;Loz=50;
-    Avx=50; Avy=0; Avz=0;
+    Ex=250; Ey=200;Ez=-250;
+    Lox=50; Loy=0;Loz=50;
+    Avx=0; Avy=0; Avz=0;
     Bg = new RGB(0.22,0.22,0.22);//(0.250980, 0.87843137, 0.815686275);
     Amb = new RGB(0.4, 0.4, 0.4);
 
@@ -66,6 +66,8 @@ MainWindow::MainWindow(QWidget *parent) :
     //connect(ui->montar,SIGNAL(pressed()),this,SLOT(MontaCena()));
     //connect(ui->Cam,SIGNAL(pressed()),this,SLOT(CamT()));
     connect(ui->Sair,SIGNAL(pressed()),this,SLOT(Sair()));
+    connect(ui->Pad,SIGNAL(pressed()),this,SLOT(Pad()));
+
 
 
     connect(ui->solo,SIGNAL(toggled(bool)), this, SLOT(setSolo(bool)));
@@ -151,6 +153,8 @@ MainWindow::MainWindow(QWidget *parent) :
     pF3 = new Point(0,0,0);
     pF4 = new Point(0,0,0);
     pF5 = new Point(0,0,0);
+
+
     /*
     solo = true;
     pistas = true;
@@ -673,6 +677,8 @@ void MainWindow::CamT(){
 
 
 }
+
+
 void MainWindow::Sair(){
     free(Casa1);
     free(Casa2);
@@ -698,6 +704,26 @@ void MainWindow::Sair(){
     exit(0);
 
 }
+void MainWindow::Pad(){
+    sizeX = 200;
+    sizeY = 200;
+    W = 0.5;
+    H = 0.5;
+    d = 1.5;
+    rF1=0, rF2=0, rF3=0, rF4=0, rF5=0;
+    gF1=0, gF2=0, gF3=0, gF4=0, gF5=0;
+    bF1=0, bF2=0, bF3=0, bF4=0, bF5=0;
+
+    Ex=250; Ey=200;Ez=-250;
+    Lox=50; Loy=0;Loz=50;
+    Avx=0; Avy=0; Avz=0;
+
+    Amb->R=0.4;Amb->G=0.4;Amb->B=0.4;
+    Bg->R=0.22;Bg->R=0.22;Bg->B=0.22;
+
+}
+
+
 
 void MainWindow::setPF1x(double d){
     pF1->x=d;

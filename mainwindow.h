@@ -42,7 +42,7 @@ public:
     int sizeY = 200;
     float W = 0.5;
     float H = 0.5;
-    float d = 2;
+    float d = 1.5;
 
     float Ex, Ey, Ez;
     float Lox, Loy, Loz;
@@ -77,6 +77,7 @@ public slots:
     void MontaCena();
     void CamT();
     void Sair();
+    void Pad();
 
     void setPF1x(double);
     void setPF2x(double);

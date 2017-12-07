@@ -55,6 +55,12 @@ public:
     RGB* Amb;
     Cenario* scene;
 
+    float pF1x=0, pF1y=0, pF1z=0;
+    float pF2x=0, pF2y=0, pF2z=0;
+    float pF3x=0, pF3y=0, pF3z=0;
+    float pF4x=0, pF4y=0, pF4z=0;
+    float pF5x=0, pF5y=0, pF5z=0;
+
     Point *pF1;
     Point *pF2;
     Point *pF3;

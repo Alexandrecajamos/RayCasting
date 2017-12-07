@@ -410,6 +410,7 @@ void Cenario::Libera(){
     Objetos.clear();
 
     for(std::vector<luz*>::iterator i=this->fontes_luminosas.begin();i!=fontes_luminosas.end();i++){
+        free((*i)->P);
         free(*i);
     }
     fontes_luminosas.clear();

@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "transformacoes.h"
+#include "QImage"
 
 RGB G(0.4196,0.5568,0.1372);
 RGB Pis(0.3235, 0.3823, 0.4450);
@@ -52,12 +53,23 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    QImage image("/home/alexandre/TF_CG/raycasting/model.jpeg");
+    if(!image.isNull())
+    {
+        QGraphicsScene img;
+        img.addPixmap(QPixmap::fromImage(image));
+        ui->graphicsModel->setScene(&img);
+        ui->graphicsModel->show();
+    }
+
 
     Ex=250; Ey=200;Ez=-250;
     Lox=50; Loy=0;Loz=50;
     Avx=0; Avy=0; Avz=0;
     Bg = new RGB(0.22,0.22,0.22);//(0.250980, 0.87843137, 0.815686275);
     Amb = new RGB(0.4, 0.4, 0.4);
+
+
 
 
 
@@ -148,11 +160,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     scene = new Cenario(Obs, Cam, Amb, Bg);
 
-    pF1 = new Point(0,0,0);
-    pF2 = new Point(0,0,0);
-    pF3 = new Point(0,0,0);
-    pF4 = new Point(0,0,0);
-    pF5 = new Point(0,0,0);
+    pF1 = new Point(pF1x,pF1y,pF1z);
+    pF2 = new Point(pF2x,pF2y,pF2z);
+    pF3 = new Point(pF3x,pF3y,pF3z);
+    pF4 = new Point(pF4x,pF4y,pF4z);
+    pF5 = new Point(pF5x,pF5y,pF5z);
 
 
     /*
@@ -178,9 +190,9 @@ void MainWindow::Render(){
     CamT();
     MontaCena();
     scene->Word_Cam();
-   // scene->Objetos.at(0)->ImpPoints();
+    // scene->Objetos.at(0)->ImpPoints();
     QImage image = QImage( sizeX, sizeY, QImage::Format_RGB32 );
-
+    //scene->fontes_luminosas.at(0)->P->ImpPoint();
     //Ray Casting :
 
     for( int i=0; i<sizeX; i++)
@@ -669,6 +681,12 @@ void MainWindow::CamT(){
     RGB iF4(rF4,gF4,bF4);
     RGB iF5(rF5,gF5,bF5);
 
+    pF1 = new Point(pF1x,pF1y,pF1z);
+    pF2 = new Point(pF2x,pF2y,pF2z);
+    pF3 = new Point(pF3x,pF3y,pF3z);
+    pF4 = new Point(pF4x,pF4y,pF4z);
+    pF5 = new Point(pF5x,pF5y,pF5z);
+
     scene->addFonte2(pF1,iF1);
     scene->addFonte2(pF2,iF2);
     scene->addFonte2(pF3,iF3);
@@ -699,8 +717,6 @@ void MainWindow::Sair(){
     free(Arvore);
     free(Bg);
     free(Amb);
-
-
     exit(0);
 
 }
@@ -726,13 +742,13 @@ void MainWindow::Pad(){
 
 
 void MainWindow::setPF1x(double d){
-    pF1->x=d;
+    pF1x=d;
 }
 void MainWindow::setPF1y(double d){
-    pF1->y=d;
+    pF1y=d;
 }
 void MainWindow::setPF1z(double d){
-    pF1->z=d;
+    pF1z=d;
 }
 void MainWindow::setF1r(int x){
     rF1 = (float)x/255;
@@ -745,13 +761,13 @@ void MainWindow::setF1b(int x){
 }
 
 void MainWindow::setPF2x(double d){
-    pF2->x=d;
+    pF2x=d;
 }
 void MainWindow::setPF2y(double d){
-    pF2->y=d;
+    pF2y=d;
 }
 void MainWindow::setPF2z(double d){
-    pF2->z=d;
+    pF2z=d;
 }
 void MainWindow::setF2r(int x){
     rF2 = (float)x/255;
@@ -764,13 +780,13 @@ void MainWindow::setF2b(int x){
 }
 
 void MainWindow::setPF3x(double d){
-    pF3->x=d;
+    pF3x=d;
 }
 void MainWindow::setPF3y(double d){
-    pF3->y=d;
+    pF3y=d;
 }
 void MainWindow::setPF3z(double d){
-    pF3->z=d;
+    pF3z=d;
 }
 void MainWindow::setF3r(int x){
     rF3 = (float)x/255;
@@ -784,13 +800,13 @@ void MainWindow::setF3b(int x){
 
 
 void MainWindow::setPF4x(double d){
-    pF4->x=d;
+    pF4x=d;
 }
 void MainWindow::setPF4y(double d){
-    pF4->y=d;
+    pF4y=d;
 }
 void MainWindow::setPF4z(double d){
-    pF4->z=d;
+    pF4z=d;
 }
 void MainWindow::setF4r(int x){
     rF4 = (float)x/255;
@@ -804,13 +820,13 @@ void MainWindow::setF4b(int x){
 
 
 void MainWindow::setPF5x(double d){
-    pF5->x=d;
+    pF5x=d;
 }
 void MainWindow::setPF5y(double d){
-    pF5->y=d;
+    pF5y=d;
 }
 void MainWindow::setPF5z(double d){
-    pF5->z=d;
+    pF5z=d;
 }
 void MainWindow::setF5r(int x){
     rF5 = (float)x/255;

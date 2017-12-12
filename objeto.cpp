@@ -68,10 +68,9 @@ float Objeto::Inter(Point Pint, int *idx){
     float t = -1;
     float Menor_T=999;
     int cont=0;
-    this->calc_Esfera();
+
     if(this->Esf.Interseccao(Pint)){
         for(std::vector<Face*>::iterator i = this->faces.begin(); i!= this->faces.end(); i++){
-            (*i)->atNormal();
             float x = (*i)->Inter(Pint);
             if(x != -1 && x<Menor_T){
                 Menor_T = x;
@@ -90,6 +89,12 @@ void Objeto::Transforoma(float A[TAM][TAM]){
     for(std::vector<Point*>::iterator i = this->points.begin(); i!= this->points.end(); i++){
         t.MxV(A,(*i));
     }
+
+    //for(std::vector<Face*>::iterator f = this->faces.begin(); f!=this->faces.end();f++){
+       // (*f)->atNormal();
+    //}
+
+    this->calc_Esfera();
 }
 
 
@@ -111,6 +116,17 @@ void Objeto::ImpPoints(){
 
 }
 
+
+bool Objeto::Obstaculo(Point Pint, Point l){
+    bool obstaculo = false;
+    if(this->Esf.Interseccao(Pint)){
+        for(std::vector<Face*>::iterator i = this->faces.begin(); i!= this->faces.end() && !obstaculo; i++){
+            obstaculo = (*i)->Obstaculo(Pint, l);
+        }
+    }
+    return obstaculo;
+}
+
 void Objeto::Libera(){
     for(std::vector<Point*>::iterator i = this->points.begin(); i!= this->points.end(); i++)
     {
@@ -122,7 +138,7 @@ void Objeto::Libera(){
         (*i)->P1=NULL;
         (*i)->P2=NULL;
         (*i)->P3=NULL;
-        (*i)->N=NULL;
+        //(*i)->N=NULL;
         free(*i);
         (*i)=NULL;
     }

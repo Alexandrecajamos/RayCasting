@@ -36,6 +36,13 @@ public:
     bool arvores = false;
     bool portas = false;
     bool janelas = false;
+    bool postes = false;
+
+    bool p1 = false;
+    bool p2 = false;
+    bool p3 = false;
+    bool p4 = false;
+
 
 
     int sizeX = 200;
@@ -67,6 +74,13 @@ public:
     Point *pF4;
     Point *pF5;
 
+    float rSp1 = 0, gSp1=0, bSp1=0;
+
+    Point *sP1;
+
+
+    bool Renderiza_sombras = false;
+
     float rF1=0, rF2=0, rF3=0, rF4=0, rF5=0;
     float gF1=0, gF2=0, gF3=0, gF4=0, gF5=0;
     float bF1=0, bF2=0, bF3=0, bF4=0, bF5=0;
@@ -85,6 +99,7 @@ public slots:
     void Sair();
     void Pad();
 
+    void sombras_rend(bool);
     void setPF1x(double);
     void setPF2x(double);
     void setPF3x(double);
@@ -134,6 +149,11 @@ public slots:
     void setArv(bool);
     void setPortas(bool);
     void setJan(bool);
+    void setPostes(bool);
+    void setP1(bool);
+    void setP2(bool);
+    void setP3(bool);
+    void setP4(bool);
 
     void Eye_X(double);
     void Eye_Y(double);
@@ -152,6 +172,11 @@ public slots:
     void setD(double);
     void setSX(double);
     void setSY(double);
+
+
+    void set_rSp1(int);
+    void set_gSp1(int);
+    void set_bSp1(int);
 
 };
 

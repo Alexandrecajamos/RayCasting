@@ -29,6 +29,7 @@ public:
     void Transforoma(float A[TAM][TAM]);
     Objeto* Copia();
     void ImpPoints();
+    bool Obstaculo(Point Pint, Point l);
     void Libera();
     Esfera Esf;
     std::vector<Point*> points;

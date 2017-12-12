@@ -12,10 +12,10 @@ public:
     Point calcNormal();
     void atNormal();
     float Inter(Point P);
-    Point *P1,*P2,*P3, *N;
+    Point *P1,*P2,*P3, N;
     Material *M;
     void Barycentric(Point p, Point a, Point b, Point c, float &u, float &v, float &w);
-
+    bool Obstaculo(Point Pint, Point ls);
 };
 
 #endif // FACE_H

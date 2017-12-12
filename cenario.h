@@ -19,6 +19,7 @@ public:
     void addFonte(luz *L);
     void addFonte2(Point *P, RGB I);
     void addSpot(Spot *S);
+    void addSpot2(Point *P,Point*D, RGB I, float A);
     void Word_Cam();
     float Inter(Point Pij, int &iObj, int &iFace);
     RGB* Ray_Pix_Ilm(Point Pij);
@@ -28,6 +29,8 @@ public:
     void CuboUni3(Material *M);
     void Prisma_Triangular_Uni3(Material *M);
     void Libera();
+    bool sombra(Point Pint, Point L);
+    bool Renderiza_somb;
     RGB* Amb;
     RGB* BG;
     Observador *Obs;

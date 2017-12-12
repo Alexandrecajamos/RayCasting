@@ -19,6 +19,7 @@ RGB P1(1,0,0);
 RGB P2(0,1,0);
 RGB P3(0,0,1);
 
+
 Material *Casa1 = new Material(C1,C1,C1,1);
 Material *Casa2 = new Material(C2,C2,C2,1);
 Material *Casa3 = new Material(C3,C3,C3,1);
@@ -63,9 +64,9 @@ MainWindow::MainWindow(QWidget *parent) :
     }
 
 
-    Ex=250; Ey=200;Ez=-250;
-    Lox=50; Loy=0;Loz=50;
-    Avx=0; Avy=0; Avz=0;
+    Ex=250; Ey=250;Ez=250;
+    Lox=0; Loy=0;Loz=0;
+    Avx=0; Avy=250; Avz=0;
     Bg = new RGB(0.22,0.22,0.22);//(0.250980, 0.87843137, 0.815686275);
     Amb = new RGB(0.4, 0.4, 0.4);
 
@@ -89,7 +90,13 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->arvores,SIGNAL(toggled(bool)), this, SLOT(setArv(bool)));
     connect(ui->janelas,SIGNAL(toggled(bool)), this, SLOT(setJan(bool)));
     connect(ui->telhados,SIGNAL(toggled(bool)), this, SLOT(setTelhas(bool)));
+    connect(ui->Postes,SIGNAL(toggled(bool)), this, SLOT(setPostes(bool)));
+    connect(ui->Poste1,SIGNAL(toggled(bool)), this, SLOT(setP1(bool)));
+    connect(ui->Poste2,SIGNAL(toggled(bool)), this, SLOT(setP2(bool)));
+    connect(ui->Poste3,SIGNAL(toggled(bool)), this, SLOT(setP3(bool)));
+    connect(ui->Poste4,SIGNAL(toggled(bool)), this, SLOT(setP4(bool)));
 
+    connect(ui->sombras,SIGNAL(toggled(bool)), this, SLOT(sombras_rend(bool)));
 
     connect(ui->Eye_x,SIGNAL(valueChanged(double)), this, SLOT(Eye_X(double)));
     connect(ui->Eye_y,SIGNAL(valueChanged(double)), this, SLOT(Eye_Y(double)));
@@ -118,6 +125,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->iaR,SIGNAL(valueChanged(int)), this, SLOT(IA_R(int)));
     connect(ui->iaG,SIGNAL(valueChanged(int)), this, SLOT(IA_G(int)));
     connect(ui->iaB,SIGNAL(valueChanged(int)), this, SLOT(IA_B(int)));
+
+    connect(ui->Lp1_R,SIGNAL(valueChanged(int)), this, SLOT(set_rSp1(int)));
+    connect(ui->Lp1_G,SIGNAL(valueChanged(int)), this, SLOT(set_gSp1(int)));
+    connect(ui->Lp1_B,SIGNAL(valueChanged(int)), this, SLOT(set_bSp1(int)));
 
     connect(ui->rF1,SIGNAL(valueChanged(int)), this, SLOT(setF1r(int)));
     connect(ui->gF1,SIGNAL(valueChanged(int)), this, SLOT(setF1g(int)));
@@ -189,6 +200,20 @@ MainWindow::~MainWindow()
 void MainWindow::Render(){
     CamT();
     MontaCena();
+
+
+/*
+    Point P(50,50,10);
+    RGB il(1,1,1);
+
+    luz L(il,&P);
+    Point*p = new Point(0,0,-10);
+    p->normalize();
+    Spot *sp = new Spot(&L,p,5);
+    scene->addSpot(sp);
+
+*/
+
     scene->Word_Cam();
     // scene->Objetos.at(0)->ImpPoints();
     QImage image = QImage( sizeX, sizeY, QImage::Format_RGB32 );
@@ -201,7 +226,7 @@ void MainWindow::Render(){
         float Yi= (scene->Cam->h/2)-(scene->Cam->DY/2)-(i*scene->Cam->DY);
         for( int j=0; j<sizeY; j++ )
         {
-            //if(i != 100 || j != 100)
+            //qif(i != 100 || j != 100)
                //continue;
 
             float Xj = (-scene->Cam->w/2)+(scene->Cam->DX/2)+(j*scene->Cam->DX);
@@ -224,7 +249,7 @@ void MainWindow::MontaCena(){
     int iobj =-1;
     if(solo){
         O = CuboUni3(Grama);
-        ve[0] = 100;ve[1] = 0.8; ve[2] = 95;
+        ve[0] = 100;ve[1] = 95; ve[2] = 0.8;
         t.Escala(E,ve);
         O->Transforoma(E);
         scene->Objetos.push_back(O);
@@ -233,8 +258,8 @@ void MainWindow::MontaCena(){
     }
     if(pistas){
         O = CuboUni3(Pista);
-        ve[0]=10;ve[1]=0.2;ve[2]=55;
-        vt[0]=45;vt[1]=0.8;vt[2]=0;
+        ve[0]=10;ve[1]=55;ve[2]=0.2;
+        vt[0]=45;vt[1]=0;vt[2]=0.8;
         t.Escala(E,ve);
         t.Translacao(T,vt);
         t.MxM(T,E,MT);
@@ -245,8 +270,8 @@ void MainWindow::MontaCena(){
         iobj++;
 
         O = CuboUni3(Pista);
-        ve[0]=100;ve[1]=0.2;ve[2]=10;
-        vt[0]=0;vt[1]=0.8;vt[2]=55;
+        ve[0]=100;ve[1]=10;ve[2]=0.2;
+        vt[0]=0;vt[1]=55;vt[2]=0.8;
         t.Escala(E,ve);
         t.Translacao(T,vt);
         t.MxM(T,E,MT);
@@ -257,8 +282,8 @@ void MainWindow::MontaCena(){
         iobj++;
 
         O = CuboUni3(Pista);
-        ve[0]=30;ve[1]=0.2;ve[2]=5;
-        vt[0]=55;vt[1]=0.8;vt[2]=25;
+        ve[0]=30;ve[1]=5;ve[2]=0.2;
+        vt[0]=55;vt[1]=25;vt[2]=0.8;
         t.Escala(E,ve);
         t.Translacao(T,vt);
         t.MxM(T,E,MT);
@@ -269,8 +294,8 @@ void MainWindow::MontaCena(){
         iobj++;
 
         O = CuboUni3(Pista);
-        ve[0]=15;ve[1]=0.2;ve[2]=4;
-        vt[0]=30;vt[1]=0.8;vt[2]=28;
+        ve[0]=15;ve[1]=4;ve[2]=0.2;
+        vt[0]=30;vt[1]=28;vt[2]=0.8;
         t.Escala(E,ve);
         t.Translacao(T,vt);
         t.MxM(T,E,MT);
@@ -283,10 +308,10 @@ void MainWindow::MontaCena(){
         float vx[4] ={7, 27, 55,85};
         for(int i=0; i<4; i++){
             O = CuboUni3(Terra);
-            ve[0]=4;ve[1]=0.1; ve[2]=6;
+            ve[0]=4;ve[1]=6; ve[2]=0.1;
             if(i==1)
-                ve[2]=11;
-            vt[0]=vx[i];vt[1]=0.8;vt[2]=65;
+                ve[1]=11;
+            vt[0]=vx[i];vt[1]=65;vt[2]=0.8;
             t.Escala(E,ve);
             t.Translacao(T,vt);
             t.MxM(T,E,MT);
@@ -304,8 +329,8 @@ void MainWindow::MontaCena(){
 
 
             O = CuboUni3(Casa1);
-            ve[0]=20;ve[1]=2.5;ve[2]=20;
-            vt[0]=70;vt[1]=0.8;vt[2]=5;
+            ve[0]=20;ve[1]=20;ve[2]=2.5;
+            vt[0]=70;vt[1]=5;vt[2]=0.8;
             t.Escala(E,ve);
             t.Translacao(T,vt);
             t.MxM(T,E,MT);
@@ -315,8 +340,8 @@ void MainWindow::MontaCena(){
             iobj++;
 
             O = CuboUni3(Casa2);
-            ve[0]=20;ve[1]=2.5;ve[2]=20;
-            vt[0]=70;vt[1]=0.8;vt[2]=30;
+            ve[0]=20;ve[1]=20;ve[2]=2.5;
+            vt[0]=70;vt[1]=30;vt[2]=0.8;
             t.Escala(E,ve);
             t.Translacao(T,vt);
             t.MxM(T,E,MT);
@@ -326,8 +351,8 @@ void MainWindow::MontaCena(){
             iobj++;
 
             O = CuboUni3(Casa3);
-            ve[0]=20;ve[1]=2.5;ve[2]=20;
-            vt[0]=75;vt[1]=0.8;vt[2]=70;
+            ve[0]=20;ve[1]=20;ve[2]=2.5;
+            vt[0]=75;vt[1]=70;vt[2]=0.8;
             t.Escala(E,ve);
             t.Translacao(T,vt);
             t.MxM(T,E,MT);
@@ -337,7 +362,7 @@ void MainWindow::MontaCena(){
 
             O = CuboUni3(Casa4);
             ve[0]=20;ve[1]=20;ve[2]=20;
-            vt[0]=50;vt[1]=0.8;vt[2]=70;
+            vt[0]=50;vt[1]=70;vt[2]=0.8;
             t.Escala(E,ve);
             t.Translacao(T,vt);
             t.MxM(T,E,MT);
@@ -346,8 +371,8 @@ void MainWindow::MontaCena(){
             iobj++;
 
             O = CuboUni3(Casa5);
-            ve[0]=15;ve[1]=3;ve[2]=15;
-            vt[0]=21;vt[1]=0.8;vt[2]=75;
+            ve[0]=15;ve[1]=15;ve[2]=3;
+            vt[0]=21;vt[1]=75;vt[2]=0.8;
             t.Escala(E,ve);
             t.Translacao(T,vt);
             t.MxM(T,E,MT);
@@ -357,7 +382,7 @@ void MainWindow::MontaCena(){
 
             O = CuboUni3(Casa5);
             ve[0]=20;ve[1]=20;ve[2]=20;
-            vt[0]=2;vt[1]=0.8;vt[2]=70;
+            vt[0]=2;vt[1]=70;vt[2]=0.8;
             t.Escala(E,ve);
             t.Translacao(T,vt);
             t.MxM(T,E,MT);
@@ -366,8 +391,8 @@ void MainWindow::MontaCena(){
             iobj++;
 
             O = CuboUni3(Casa6);
-            ve[0]=25;ve[1]=3;ve[2]=20;
-            vt[0]=5;vt[1]=0.8;vt[2]=20;
+            ve[0]=25;ve[1]=20;ve[2]=3;
+            vt[0]=5;vt[1]=20;vt[2]=0.8;
             t.Escala(E,ve);
             t.Translacao(T,vt);
             t.MxM(T,E,MT);
@@ -376,8 +401,8 @@ void MainWindow::MontaCena(){
             iobj++;
 
             O = CuboUni3(Casa6);
-            ve[0]=15;ve[1]=3;ve[2]=15;
-            vt[0]=5;vt[1]=0.8;vt[2]=6;
+            ve[0]=15;ve[1]=15;ve[2]=3;
+            vt[0]=5;vt[1]=6;vt[2]=0.8;
             t.Escala(E,ve);
             t.Translacao(T,vt);
             t.MxM(T,E,MT);
@@ -388,8 +413,8 @@ void MainWindow::MontaCena(){
         }
     if(telhados){
             O = Prisma_Triangular_Uni3(Telha);
-            ve[0]=20;ve[1]=2;ve[2]=20;
-            vt[0]=70;vt[1]=3.3;vt[2]=5;
+            ve[0]=20;ve[1]=20;ve[2]=2;
+            vt[0]=70;vt[1]=5;vt[2]=3.3;
             t.Escala(E,ve);
             t.Translacao(T,vt);
             t.MxM(T,E,MT);
@@ -398,8 +423,8 @@ void MainWindow::MontaCena(){
             iobj++;
 
             O = Prisma_Triangular_Uni3(Telha2);
-            ve[0]=20;ve[1]=2;ve[2]=20;
-            vt[0]=70;vt[1]=3.3;vt[2]=30;
+            ve[0]=20;ve[1]=20;ve[2]=2;
+            vt[0]=70;vt[1]=30;vt[2]=3.3;
             t.Escala(E,ve);
             t.Translacao(T,vt);
             t.MxM(T,E,MT);
@@ -408,8 +433,8 @@ void MainWindow::MontaCena(){
             iobj++;
 
             O = Prisma_Triangular_Uni3(Telha1);
-            ve[0]=20;ve[1]=2;ve[2]=20;
-            vt[0]=75;vt[1]=3.3;vt[2]=70;
+            ve[0]=20;ve[1]=20;ve[2]=2;
+            vt[0]=75;vt[1]=70;vt[2]=3.3;
             t.Escala(E,ve);
             t.Translacao(T,vt);
             t.MxM(T,E,MT);
@@ -418,8 +443,8 @@ void MainWindow::MontaCena(){
             iobj++;
 
             O = Prisma_Triangular_Uni3(Telha1);
-            ve[0]=20;ve[1]=3;ve[2]=20;
-            vt[0]=50;vt[1]=20.7;vt[2]=70;
+            ve[0]=20;ve[1]=20;ve[2]=3;
+            vt[0]=50;vt[1]=70;vt[2]=20.7;
             t.Escala(E,ve);
             t.Translacao(T,vt);
             t.MxM(T,E,MT);
@@ -429,8 +454,8 @@ void MainWindow::MontaCena(){
 
 
             O = Prisma_Triangular_Uni3(Telha2);
-            ve[0]=15;ve[1]=2;ve[2]=15;
-            vt[0]=21;vt[1]=3.8;vt[2]=75;
+            ve[0]=15;ve[1]=15;ve[2]=2;
+            vt[0]=21;vt[1]=75;vt[2]=3.8;
             t.Escala(E,ve);
             t.Translacao(T,vt);
             t.MxM(T,E,MT);
@@ -439,8 +464,8 @@ void MainWindow::MontaCena(){
             iobj++;
 
             O = Prisma_Triangular_Uni3(Telha2);
-            ve[0]=20;ve[1]=3;ve[2]=20;
-            vt[0]=2;vt[1]=20.8;vt[2]=70;
+            ve[0]=20;ve[1]=20;ve[2]=3;
+            vt[0]=2;vt[1]=70;vt[2]=20.8;
             t.Escala(E,ve);
             t.Translacao(T,vt);
             t.MxM(T,E,MT);
@@ -449,8 +474,8 @@ void MainWindow::MontaCena(){
             iobj++;
 
             O = Prisma_Triangular_Uni3(Telha1);
-            ve[0]=25;ve[1]=3;ve[2]=20;
-            vt[0]=5;vt[1]=3.8;vt[2]=20;
+            ve[0]=25;ve[1]=20;ve[2]=3;
+            vt[0]=5;vt[1]=20;vt[2]=3.8;
             t.Escala(E,ve);
             t.Translacao(T,vt);
             t.MxM(T,E,MT);
@@ -459,8 +484,8 @@ void MainWindow::MontaCena(){
             iobj++;
 
             O = Prisma_Triangular_Uni3(Telha1);
-            ve[0]=15;ve[1]=3;ve[2]=15;
-            vt[0]=5;vt[1]=3.8;vt[2]=6;
+            ve[0]=15;ve[1]=15;ve[2]=3;
+            vt[0]=5;vt[1]=6;vt[2]=3.8;
             t.Escala(E,ve);
             t.Translacao(T,vt);
             t.MxM(T,E,MT);
@@ -476,8 +501,8 @@ void MainWindow::MontaCena(){
            for(int i=0; i<3; i++){
                for(int j=0; j<4;j++){
                    O = CuboUni3(Arvore);
-                   ve[0]=1.5;ve[1]=7;ve[2]=1.5;
-                   vt[0]=z[j];vt[1]=0.8;vt[2]=(i*5)+42;
+                   ve[0]=1.5;ve[1]=1.5;ve[2]=7;
+                   vt[0]=z[j];vt[1]=(i*5)+42;vt[2]=0.8;
                    t.Escala(E,ve);
                    t.Translacao(T,vt);
                    t.MxM(T,E,MT);
@@ -486,8 +511,8 @@ void MainWindow::MontaCena(){
                    iobj++;
                }
                O = CuboUni3(Arvore);
-               ve[0]=1.5;ve[1]=7;ve[2]=1.5;
-               vt[0]=72;vt[1]=0.8;vt[2]=(i*5)+75;
+               ve[0]=1.5;ve[1]=1.5;ve[2]=7;
+               vt[0]=72;vt[1]=(i*5)+75;vt[2]=0.8;
                t.Escala(E,ve);
                t.Translacao(T,vt);
                t.MxM(T,E,MT);
@@ -496,8 +521,8 @@ void MainWindow::MontaCena(){
                iobj++;
 
                O = CuboUni3(Arvore);
-               ve[0]=1.5;ve[1]=2;ve[2]=1.5;
-               vt[0]=40;vt[1]=0.8;vt[2]=(i*5)+75;
+               ve[0]=1.5;ve[1]=1.5;ve[2]=2;
+               vt[0]=40;vt[1]=(i*5)+75;vt[2]=0.8;
                t.Escala(E,ve);
                t.Translacao(T,vt);
                t.MxM(T,E,MT);
@@ -507,8 +532,8 @@ void MainWindow::MontaCena(){
 
                for(int j=0; j<2;j++){
                    O = CuboUni3(Arvore);
-                   ve[0]=1.5;ve[1]=2;ve[2]=1.5;
-                   vt[0]=(j*20)+40;vt[1]=0.8;vt[2]=(i*5)+5;
+                   ve[0]=1.5;ve[1]=1.5;ve[2]=2;
+                   vt[0]=(j*20)+40;vt[1]=(i*5)+5;vt[2]=0.8;
                    t.Escala(E,ve);
                    t.Translacao(T,vt);
                    t.MxM(T,E,MT);
@@ -523,8 +548,8 @@ void MainWindow::MontaCena(){
        }
     if(portas){
          O = CuboUni3(Porta1);
-         ve[0]=1;ve[1]=2;ve[2]=0.1;
-         vt[0]=80;vt[1]=0.8;vt[2]=25;
+         ve[0]=1;ve[1]=0.1;ve[2]=2;
+         vt[0]=80;vt[1]=25;vt[2]=0.8;
          t.Escala(E,ve);
          t.Translacao(T,vt);
          t.MxM(T,E,MT);
@@ -533,8 +558,8 @@ void MainWindow::MontaCena(){
          iobj++;
 
          O = CuboUni3(Porta1);
-         ve[0]=1;ve[1]=2;ve[2]=0.1;
-         vt[0]=80;vt[1]=0.8;vt[2]=29.8;
+         ve[0]=1;ve[1]=0.1;ve[2]=2;
+         vt[0]=80;vt[1]=29.8;vt[2]=0.8;
          t.Escala(E,ve);
          t.Translacao(T,vt);
          t.MxM(T,E,MT);
@@ -543,8 +568,8 @@ void MainWindow::MontaCena(){
          iobj++;
 
          O = CuboUni3(Porta1);
-         ve[0]=2;ve[1]=2;ve[2]=0.1;
-         vt[0]=85;vt[1]=0.8;vt[2]=69.8;
+         ve[0]=2;ve[1]=0.1;ve[2]=2;
+         vt[0]=85;vt[1]=69.8;vt[2]=0.8;
          t.Escala(E,ve);
          t.Translacao(T,vt);
          t.MxM(T,E,MT);
@@ -553,8 +578,8 @@ void MainWindow::MontaCena(){
          iobj++;
 
          O = CuboUni3(Porta1);
-         ve[0]=4;ve[1]=2.5;ve[2]=0.1;
-         vt[0]=55;vt[1]=0.8;vt[2]=69.8;
+         ve[0]=4;ve[1]=0.1;ve[2]=2.5;
+         vt[0]=55;vt[1]=69.8;vt[2]=0.8;
          t.Escala(E,ve);
          t.Translacao(T,vt);
          t.MxM(T,E,MT);
@@ -563,8 +588,8 @@ void MainWindow::MontaCena(){
          iobj++;
 
          O = CuboUni3(Porta1);
-         ve[0]=3;ve[1]=2;ve[2]=0.1;
-         vt[0]=27;vt[1]=0.8;vt[2]=74.8;
+         ve[0]=3;ve[1]=0.1;ve[2]=2;
+         vt[0]=27;vt[1]=74.8;vt[2]=0.8;
          t.Escala(E,ve);
          t.Translacao(T,vt);
          t.MxM(T,E,MT);
@@ -573,8 +598,8 @@ void MainWindow::MontaCena(){
          iobj++;
 
          O = CuboUni3(Porta2);
-         ve[0]=4;ve[1]=2.5;ve[2]=0.1;
-         vt[0]=7;vt[1]=0.8;vt[2]=69.8;
+         ve[0]=4;ve[1]=0.1;ve[2]=2.5;
+         vt[0]=7;vt[1]=69.8;vt[2]=0.8;
          t.Escala(E,ve);
          t.Translacao(T,vt);
          t.MxM(T,E,MT);
@@ -583,8 +608,8 @@ void MainWindow::MontaCena(){
          iobj++;
 
          O = CuboUni3(Porta3);
-         ve[0]=0.1;ve[1]=2;ve[2]=1.5;
-         vt[0]=30;vt[1]=0.8;vt[2]=30;
+         ve[0]=0.1;ve[1]=1.5;ve[2]=2;
+         vt[0]=30;vt[1]=30;vt[2]=0.8;
          t.Escala(E,ve);
          t.Translacao(T,vt);
          t.MxM(T,E,MT);
@@ -601,8 +626,8 @@ void MainWindow::MontaCena(){
                 for(int j=0; j<4;j++){
 
                     O = CuboUni3(Janela);
-                    ve[0]=2;ve[1]=2;ve[2]=0.1;
-                    vt[0]=(i*5)+6;vt[1]=(j*3)+6.8;vt[2]=69.8;
+                    ve[0]=2;ve[1]=0.1;ve[2]=2;
+                    vt[0]=(i*5)+6;vt[1]=69.8;vt[2]=(j*3)+6.8;
                     t.Escala(E,ve);
                     t.Translacao(T,vt);
                     t.MxM(T,E,MT);
@@ -612,7 +637,7 @@ void MainWindow::MontaCena(){
 
                     O = CuboUni3(Janela);
                     ve[0]=0.1;ve[1]=2;ve[2]=1;
-                    vt[0]=70;vt[1]=(j*3)+6.8;vt[2]=(i*5)+72;
+                    vt[0]=70;vt[1]= (i*5)+72;vt[2]= (j*3)+6.8;
                     t.Escala(E,ve);
                     t.Translacao(T,vt);
                     t.MxM(T,E,MT);
@@ -624,7 +649,7 @@ void MainWindow::MontaCena(){
 
                 O = CuboUni3(Janela);
                 ve[0]=0.1;ve[1]=1;ve[2]=1;
-                vt[0]=90;vt[1]=1.8;vt[2]=(i*5)+10;
+                vt[0]=90;vt[1]=(i*5)+10;vt[2]=1.8;
                 t.Escala(E,ve);
                 t.Translacao(T,vt);
                 t.MxM(T,E,MT);
@@ -633,7 +658,7 @@ void MainWindow::MontaCena(){
                 iobj++;
 
                 O = CuboUni3(Janela);
-                vt[2]=(i*5)+35;
+                vt[1]=(i*5)+35;
                 t.Escala(E,ve);
                 t.Translacao(T,vt);
                 t.MxM(T,E,MT);
@@ -642,7 +667,7 @@ void MainWindow::MontaCena(){
                 iobj++;
 
                 O = CuboUni3(Janela);
-                vt[0]=95;vt[2]=(i*5)+75;
+                vt[0]=95;vt[1]=(i*5)+75;
                 t.Escala(E,ve);
                 t.Translacao(T,vt);
                 t.MxM(T,E,MT);
@@ -651,17 +676,60 @@ void MainWindow::MontaCena(){
                 iobj++;
 
                 O = CuboUni3(Porta1);
-                ve[0]=2;ve[1]=2;ve[2]=0.1;
-                vt[0]=(i*5)+6;vt[1]=1.8;vt[2]=5.9;
+                ve[0]=2;ve[1]=0.1;ve[2]=2;
+                vt[0]=(i*5)+6;vt[1]=5.9;vt[2]=1.8;
                 t.Escala(E,ve);
                 t.Translacao(T,vt);
                 t.MxM(T,E,MT);
                 O->Transforoma(MT);
-               scene->Objetos.push_back(O);
+                scene->Objetos.push_back(O);
                 iobj++;
             }
         }
+    if(postes){
 
+        O = CuboUni3(Pista);
+        ve[0]=0.5;ve[1]=0.5;ve[2]=15;
+        vt[0]=43;vt[1]=25;vt[2]=0.8;
+        t.Escala(E,ve);
+        t.Translacao(T,vt);
+        t.MxM(T,E,MT);
+        O->Transforoma(MT);
+        scene->Objetos.push_back(O);
+        iobj++;
+        O = CuboUni3(Pista);
+        ve[0]=2.5;ve[1]=0.5;ve[2]=0.5;
+        vt[2]=15.8;
+        t.Escala(E,ve);
+        t.Translacao(T,vt);
+        t.MxM(T,E,MT);
+        O->Transforoma(MT);
+        scene->Objetos.push_back(O);
+        iobj++;
+
+
+        O = CuboUni3(Pista);
+        ve[0]=0.5;ve[1]=0.5;ve[2]=15;
+        vt[0]=61;vt[1]=35;vt[2]=0.8;
+        t.Escala(E,ve);
+        t.Translacao(T,vt);
+        t.MxM(T,E,MT);
+        O->Transforoma(MT);
+        scene->Objetos.push_back(O);
+        iobj++;
+        O = CuboUni3(Pista);
+        ve[0]=2.5;ve[1]=0.5;ve[2]=0.5;
+        vt[0]=59;vt[2]=15.8;
+        t.Escala(E,ve);
+        t.Translacao(T,vt);
+        t.MxM(T,E,MT);
+        O->Transforoma(MT);
+        scene->Objetos.push_back(O);
+        iobj++;
+
+
+
+    }
 }
 void MainWindow::CamT(){
 
@@ -674,6 +742,7 @@ void MainWindow::CamT(){
     Cam = new Camera(W,H,-d,sizeX,sizeY,*Obs);
 
     scene = new Cenario(Obs, Cam, Amb, Bg);
+    scene->Renderiza_somb = this->Renderiza_sombras;
 
     RGB iF1(rF1,gF1,bF1);
     RGB iF2(rF2,gF2,bF2);
@@ -681,17 +750,33 @@ void MainWindow::CamT(){
     RGB iF4(rF4,gF4,bF4);
     RGB iF5(rF5,gF5,bF5);
 
+    RGB iSp1(rSp1, gSp1, bSp1);
+
     pF1 = new Point(pF1x,pF1y,pF1z);
     pF2 = new Point(pF2x,pF2y,pF2z);
     pF3 = new Point(pF3x,pF3y,pF3z);
     pF4 = new Point(pF4x,pF4y,pF4z);
     pF5 = new Point(pF5x,pF5y,pF5z);
 
-    scene->addFonte2(pF1,iF1);
-    scene->addFonte2(pF2,iF2);
-    scene->addFonte2(pF3,iF3);
-    scene->addFonte2(pF4,iF4);
-    scene->addFonte2(pF5,iF5);
+    if(rF1!=0||gF1!=0||bF1!=0)
+        scene->addFonte2(pF1,iF1);
+    if(rF2!=0||gF2!=0||bF2!=0)
+        scene->addFonte2(pF2,iF2);
+    if(rF3!=0||gF3!=0||bF3!=0)
+        scene->addFonte2(pF3,iF3);
+    if(rF4!=0||gF4!=0||bF4!=0)
+        scene->addFonte2(pF4,iF4);
+    if(rF5!=0||gF5!=0||bF5!=0)
+        scene->addFonte2(pF5,iF5);
+
+
+    if(p1 && postes){
+
+        Point *PosSp1 = new Point(61,35,15.8);
+        Point *D = new Point(0,0,-1);
+        scene->addSpot2(PosSp1,D,iSp1,5);
+
+    }
 
 
 }
@@ -739,7 +824,9 @@ void MainWindow::Pad(){
 
 }
 
-
+void MainWindow::sombras_rend(bool s){
+  Renderiza_sombras = s;
+}
 
 void MainWindow::setPF1x(double d){
     pF1x=d;
@@ -860,6 +947,16 @@ void MainWindow::IA_B(int I){
     Amb->B= (float)I/255;
 }
 
+void MainWindow::set_rSp1(int I){
+    rSp1 = (float)I/255;
+}
+void MainWindow::set_gSp1(int I){
+    gSp1 = (float)I/255;
+}
+void MainWindow::set_bSp1(int I){
+    bSp1 = (float)I/255;
+}
+
 void MainWindow::setSolo(bool b){
     solo=b;
 }
@@ -881,6 +978,25 @@ void MainWindow::setPortas(bool b){
 void MainWindow::setJan(bool b){
     janelas=b;
 }
+void MainWindow::setPostes(bool b){
+    postes=b;
+}
+void MainWindow::setP1(bool b){
+    p1=b;
+}
+void MainWindow::setP2(bool b){
+    p2=b;
+}
+void MainWindow::setP3(bool b){
+    p3=b;
+}
+void MainWindow::setP4(bool b){
+    p4=b;
+}
+
+
+
+
 
 void MainWindow::Eye_X(double x){
     Ex=(float)x;
@@ -960,13 +1076,11 @@ Objeto* MainWindow::Prisma_Triangular_Uni3(Material *M){
 
     Objeto *prism = new Objeto();
     prism->addPoint(1,0,0);
-    prism->addPoint(1,0,1);
-    prism->addPoint(0,0,1);
+    prism->addPoint(1,1,0);
+    prism->addPoint(0,1,0);
     prism->addPoint(0,0,0);
-    prism->addPoint(1,1,0.5);
-    prism->addPoint(0,1,0.5);
-
-
+    prism->addPoint(1,0.5,1);
+    prism->addPoint(0,0.5,1);
 
     prism->addFace(1,3,0, M);
     prism->addFace(0,4,1, M);

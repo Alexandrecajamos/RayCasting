@@ -18,7 +18,9 @@ Face::Face(Point *_P1, Point *_P2, Point *_P3, Material *_M){
     this->P2=_P2;
     this->P3=_P3;
     this->M =_M;
-    this->atNormal();
+    this->N = this->calcNormal();
+
+    //this->atNormal();
 }
 
 Face::Face(Point *_P1, Point *_P2, Point *_P3)
@@ -55,8 +57,7 @@ float Face::Inter(Point P){
     p2= *(this->P2);
     p3= *(this->P3);
 
-    Point nF = this->calcNormal();
-    nF.normalize();
+    Point nF = this->N;
     Point Pint = P;
     float PE = Pint.ProdutoEscalar(nF);
 
@@ -162,10 +163,46 @@ float Face::Inter(Point P){
 }
 
 void Face::atNormal(){
-    Point Norm = this->calcNormal();
-    this->N = &Norm;
+    this->N= this->calcNormal();
 }
+bool Face::Obstaculo(Point Pint, Point l){
 
+    Point p1,p2,p3;
+    p1= *(this->P1);
+    p2= *(this->P2);
+    p3= *(this->P3);
+
+    Point nF = this->N;
+    float PE = l.ProdutoEscalar(nF);
+    if(PE<0){
+
+        Point v1 = p2;
+        Point v2 = p3;
+        v1.operator -=(p1);
+        v2.operator -=(p1);
+
+        transformacoes tr;
+        float M[3][3];
+        M[0][0] = v1.x; M[1][0] = v1.y; M[2][0] = v1.z;
+        M[0][1] = v2.x; M[1][1] = v2.y; M[2][1] = v2.z;
+        M[0][2] = -l.x;  M[1][2] = -l.y;  M[2][2] = -l.z;
+        float det = tr.Det3x3(M);
+        tr.Inv3x3(M,det);
+        Point b = Pint;
+        b.operator -=(p1);
+        Point lamb = tr.mxv(M,&b);
+
+        float l3 = 1-(lamb.x+lamb.y);
+
+        if(lamb.x>=0 && lamb.x<=1 && lamb.y>=0 && lamb.y<=1 && l3>=0 && l3<=1 && lamb.z>0){
+            //std::cout << "\n" << lamb.x << ", " << lamb.y << ", " << lamb.z;
+            return true;
+
+        }
+
+    }
+    return false;
+}
 
 void Face::Barycentric(Point p, Point a, Point b, Point c, float &u, float &v, float &w)
 {
@@ -186,3 +223,4 @@ void Face::Barycentric(Point p, Point a, Point b, Point c, float &u, float &v, f
     u = 1-v-w;
 
 }
+

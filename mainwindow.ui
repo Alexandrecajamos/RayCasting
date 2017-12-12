@@ -24,7 +24,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_2">
        <attribute name="title">
@@ -792,7 +792,7 @@
         <property name="geometry">
          <rect>
           <x>110</x>
-          <y>560</y>
+          <y>590</y>
           <width>111</width>
           <height>51</height>
          </rect>
@@ -882,6 +882,32 @@
         </property>
         <property name="text">
          <string>Direção -&gt;</string>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="sombras">
+        <property name="geometry">
+         <rect>
+          <x>50</x>
+          <y>550</y>
+          <width>171</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Projetar Sombras</string>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="Postes">
+        <property name="geometry">
+         <rect>
+          <x>270</x>
+          <y>480</y>
+          <width>92</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Postes</string>
         </property>
        </widget>
       </widget>
@@ -1538,6 +1564,97 @@
          <rect>
           <x>390</x>
           <y>290</y>
+          <width>48</width>
+          <height>26</height>
+         </rect>
+        </property>
+        <property name="maximum">
+         <number>255</number>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="Poste1">
+        <property name="geometry">
+         <rect>
+          <x>60</x>
+          <y>360</y>
+          <width>101</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Poste 1</string>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="Poste2">
+        <property name="geometry">
+         <rect>
+          <x>60</x>
+          <y>390</y>
+          <width>101</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Poste 2</string>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="Poste3">
+        <property name="geometry">
+         <rect>
+          <x>60</x>
+          <y>420</y>
+          <width>101</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Poste 3</string>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="Poste4">
+        <property name="geometry">
+         <rect>
+          <x>60</x>
+          <y>450</y>
+          <width>101</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Poste 4</string>
+        </property>
+       </widget>
+       <widget class="QSpinBox" name="Lp1_R">
+        <property name="geometry">
+         <rect>
+          <x>160</x>
+          <y>370</y>
+          <width>48</width>
+          <height>26</height>
+         </rect>
+        </property>
+        <property name="maximum">
+         <number>255</number>
+        </property>
+       </widget>
+       <widget class="QSpinBox" name="Lp1_G">
+        <property name="geometry">
+         <rect>
+          <x>230</x>
+          <y>370</y>
+          <width>48</width>
+          <height>26</height>
+         </rect>
+        </property>
+        <property name="maximum">
+         <number>255</number>
+        </property>
+       </widget>
+       <widget class="QSpinBox" name="Lp1_B">
+        <property name="geometry">
+         <rect>
+          <x>300</x>
+          <y>370</y>
           <width>48</width>
           <height>26</height>
          </rect>

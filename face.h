@@ -16,6 +16,7 @@ public:
     Material *M;
     void Barycentric(Point p, Point a, Point b, Point c, float &u, float &v, float &w);
     bool Obstaculo(Point Pint, Point ls);
+    float Ray_intersept(Point Po, Point D);
 };
 
 #endif // FACE_H

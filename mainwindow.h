@@ -45,11 +45,11 @@ public:
 
 
 
-    int sizeX = 200;
-    int sizeY = 200;
+    int sizeX = 250;
+    int sizeY = 250;
     float W = 0.5;
     float H = 0.5;
-    float d = 1.5;
+    float d = 1;
 
     float Ex, Ey, Ez;
     float Lox, Loy, Loz;
@@ -74,7 +74,12 @@ public:
     Point *pF4;
     Point *pF5;
 
-    float rSp1 = 0, gSp1=0, bSp1=0;
+    float rSp1 = 1, gSp1=1, bSp1=1;
+    float rSp2 = 1, gSp2=1, bSp2=1;
+    float rSp3 = 1, gSp3=1, bSp3=1;
+    float rSp4 = 1, gSp4=1, bSp4=1;
+
+    float dObq_x=0,dObq_y=0,dObq_z=0;
 
     Point *sP1;
 
@@ -93,13 +98,23 @@ private:
     Ui::MainWindow *ui;
 
 public slots:
+    void Obq();
     void Render();
     void MontaCena();
     void CamT();
     void Sair();
     void Pad();
 
+    void setDirObx(double);
+    void setDirOby(double);
+    void setDirObz(double);
+
     void sombras_rend(bool);
+    void RenderPFuga(Cenario *Cena);
+    void Fuga_1P();
+    void Fuga_2P();
+    void Fuga_3P();
+
     void setPF1x(double);
     void setPF2x(double);
     void setPF3x(double);
@@ -177,6 +192,18 @@ public slots:
     void set_rSp1(int);
     void set_gSp1(int);
     void set_bSp1(int);
+
+    void set_rSp2(int);
+    void set_gSp2(int);
+    void set_bSp2(int);
+
+    void set_rSp3(int);
+    void set_gSp3(int);
+    void set_bSp3(int);
+
+    void set_rSp4(int);
+    void set_gSp4(int);
+    void set_bSp4(int);
 
 };
 

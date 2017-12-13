@@ -74,8 +74,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
 
+    connect(ui->P1_Fuga, SIGNAL(pressed()),this, SLOT(Fuga_1P()));
+    connect(ui->P2_Fuga, SIGNAL(pressed()),this, SLOT(Fuga_2P()));
+    connect(ui->P3_Fuga, SIGNAL(pressed()),this, SLOT(Fuga_3P()));
+
 
     connect(ui->render,SIGNAL(pressed()),this,SLOT(Render()));
+    connect(ui->render_2,SIGNAL(pressed()),this,SLOT(Obq()));
     //connect(ui->montar,SIGNAL(pressed()),this,SLOT(MontaCena()));
     //connect(ui->Cam,SIGNAL(pressed()),this,SLOT(CamT()));
     connect(ui->Sair,SIGNAL(pressed()),this,SLOT(Sair()));
@@ -108,9 +113,16 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->La_y,SIGNAL(valueChanged(double)), this, SLOT(Lo_Y(double)));
     connect(ui->La_z,SIGNAL(valueChanged(double)), this, SLOT(Lo_Z(double)));
 
+
+
     connect(ui->Av_x,SIGNAL(valueChanged(double)), this, SLOT(Av_X(double)));
     connect(ui->Av_y,SIGNAL(valueChanged(double)), this, SLOT(Av_Y(double)));
     connect(ui->Av_z,SIGNAL(valueChanged(double)), this, SLOT(Av_Z(double)));
+
+
+    connect(ui->ObqD_x,SIGNAL(valueChanged(double)), this, SLOT(setDirObx(double)));
+    connect(ui->ObqD_y,SIGNAL(valueChanged(double)), this, SLOT(setDirOby(double)));
+    connect(ui->ObqD_z,SIGNAL(valueChanged(double)), this, SLOT(setDirObz(double)));
 
     connect(ui->w,SIGNAL(valueChanged(double)), this, SLOT(setW(double)));
     connect(ui->h,SIGNAL(valueChanged(double)), this, SLOT(setH(double)));
@@ -126,9 +138,23 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->iaG,SIGNAL(valueChanged(int)), this, SLOT(IA_G(int)));
     connect(ui->iaB,SIGNAL(valueChanged(int)), this, SLOT(IA_B(int)));
 
+
     connect(ui->Lp1_R,SIGNAL(valueChanged(int)), this, SLOT(set_rSp1(int)));
     connect(ui->Lp1_G,SIGNAL(valueChanged(int)), this, SLOT(set_gSp1(int)));
     connect(ui->Lp1_B,SIGNAL(valueChanged(int)), this, SLOT(set_bSp1(int)));
+
+    connect(ui->Lp2_R,SIGNAL(valueChanged(int)), this, SLOT(set_rSp2(int)));
+    connect(ui->Lp2_G,SIGNAL(valueChanged(int)), this, SLOT(set_gSp2(int)));
+    connect(ui->Lp2_B,SIGNAL(valueChanged(int)), this, SLOT(set_bSp2(int)));
+
+    connect(ui->Lp3_R,SIGNAL(valueChanged(int)), this, SLOT(set_rSp3(int)));
+    connect(ui->Lp3_G,SIGNAL(valueChanged(int)), this, SLOT(set_gSp3(int)));
+    connect(ui->Lp3_B,SIGNAL(valueChanged(int)), this, SLOT(set_bSp3(int)));
+
+    connect(ui->Lp4_R,SIGNAL(valueChanged(int)), this, SLOT(set_rSp4(int)));
+    connect(ui->Lp4_G,SIGNAL(valueChanged(int)), this, SLOT(set_gSp4(int)));
+    connect(ui->Lp4_B,SIGNAL(valueChanged(int)), this, SLOT(set_bSp4(int)));
+
 
     connect(ui->rF1,SIGNAL(valueChanged(int)), this, SLOT(setF1r(int)));
     connect(ui->gF1,SIGNAL(valueChanged(int)), this, SLOT(setF1g(int)));
@@ -178,18 +204,7 @@ MainWindow::MainWindow(QWidget *parent) :
     pF5 = new Point(pF5x,pF5y,pF5z);
 
 
-    /*
-    solo = true;
-    pistas = true;
-    casas = true;
-    telhados = true;
-    arvores = true;
-    portas = true;
-    janelas = true;
 
-    MontaCena();
-    scene->Word_Cam();
-    */
 }
 
 MainWindow::~MainWindow()
@@ -200,20 +215,6 @@ MainWindow::~MainWindow()
 void MainWindow::Render(){
     CamT();
     MontaCena();
-
-
-/*
-    Point P(50,50,10);
-    RGB il(1,1,1);
-
-    luz L(il,&P);
-    Point*p = new Point(0,0,-10);
-    p->normalize();
-    Spot *sp = new Spot(&L,p,5);
-    scene->addSpot(sp);
-
-*/
-
     scene->Word_Cam();
     // scene->Objetos.at(0)->ImpPoints();
     QImage image = QImage( sizeX, sizeY, QImage::Format_RGB32 );
@@ -230,9 +231,10 @@ void MainWindow::Render(){
                //continue;
 
             float Xj = (-scene->Cam->w/2)+(scene->Cam->DX/2)+(j*scene->Cam->DX);
-            Point px(Xj,Yi,scene->Cam->d);
-
-                RGB* print = scene->Ray_Pix_Ilm(px);
+            Point Pij(Xj,Yi,scene->Cam->d);
+            Pij.normalize();
+                Point Po(0,0,0);
+                RGB* print = scene->Ray_Pix_Ilm(Po, Pij);
                 image.setPixel( i, j, qRgb(print->R*255, print->G*255, print->B*255));
         }
     }
@@ -240,6 +242,7 @@ void MainWindow::Render(){
     QGraphicsScene * graphic = new QGraphicsScene( this );
     graphic->addPixmap( QPixmap::fromImage( image ) );
     ui->graphicsView->setScene(graphic);
+
     scene->Libera();
     free(scene);
 }
@@ -727,6 +730,45 @@ void MainWindow::MontaCena(){
         scene->Objetos.push_back(O);
         iobj++;
 
+        O = CuboUni3(Pista);
+        ve[0]=0.5;ve[1]=0.5;ve[2]=15;
+        vt[0]=43;vt[1]=70;vt[2]=0.8;
+        t.Escala(E,ve);
+        t.Translacao(T,vt);
+        t.MxM(T,E,MT);
+        O->Transforoma(MT);
+        scene->Objetos.push_back(O);
+        iobj++;
+        O = CuboUni3(Pista);
+        ve[0]=0.5;ve[1]=2.5;ve[2]=0.5;
+        vt[1]=68;vt[2]=15.8;
+        t.Escala(E,ve);
+        t.Translacao(T,vt);
+        t.MxM(T,E,MT);
+        O->Transforoma(MT);
+        scene->Objetos.push_back(O);
+        iobj++;
+
+
+        O = CuboUni3(Pista);
+        ve[0]=0.5;ve[1]=0.5;ve[2]=15;
+        vt[0]=72;vt[1]=70;vt[2]=0.8;
+        t.Escala(E,ve);
+        t.Translacao(T,vt);
+        t.MxM(T,E,MT);
+        O->Transforoma(MT);
+        scene->Objetos.push_back(O);
+        iobj++;
+        O = CuboUni3(Pista);
+        ve[0]=0.5;ve[1]=2.5;ve[2]=0.5;
+        vt[1]=68;vt[2]=15.8;
+        t.Escala(E,ve);
+        t.Translacao(T,vt);
+        t.MxM(T,E,MT);
+        O->Transforoma(MT);
+        scene->Objetos.push_back(O);
+        iobj++;
+
 
 
     }
@@ -751,6 +793,9 @@ void MainWindow::CamT(){
     RGB iF5(rF5,gF5,bF5);
 
     RGB iSp1(rSp1, gSp1, bSp1);
+    RGB iSp2(rSp2, gSp2, bSp2);
+    RGB iSp3(rSp3, gSp3, bSp3);
+    RGB iSp4(rSp4, gSp4, bSp4);
 
     pF1 = new Point(pF1x,pF1y,pF1z);
     pF2 = new Point(pF2x,pF2y,pF2z);
@@ -772,15 +817,67 @@ void MainWindow::CamT(){
 
     if(p1 && postes){
 
-        Point *PosSp1 = new Point(61,35,15.8);
+        Point *PosSp1 = new Point(43,25,15.5);
         Point *D = new Point(0,0,-1);
-        scene->addSpot2(PosSp1,D,iSp1,5);
+        scene->addSpot2(PosSp1,D,iSp1,15);
+
+    }
+    if(p2 && postes){
+
+        Point *PosSp2 = new Point(61,35,15.5);
+        Point *D = new Point(0,0,-1);
+        scene->addSpot2(PosSp2,D,iSp2,15);
+
+    }
+    if(p3 && postes){
+
+        Point *PosSp3 = new Point(43,68,15.5);
+        Point *D = new Point(0,0,-1);
+        scene->addSpot2(PosSp3,D,iSp3,15);
+
+    }
+    if(p4 && postes){
+
+        Point *PosSp4 = new Point(72,68,15.5);
+        Point *D = new Point(0,0,-1);
+        scene->addSpot2(PosSp4,D,iSp4,15);
 
     }
 
 
 }
+void MainWindow::Obq(){
+    CamT();
+    MontaCena();
+    scene->Word_Cam();
 
+    QImage image = QImage( sizeX, sizeY, QImage::Format_RGB32 );
+
+    for( int i=0; i<sizeX; i++)
+    {
+
+        float Yi= (scene->Cam->h/2)-(scene->Cam->DY/2)-(i*scene->Cam->DY);
+        for( int j=0; j<sizeY; j++ )
+        {
+
+            float Xj = (-scene->Cam->w/2)+(scene->Cam->DX/2)+(j*scene->Cam->DX);
+            Point Po(Xj,Yi,scene->Cam->d);
+            //Pij.normalize();
+                Point D(dObq_x,dObq_y,dObq_z);
+                D.normalize();
+
+                RGB* print = scene->Ray_Pix_Ilm(Po, D);
+                image.setPixel( i, j, qRgb(print->R*255, print->G*255, print->B*255));
+        }
+    }
+
+    QGraphicsScene * graphic = new QGraphicsScene( this );
+    graphic->addPixmap( QPixmap::fromImage( image ) );
+    ui->graphicsView->setScene(graphic);
+
+    scene->Libera();
+    free(scene);
+}
 
 void MainWindow::Sair(){
     free(Casa1);
@@ -824,8 +921,107 @@ void MainWindow::Pad(){
 
 }
 
+
+void MainWindow::RenderPFuga(Cenario *Cena){
+
+
+    QImage image = QImage( 400, 400, QImage::Format_RGB32 );
+
+    for( int i=0; i<400; i++)
+    {
+
+        float Yi= (Cena->Cam->h/2)-(Cena->Cam->DY/2)-(i*Cena->Cam->DY);
+        for( int j=0; j<400; j++ )
+        {
+
+            float Xj = (-Cena->Cam->w/2)+(Cena->Cam->DX/2)+(j*Cena->Cam->DX);
+            Point Pij(Xj,Yi,Cena->Cam->d);
+            Pij.normalize();
+                Point Po(0,0,0);
+                RGB* print = Cena->Ray_Pix_Ilm(Po, Pij);
+                image.setPixel( i, j, qRgb(print->R*255, print->G*255, print->B*255));
+        }
+    }
+
+    QGraphicsScene * graphic = new QGraphicsScene( this );
+    graphic->addPixmap( QPixmap::fromImage( image ) );
+    ui->graphicsModel->setScene(graphic);
+
+    Cena->Libera();
+    free(Cena);
+}
+
+void MainWindow::Fuga_1P(){
+
+    Point Eye(0.5, 5, 0.5);
+    Point LA(0.5,0.5,0.5);
+    Point AVUp(0.5,0.5,10);
+
+    Obs = new Observador(Eye,LA,AVUp);
+    Cam = new Camera(0.5,0.5,-1,400,400,*Obs);
+    RGB *Back = new RGB(0.1, 0.1, 0.1);
+    RGB *iA = new RGB(0.5, 0.5, 0.5);
+    Cenario *Cena = new Cenario(Obs, Cam, iA, Back);
+    Objeto *O;
+    O = CuboUni3(Pista);
+    Cena->Objetos.push_back(O);
+    Cena->Word_Cam();
+    RenderPFuga(Cena);
+
+}
+
+void MainWindow::Fuga_2P(){
+
+    Point Eye(5, 0.5, 5);
+    Point LA(0.5,0.5,0.5);
+    Point AVUp(0.5,0.5,5);
+
+    Obs = new Observador(Eye,LA,AVUp);
+    Cam = new Camera(0.5,0.5,-1,400,400,*Obs);
+    RGB *Back = new RGB(0.1, 0.1, 0.1);
+    RGB *iA = new RGB(0.5, 0.5, 0.5);
+    Cenario *Cena = new Cenario(Obs, Cam, iA, Back);
+    Objeto *O;
+    O = CuboUni3(Pista);
+    Cena->Objetos.push_back(O);
+    Cena->Word_Cam();
+    RenderPFuga(Cena);
+
+}
+
+void MainWindow::Fuga_3P(){
+
+    Point Eye(5, 5, 5);
+    Point LA(0.5,0.5,0.5);
+    Point AVUp(0.5,0.5,10);
+
+    Obs = new Observador(Eye,LA,AVUp);
+    Cam = new Camera(0.5,0.5,-1,400,400,*Obs);
+    RGB *Back = new RGB(0.1, 0.1, 0.1);
+    RGB *iA = new RGB(0.5, 0.5, 0.5);
+    Cenario *Cena = new Cenario(Obs, Cam, iA, Back);
+    Objeto *O;
+    O = CuboUni3(Pista);
+    Cena->Objetos.push_back(O);
+    Cena->Word_Cam();
+    RenderPFuga(Cena);
+
+}
+
+
+
 void MainWindow::sombras_rend(bool s){
   Renderiza_sombras = s;
+}
+
+void MainWindow::setDirObx(double dx){
+    dObq_x=(float)dx;
+}
+void MainWindow::setDirOby(double dy){
+    dObq_y=(float)dy;
+}
+void MainWindow::setDirObz(double dz){
+    dObq_z=(float)dz;
 }
 
 void MainWindow::setPF1x(double d){
@@ -955,6 +1151,33 @@ void MainWindow::set_gSp1(int I){
 }
 void MainWindow::set_bSp1(int I){
     bSp1 = (float)I/255;
+}
+void MainWindow::set_rSp2(int I){
+    rSp2 = (float)I/255;
+}
+void MainWindow::set_gSp2(int I){
+    gSp2 = (float)I/255;
+}
+void MainWindow::set_bSp2(int I){
+    bSp2 = (float)I/255;
+}
+void MainWindow::set_rSp3(int I){
+    rSp3 = (float)I/255;
+}
+void MainWindow::set_gSp3(int I){
+    gSp3 = (float)I/255;
+}
+void MainWindow::set_bSp3(int I){
+    bSp3 = (float)I/255;
+}
+void MainWindow::set_rSp4(int I){
+    rSp4 = (float)I/255;
+}
+void MainWindow::set_gSp4(int I){
+    gSp4 = (float)I/255;
+}
+void MainWindow::set_bSp4(int I){
+    bSp4 = (float)I/255;
 }
 
 void MainWindow::setSolo(bool b){

@@ -55,14 +55,14 @@ void Cenario::Word_Cam(){
     t.MxV(WC,p);
 
 }
-float Cenario::Inter(Point Pij, int &Obj, int &Face){
+float Cenario::Ray_intersept(Point Po, Point D, int &Obj, int &Face){
 
     float Tint=999;
     int iFace, iObj;
     int cont=0;
     for(std::vector<Objeto*>::iterator i=this->Objetos.begin();i!=Objetos.end();i++){
         int iFace_temp;
-        float temp = (*i)->Inter(Pij,&iFace_temp);
+        float temp = (*i)->Ray_intersept(Po, D, &iFace_temp);//Inter(Pij,&iFace_temp);
         if(temp != -1 && temp<Tint){
             Tint=temp;
             iFace=iFace_temp;
@@ -80,15 +80,16 @@ float Cenario::Inter(Point Pij, int &Obj, int &Face){
     return Tint;
 
 }
-RGB* Cenario::Ray_Pix_Ilm(Point px){
+RGB* Cenario::Ray_Pix_Ilm(Point Po, Point D){
     RGB* RayPix = new RGB(this->BG->R, this->BG->G, this->BG->B); //Inicializa com background color;
 
     int iObj,iFace;
-    float t = this->Inter(px, iObj,iFace);
+
+    float t = this->Ray_intersept(Po, D, iObj,iFace);
     if(t!=-1 && t>0){
         Face* F = this->Objetos.at(iObj)->faces.at(iFace);
-        Point Pint = px;
-        Pint.normalize();
+        Point Pint = D;
+        //Pint.normalize();
         Pint.operator *=(t);
 
         Point nFace = F->N;
@@ -115,7 +116,7 @@ RGB* Cenario::Ray_Pix_Ilm(Point px){
 
                 float xDif = nFace.ProdutoEscalar(Fonte);
 
-                Point v = this->Obs->Pos;  //Luz->P;
+                Point v = D;//Luz->P;
                 v.operator -=(Pint);
                 v.normalize();
                 Point r = nFace;

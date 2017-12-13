@@ -90,7 +90,7 @@ float Face::Inter(Point P){
         Point lamb = tr.mxv(M,this->P3);
 
         float l3 = 1-(lamb.x+lamb.y);
-        if(lamb.x>=0 && lamb.x<=1 && lamb.y>=0 && lamb.y<=1 && l3>=0 && l3<=1)
+        if(lamb.x>=0 && lamb.x<=1 && lamb.y>=0 && lamb.y<=1 && l3>=0 && l3<= 1 && lamb.z >= 1)
             t = lamb.z;
 
         //std::cout << t;
@@ -224,3 +224,42 @@ void Face::Barycentric(Point p, Point a, Point b, Point c, float &u, float &v, f
 
 }
 
+float Face::Ray_intersept(Point Po, Point D){
+    float t = -1;
+
+    Point p1,p2,p3;
+    p1= *(this->P1);
+    p2= *(this->P2);
+    p3= *(this->P3);
+
+    Point nF = this->N;
+    float PE = D.ProdutoEscalar(nF);
+    if(PE<0){
+
+        Point v1 = p2;
+        Point v2 = p3;
+        v1.operator -=(p1);
+        v2.operator -=(p1);
+
+        transformacoes tr;
+        float M[3][3];
+        M[0][0] = v1.x; M[1][0] = v1.y; M[2][0] = v1.z;
+        M[0][1] = v2.x; M[1][1] = v2.y; M[2][1] = v2.z;
+        M[0][2] = -D.x;  M[1][2] = -D.y;  M[2][2] = -D.z;
+        float det = tr.Det3x3(M);
+        tr.Inv3x3(M,det);
+        Point b = Po;
+        b.operator -=(p1);
+        Point lamb = tr.mxv(M,&b);
+
+        float l3 = 1-(lamb.x+lamb.y);
+
+        if(lamb.x>=0 && lamb.x<=1 && lamb.y>=0 && lamb.y<=1 && l3>=0 && l3<=1 && lamb.z>0){
+            //std::cout << "\n" << lamb.x << ", " << lamb.y << ", " << lamb.z;
+            t = lamb.z;
+
+        }
+
+    }
+    return t;
+}

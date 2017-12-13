@@ -24,7 +24,7 @@ public:
     void addFace(int iP1, int iP2, int iP3, Material *M);
     void addFace2(int iP1, int iP2, int iP3);
     void addFace3(Point *P1, Point *P2, Point *P3, Material*M);
-    float Inter(Point Pint, int *ind);
+    float Ray_intersept(Point Po, Point Pint, int *ind);
     void calc_Esfera();
     void Transforoma(float A[TAM][TAM]);
     Objeto* Copia();

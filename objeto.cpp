@@ -63,7 +63,7 @@ void Objeto::calc_Esfera(){
 
 }
 
-float Objeto::Inter(Point Pint, int *idx){
+float Objeto::Ray_intersept(Point Po, Point Pint, int *idx){
 
     float t = -1;
     float Menor_T=999;
@@ -71,7 +71,7 @@ float Objeto::Inter(Point Pint, int *idx){
 
     if(this->Esf.Interseccao(Pint)){
         for(std::vector<Face*>::iterator i = this->faces.begin(); i!= this->faces.end(); i++){
-            float x = (*i)->Inter(Pint);
+            float x = (*i)->Ray_intersept(Po, Pint);//Inter(Pint);
             if(x != -1 && x<Menor_T){
                 Menor_T = x;
                 (*idx) = cont;

@@ -21,8 +21,8 @@ public:
     void addSpot(Spot *S);
     void addSpot2(Point *P,Point*D, RGB I, float A);
     void Word_Cam();
-    float Inter(Point Pij, int &iObj, int &iFace);
-    RGB* Ray_Pix_Ilm(Point Pij);
+    float Ray_intersept(Point Po, Point D, int &iObj, int &iFace);
+    RGB* Ray_Pix_Ilm(Point Po, Point D);
     RGB* Ilm_Pint(Point Pint, Point nFace, Material *MF);
     void CuboUni();
     void CuboUni2(Material *M1,Material *M2,Material *M3,Material *M4,Material *M5,Material *M6);

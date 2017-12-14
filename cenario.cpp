@@ -5,7 +5,7 @@ Cenario::Cenario()
 
 }
 
-Cenario::Cenario(Observador *_Obs, Camera *_Cam, RGB*_Amb, RGB *_BG){
+Cenario::Cenario(Camera *_Cam, RGB*_Amb, RGB *_BG, Observador* _Obs){
     this->Obs=_Obs;
     this->Cam=_Cam;
     this->Amb=_Amb;
@@ -36,8 +36,11 @@ void Cenario::Word_Cam(){
     transformacoes t;
     float WC[4][4];
     this->Obs->Word_Cam(WC);
+
     for(std::vector<Objeto*>::iterator i = this->Objetos.begin(); i!= this->Objetos.end(); i++){
+        //(*i)->points.at(0)->ImpPoint();
         (*i)->Transforoma(WC);
+        //(*i)->points.at(0)->ImpPoint();
         for(std::vector<Face*>::iterator f = (*i)->faces.begin(); f!=(*i)->faces.end();f++){
                 (*f)->atNormal();
             }
@@ -116,7 +119,7 @@ RGB* Cenario::Ray_Pix_Ilm(Point Po, Point D){
 
                 float xDif = nFace.ProdutoEscalar(Fonte);
 
-                Point v = D;//Luz->P;
+                Point v = Po;//Luz->P;
                 v.operator -=(Pint);
                 v.normalize();
                 Point r = nFace;
@@ -170,7 +173,7 @@ RGB* Cenario::Ray_Pix_Ilm(Point Po, Point D){
 
                         float xDif = nFace.ProdutoEscalar(Fonte);
 
-                        Point v = this->Obs->Pos;  //Luz->P;
+                        Point v = Po;  //Luz->P;
                         v.operator -=(Pint);
                         v.normalize();
                         Point r = nFace;
@@ -450,8 +453,6 @@ void Cenario::Libera(){
         free(*i);
     }
     fontes_luminosas.clear();
-
-
     free(Obs);
     free(Cam);
 

@@ -19,6 +19,7 @@ RGB P1(1,0,0);
 RGB P2(0,1,0);
 RGB P3(0,0,1);
 
+RGB Esp(0,0,0);
 
 Material *Casa1 = new Material(C1,C1,C1,1);
 Material *Casa2 = new Material(C2,C2,C2,1);
@@ -38,7 +39,7 @@ Material* Porta3 = new Material(P3,P3,P3,1);
 Material* Janela = new Material(J,J,J,1);
 
 
-Material *Grama = new Material(G,G,G,1);
+Material *Grama = new Material(G,G,Esp,1);
 Material *Pista = new Material(Pis,Pis,Pis,1);
 Material *Terra = new Material(PisT,PisT,PisT,1);
 Material *Arvore = new Material(Arv,Arv,Arv,1);
@@ -64,14 +65,14 @@ MainWindow::MainWindow(QWidget *parent) :
     }
 
 
-    Ex=250; Ey=250;Ez=250;
-    Lox=0; Loy=0;Loz=0;
-    Avx=0; Avy=250; Avz=0;
+    Ex=-150; Ey=150;Ez=-150;
+    Lox=50; Loy=0;Loz=50;
+    Avx=50; Avy=100; Avz=50;
     Bg = new RGB(0.22,0.22,0.22);//(0.250980, 0.87843137, 0.815686275);
     Amb = new RGB(0.4, 0.4, 0.4);
 
 
-
+    connect(ui->orto, SIGNAL(pressed()),this, SLOT(Orto()));
 
 
     connect(ui->P1_Fuga, SIGNAL(pressed()),this, SLOT(Fuga_1P()));
@@ -193,9 +194,9 @@ MainWindow::MainWindow(QWidget *parent) :
     Point AVUp(Avx,Avy,Avz);
 
     Obs = new Observador(Eye,LA,AVUp);
-    Cam = new Camera(W,H,-d,sizeX,sizeY,*Obs);
+    Cam = new Camera(W,H,-d,sizeX,sizeY);
 
-    scene = new Cenario(Obs, Cam, Amb, Bg);
+    scene = new Cenario(Cam, Amb, Bg, Obs);
 
     pF1 = new Point(pF1x,pF1y,pF1z);
     pF2 = new Point(pF2x,pF2y,pF2z);
@@ -216,7 +217,9 @@ void MainWindow::Render(){
     CamT();
     MontaCena();
     scene->Word_Cam();
-    // scene->Objetos.at(0)->ImpPoints();
+
+
+
     QImage image = QImage( sizeX, sizeY, QImage::Format_RGB32 );
     //scene->fontes_luminosas.at(0)->P->ImpPoint();
     //Ray Casting :
@@ -232,10 +235,10 @@ void MainWindow::Render(){
 
             float Xj = (-scene->Cam->w/2)+(scene->Cam->DX/2)+(j*scene->Cam->DX);
             Point Pij(Xj,Yi,scene->Cam->d);
-            Pij.normalize();
+            //Pij.normalize();
                 Point Po(0,0,0);
                 RGB* print = scene->Ray_Pix_Ilm(Po, Pij);
-                image.setPixel( i, j, qRgb(print->R*255, print->G*255, print->B*255));
+                image.setPixel( j, i, qRgb(print->R*255, print->G*255, print->B*255));
         }
     }
 
@@ -251,70 +254,39 @@ void MainWindow::MontaCena(){
     ve[3] = 1; vt[3]=1;
     int iobj =-1;
     if(solo){
-        O = CuboUni3(Grama);
-        ve[0] = 100;ve[1] = 95; ve[2] = 0.8;
-        t.Escala(E,ve);
-        O->Transforoma(E);
-        scene->Objetos.push_back(O);
-        //free(O);
-        iobj++;
-    }
-    if(pistas){
-        O = CuboUni3(Pista);
-        ve[0]=10;ve[1]=55;ve[2]=0.2;
-        vt[0]=45;vt[1]=0;vt[2]=0.8;
-        t.Escala(E,ve);
-        t.Translacao(T,vt);
-        t.MxM(T,E,MT);
-        O->Transforoma(MT);
-        //WObj.push_back(O);
-        scene->Objetos.push_back(O);
-        //free(O);
-        iobj++;
+            O = CuboUni3(Grama);
+            ve[0] = 100;ve[1] = 0.8; ve[2] = 95;
+            t.Escala(E,ve);
+            O->Transforoma(E);
+            scene->Objetos.push_back(O);
+            iobj++;
+        }
+        if(pistas){
+            O = CuboUni3(Pista);
 
-        O = CuboUni3(Pista);
-        ve[0]=100;ve[1]=10;ve[2]=0.2;
-        vt[0]=0;vt[1]=55;vt[2]=0.8;
-        t.Escala(E,ve);
-        t.Translacao(T,vt);
-        t.MxM(T,E,MT);
-        O->Transforoma(MT);
-        scene->Objetos.push_back(O);
-        //WObj.push_back(O);
-        //free(O);
-        iobj++;
 
-        O = CuboUni3(Pista);
-        ve[0]=30;ve[1]=5;ve[2]=0.2;
-        vt[0]=55;vt[1]=25;vt[2]=0.8;
-        t.Escala(E,ve);
-        t.Translacao(T,vt);
-        t.MxM(T,E,MT);
-        O->Transforoma(MT);
-        scene->Objetos.push_back(O);
-        //WObj.push_back(O);
-        //free(O);
-        iobj++;
+            ve[0]=10;ve[1]=0.2;ve[2]=55;
+            vt[0]=45;vt[1]=0.8;vt[2]=0;
+            t.Escala(E,ve);
+            t.Translacao(T,vt);
+            t.MxM(T,E,MT);;
+            O->Transforoma(MT);
+            scene->Objetos.push_back(O);
+            iobj++;
 
-        O = CuboUni3(Pista);
-        ve[0]=15;ve[1]=4;ve[2]=0.2;
-        vt[0]=30;vt[1]=28;vt[2]=0.8;
-        t.Escala(E,ve);
-        t.Translacao(T,vt);
-        t.MxM(T,E,MT);
-        O->Transforoma(MT);
-        scene->Objetos.push_back(O);
-        //WObj.push_back(O);
-        //free(O);
-        iobj++;
+            O = CuboUni3(Pista);
+            ve[0]=100;ve[1]=0.2;ve[2]=10;
+            vt[0]=0;vt[1]=0.8;vt[2]=55;
+            t.Escala(E,ve);
+            t.Translacao(T,vt);
+            t.MxM(T,E,MT);
+            O->Transforoma(MT);
+            scene->Objetos.push_back(O);
+            iobj++;
 
-        float vx[4] ={7, 27, 55,85};
-        for(int i=0; i<4; i++){
-            O = CuboUni3(Terra);
-            ve[0]=4;ve[1]=6; ve[2]=0.1;
-            if(i==1)
-                ve[1]=11;
-            vt[0]=vx[i];vt[1]=65;vt[2]=0.8;
+            O = CuboUni3(Pista);
+            ve[0]=30;ve[1]=0.2;ve[2]=5;
+            vt[0]=55;vt[1]=0.8;vt[2]=25;
             t.Escala(E,ve);
             t.Translacao(T,vt);
             t.MxM(T,E,MT);
@@ -323,377 +295,405 @@ void MainWindow::MontaCena(){
             //WObj.push_back(O);
             //free(O);
             iobj++;
-        }
 
-
-
-    }
-    if(casas){
-
-
-            O = CuboUni3(Casa1);
-            ve[0]=20;ve[1]=20;ve[2]=2.5;
-            vt[0]=70;vt[1]=5;vt[2]=0.8;
+            O = CuboUni3(Pista);
+            ve[0]=15;ve[1]=0.2;ve[2]=4;
+            vt[0]=30;vt[1]=0.8;vt[2]=28;
             t.Escala(E,ve);
             t.Translacao(T,vt);
             t.MxM(T,E,MT);
             O->Transforoma(MT);
             scene->Objetos.push_back(O);
+            //WObj.push_back(O);
             //free(O);
             iobj++;
 
-            O = CuboUni3(Casa2);
-            ve[0]=20;ve[1]=20;ve[2]=2.5;
-            vt[0]=70;vt[1]=30;vt[2]=0.8;
-            t.Escala(E,ve);
-            t.Translacao(T,vt);
-            t.MxM(T,E,MT);
-            O->Transforoma(MT);
-            scene->Objetos.push_back(O);
-            //free(O);
-            iobj++;
-
-            O = CuboUni3(Casa3);
-            ve[0]=20;ve[1]=20;ve[2]=2.5;
-            vt[0]=75;vt[1]=70;vt[2]=0.8;
-            t.Escala(E,ve);
-            t.Translacao(T,vt);
-            t.MxM(T,E,MT);
-            O->Transforoma(MT);
-            scene->Objetos.push_back(O);
-            iobj++;
-
-            O = CuboUni3(Casa4);
-            ve[0]=20;ve[1]=20;ve[2]=20;
-            vt[0]=50;vt[1]=70;vt[2]=0.8;
-            t.Escala(E,ve);
-            t.Translacao(T,vt);
-            t.MxM(T,E,MT);
-            O->Transforoma(MT);
-            scene->Objetos.push_back(O);
-            iobj++;
-
-            O = CuboUni3(Casa5);
-            ve[0]=15;ve[1]=15;ve[2]=3;
-            vt[0]=21;vt[1]=75;vt[2]=0.8;
-            t.Escala(E,ve);
-            t.Translacao(T,vt);
-            t.MxM(T,E,MT);
-            O->Transforoma(MT);
-            scene->Objetos.push_back(O);
-            iobj++;
-
-            O = CuboUni3(Casa5);
-            ve[0]=20;ve[1]=20;ve[2]=20;
-            vt[0]=2;vt[1]=70;vt[2]=0.8;
-            t.Escala(E,ve);
-            t.Translacao(T,vt);
-            t.MxM(T,E,MT);
-            O->Transforoma(MT);
-            scene->Objetos.push_back(O);
-            iobj++;
-
-            O = CuboUni3(Casa6);
-            ve[0]=25;ve[1]=20;ve[2]=3;
-            vt[0]=5;vt[1]=20;vt[2]=0.8;
-            t.Escala(E,ve);
-            t.Translacao(T,vt);
-            t.MxM(T,E,MT);
-            O->Transforoma(MT);
-            scene->Objetos.push_back(O);
-            iobj++;
-
-            O = CuboUni3(Casa6);
-            ve[0]=15;ve[1]=15;ve[2]=3;
-            vt[0]=5;vt[1]=6;vt[2]=0.8;
-            t.Escala(E,ve);
-            t.Translacao(T,vt);
-            t.MxM(T,E,MT);
-            O->Transforoma(MT);
-            scene->Objetos.push_back(O);
-            iobj++;
-
-        }
-    if(telhados){
-            O = Prisma_Triangular_Uni3(Telha);
-            ve[0]=20;ve[1]=20;ve[2]=2;
-            vt[0]=70;vt[1]=5;vt[2]=3.3;
-            t.Escala(E,ve);
-            t.Translacao(T,vt);
-            t.MxM(T,E,MT);
-            O->Transforoma(MT);
-            scene->Objetos.push_back(O);
-            iobj++;
-
-            O = Prisma_Triangular_Uni3(Telha2);
-            ve[0]=20;ve[1]=20;ve[2]=2;
-            vt[0]=70;vt[1]=30;vt[2]=3.3;
-            t.Escala(E,ve);
-            t.Translacao(T,vt);
-            t.MxM(T,E,MT);
-            O->Transforoma(MT);
-            scene->Objetos.push_back(O);
-            iobj++;
-
-            O = Prisma_Triangular_Uni3(Telha1);
-            ve[0]=20;ve[1]=20;ve[2]=2;
-            vt[0]=75;vt[1]=70;vt[2]=3.3;
-            t.Escala(E,ve);
-            t.Translacao(T,vt);
-            t.MxM(T,E,MT);
-            O->Transforoma(MT);
-            scene->Objetos.push_back(O);
-            iobj++;
-
-            O = Prisma_Triangular_Uni3(Telha1);
-            ve[0]=20;ve[1]=20;ve[2]=3;
-            vt[0]=50;vt[1]=70;vt[2]=20.7;
-            t.Escala(E,ve);
-            t.Translacao(T,vt);
-            t.MxM(T,E,MT);
-            O->Transforoma(MT);
-            scene->Objetos.push_back(O);
-            iobj++;
-
-
-            O = Prisma_Triangular_Uni3(Telha2);
-            ve[0]=15;ve[1]=15;ve[2]=2;
-            vt[0]=21;vt[1]=75;vt[2]=3.8;
-            t.Escala(E,ve);
-            t.Translacao(T,vt);
-            t.MxM(T,E,MT);
-            O->Transforoma(MT);
-            scene->Objetos.push_back(O);
-            iobj++;
-
-            O = Prisma_Triangular_Uni3(Telha2);
-            ve[0]=20;ve[1]=20;ve[2]=3;
-            vt[0]=2;vt[1]=70;vt[2]=20.8;
-            t.Escala(E,ve);
-            t.Translacao(T,vt);
-            t.MxM(T,E,MT);
-            O->Transforoma(MT);
-            scene->Objetos.push_back(O);
-            iobj++;
-
-            O = Prisma_Triangular_Uni3(Telha1);
-            ve[0]=25;ve[1]=20;ve[2]=3;
-            vt[0]=5;vt[1]=20;vt[2]=3.8;
-            t.Escala(E,ve);
-            t.Translacao(T,vt);
-            t.MxM(T,E,MT);
-            O->Transforoma(MT);
-            scene->Objetos.push_back(O);
-            iobj++;
-
-            O = Prisma_Triangular_Uni3(Telha1);
-            ve[0]=15;ve[1]=15;ve[2]=3;
-            vt[0]=5;vt[1]=6;vt[2]=3.8;
-            t.Escala(E,ve);
-            t.Translacao(T,vt);
-            t.MxM(T,E,MT);
-            O->Transforoma(MT);
-            scene->Objetos.push_back(O);
-            iobj++;
-
-
-        }
-    if(arvores){
-
-           float z[4] = {8,14,40,60};
-           for(int i=0; i<3; i++){
-               for(int j=0; j<4;j++){
-                   O = CuboUni3(Arvore);
-                   ve[0]=1.5;ve[1]=1.5;ve[2]=7;
-                   vt[0]=z[j];vt[1]=(i*5)+42;vt[2]=0.8;
-                   t.Escala(E,ve);
-                   t.Translacao(T,vt);
-                   t.MxM(T,E,MT);
-                   O->Transforoma(MT);
-                   scene->Objetos.push_back(O);
-                   iobj++;
-               }
-               O = CuboUni3(Arvore);
-               ve[0]=1.5;ve[1]=1.5;ve[2]=7;
-               vt[0]=72;vt[1]=(i*5)+75;vt[2]=0.8;
-               t.Escala(E,ve);
-               t.Translacao(T,vt);
-               t.MxM(T,E,MT);
-               O->Transforoma(MT);
-               scene->Objetos.push_back(O);
-               iobj++;
-
-               O = CuboUni3(Arvore);
-               ve[0]=1.5;ve[1]=1.5;ve[2]=2;
-               vt[0]=40;vt[1]=(i*5)+75;vt[2]=0.8;
-               t.Escala(E,ve);
-               t.Translacao(T,vt);
-               t.MxM(T,E,MT);
-               O->Transforoma(MT);
-               scene->Objetos.push_back(O);
-               iobj++;
-
-               for(int j=0; j<2;j++){
-                   O = CuboUni3(Arvore);
-                   ve[0]=1.5;ve[1]=1.5;ve[2]=2;
-                   vt[0]=(j*20)+40;vt[1]=(i*5)+5;vt[2]=0.8;
-                   t.Escala(E,ve);
-                   t.Translacao(T,vt);
-                   t.MxM(T,E,MT);
-                   O->Transforoma(MT);
-                   scene->Objetos.push_back(O);
-                   iobj++;
-               }
-
-
-           }
-
-       }
-    if(portas){
-         O = CuboUni3(Porta1);
-         ve[0]=1;ve[1]=0.1;ve[2]=2;
-         vt[0]=80;vt[1]=25;vt[2]=0.8;
-         t.Escala(E,ve);
-         t.Translacao(T,vt);
-         t.MxM(T,E,MT);
-         O->Transforoma(MT);
-         scene->Objetos.push_back(O);
-         iobj++;
-
-         O = CuboUni3(Porta1);
-         ve[0]=1;ve[1]=0.1;ve[2]=2;
-         vt[0]=80;vt[1]=29.8;vt[2]=0.8;
-         t.Escala(E,ve);
-         t.Translacao(T,vt);
-         t.MxM(T,E,MT);
-         O->Transforoma(MT);
-         scene->Objetos.push_back(O);
-         iobj++;
-
-         O = CuboUni3(Porta1);
-         ve[0]=2;ve[1]=0.1;ve[2]=2;
-         vt[0]=85;vt[1]=69.8;vt[2]=0.8;
-         t.Escala(E,ve);
-         t.Translacao(T,vt);
-         t.MxM(T,E,MT);
-         O->Transforoma(MT);
-         scene->Objetos.push_back(O);
-         iobj++;
-
-         O = CuboUni3(Porta1);
-         ve[0]=4;ve[1]=0.1;ve[2]=2.5;
-         vt[0]=55;vt[1]=69.8;vt[2]=0.8;
-         t.Escala(E,ve);
-         t.Translacao(T,vt);
-         t.MxM(T,E,MT);
-         O->Transforoma(MT);
-         scene->Objetos.push_back(O);
-         iobj++;
-
-         O = CuboUni3(Porta1);
-         ve[0]=3;ve[1]=0.1;ve[2]=2;
-         vt[0]=27;vt[1]=74.8;vt[2]=0.8;
-         t.Escala(E,ve);
-         t.Translacao(T,vt);
-         t.MxM(T,E,MT);
-         O->Transforoma(MT);
-         scene->Objetos.push_back(O);
-         iobj++;
-
-         O = CuboUni3(Porta2);
-         ve[0]=4;ve[1]=0.1;ve[2]=2.5;
-         vt[0]=7;vt[1]=69.8;vt[2]=0.8;
-         t.Escala(E,ve);
-         t.Translacao(T,vt);
-         t.MxM(T,E,MT);
-         O->Transforoma(MT);
-        scene->Objetos.push_back(O);
-         iobj++;
-
-         O = CuboUni3(Porta3);
-         ve[0]=0.1;ve[1]=1.5;ve[2]=2;
-         vt[0]=30;vt[1]=30;vt[2]=0.8;
-         t.Escala(E,ve);
-         t.Translacao(T,vt);
-         t.MxM(T,E,MT);
-         O->Transforoma(MT);
-        scene->Objetos.push_back(O);
-         iobj++;
-
-
-
-     }
-    if(janelas){
-
-            for(int i=0; i<3;i++){
-                for(int j=0; j<4;j++){
-
-                    O = CuboUni3(Janela);
-                    ve[0]=2;ve[1]=0.1;ve[2]=2;
-                    vt[0]=(i*5)+6;vt[1]=69.8;vt[2]=(j*3)+6.8;
-                    t.Escala(E,ve);
-                    t.Translacao(T,vt);
-                    t.MxM(T,E,MT);
-                    O->Transforoma(MT);
-                    scene->Objetos.push_back(O);
-                    iobj++;
-
-                    O = CuboUni3(Janela);
-                    ve[0]=0.1;ve[1]=2;ve[2]=1;
-                    vt[0]=70;vt[1]= (i*5)+72;vt[2]= (j*3)+6.8;
-                    t.Escala(E,ve);
-                    t.Translacao(T,vt);
-                    t.MxM(T,E,MT);
-                    O->Transforoma(MT);
-                    scene->Objetos.push_back(O);
-                    iobj++;
-
-                }
-
-                O = CuboUni3(Janela);
-                ve[0]=0.1;ve[1]=1;ve[2]=1;
-                vt[0]=90;vt[1]=(i*5)+10;vt[2]=1.8;
-                t.Escala(E,ve);
-                t.Translacao(T,vt);
-                t.MxM(T,E,MT);
-                O->Transforoma(MT);
-               scene->Objetos.push_back(O);
-                iobj++;
-
-                O = CuboUni3(Janela);
-                vt[1]=(i*5)+35;
+            float vx[4] ={7, 27, 55,85};
+            for(int i=0; i<4; i++){
+                O = CuboUni3(Terra);
+                ve[0]=4;ve[1]=0.1; ve[2]=6;
+                if(i==1)
+                    ve[2]=11;
+                vt[0]=vx[i];vt[1]=0.8;vt[2]=65;
                 t.Escala(E,ve);
                 t.Translacao(T,vt);
                 t.MxM(T,E,MT);
                 O->Transforoma(MT);
                 scene->Objetos.push_back(O);
-                iobj++;
-
-                O = CuboUni3(Janela);
-                vt[0]=95;vt[1]=(i*5)+75;
-                t.Escala(E,ve);
-                t.Translacao(T,vt);
-                t.MxM(T,E,MT);
-                O->Transforoma(MT);
-               scene->Objetos.push_back(O);
-                iobj++;
-
-                O = CuboUni3(Porta1);
-                ve[0]=2;ve[1]=0.1;ve[2]=2;
-                vt[0]=(i*5)+6;vt[1]=5.9;vt[2]=1.8;
-                t.Escala(E,ve);
-                t.Translacao(T,vt);
-                t.MxM(T,E,MT);
-                O->Transforoma(MT);
-                scene->Objetos.push_back(O);
+                //WObj.push_back(O);
+                //free(O);
                 iobj++;
             }
+
+
+
         }
-    if(postes){
+        if(casas){
 
+
+                O = CuboUni3(Casa1);
+                ve[0]=20;ve[1]=2.5;ve[2]=20;
+                vt[0]=70;vt[1]=0.8;vt[2]=5;
+                t.Escala(E,ve);
+                t.Translacao(T,vt);
+                t.MxM(T,E,MT);
+                O->Transforoma(MT);
+                scene->Objetos.push_back(O);
+                //free(O);
+                iobj++;
+
+                O = CuboUni3(Casa2);
+                ve[0]=20;ve[1]=2.5;ve[2]=20;
+                vt[0]=70;vt[1]=0.8;vt[2]=30;
+                t.Escala(E,ve);
+                t.Translacao(T,vt);
+                t.MxM(T,E,MT);
+                O->Transforoma(MT);
+                scene->Objetos.push_back(O);
+                //free(O);
+                iobj++;
+
+                O = CuboUni3(Casa3);
+                ve[0]=20;ve[1]=2.5;ve[2]=20;
+                vt[0]=75;vt[1]=0.8;vt[2]=70;
+                t.Escala(E,ve);
+                t.Translacao(T,vt);
+                t.MxM(T,E,MT);
+                O->Transforoma(MT);
+                scene->Objetos.push_back(O);
+                iobj++;
+
+                O = CuboUni3(Casa4);
+                ve[0]=20;ve[1]=20;ve[2]=20;
+                vt[0]=50;vt[1]=0.8;vt[2]=70;
+                t.Escala(E,ve);
+                t.Translacao(T,vt);
+                t.MxM(T,E,MT);
+                O->Transforoma(MT);
+                scene->Objetos.push_back(O);
+                iobj++;
+
+                O = CuboUni3(Casa5);
+                ve[0]=15;ve[1]=3;ve[2]=15;
+                vt[0]=21;vt[1]=0.8;vt[2]=75;
+                t.Escala(E,ve);
+                t.Translacao(T,vt);
+                t.MxM(T,E,MT);
+                O->Transforoma(MT);
+                scene->Objetos.push_back(O);
+                iobj++;
+
+                O = CuboUni3(Casa5);
+                ve[0]=20;ve[1]=20;ve[2]=20;
+                vt[0]=2;vt[1]=0.8;vt[2]=70;
+                t.Escala(E,ve);
+                t.Translacao(T,vt);
+                t.MxM(T,E,MT);
+                O->Transforoma(MT);
+                scene->Objetos.push_back(O);
+                iobj++;
+
+                O = CuboUni3(Casa6);
+                ve[0]=25;ve[1]=3;ve[2]=20;
+                vt[0]=5;vt[1]=0.8;vt[2]=20;
+                t.Escala(E,ve);
+                t.Translacao(T,vt);
+                t.MxM(T,E,MT);
+                O->Transforoma(MT);
+                scene->Objetos.push_back(O);
+                iobj++;
+
+                O = CuboUni3(Casa6);
+                ve[0]=15;ve[1]=3;ve[2]=15;
+                vt[0]=5;vt[1]=0.8;vt[2]=6;
+                t.Escala(E,ve);
+                t.Translacao(T,vt);
+                t.MxM(T,E,MT);
+                O->Transforoma(MT);
+                scene->Objetos.push_back(O);
+                iobj++;
+
+            }
+        if(telhados){
+                O = Prisma_Triangular_Uni3(Telha);
+                ve[0]=20;ve[1]=2;ve[2]=20;
+                vt[0]=70;vt[1]=3.3;vt[2]=5;
+                t.Escala(E,ve);
+                t.Translacao(T,vt);
+                t.MxM(T,E,MT);
+                O->Transforoma(MT);
+                scene->Objetos.push_back(O);
+                iobj++;
+
+                O = Prisma_Triangular_Uni3(Telha2);
+                ve[0]=20;ve[1]=2;ve[2]=20;
+                vt[0]=70;vt[1]=3.3;vt[2]=30;
+                t.Escala(E,ve);
+                t.Translacao(T,vt);
+                t.MxM(T,E,MT);
+                O->Transforoma(MT);
+                scene->Objetos.push_back(O);
+                iobj++;
+
+                O = Prisma_Triangular_Uni3(Telha1);
+                ve[0]=20;ve[1]=2;ve[2]=20;
+                vt[0]=75;vt[1]=3.3;vt[2]=70;
+                t.Escala(E,ve);
+                t.Translacao(T,vt);
+                t.MxM(T,E,MT);
+                O->Transforoma(MT);
+                scene->Objetos.push_back(O);
+                iobj++;
+
+                O = Prisma_Triangular_Uni3(Telha1);
+                ve[0]=20;ve[1]=3;ve[2]=20;
+                vt[0]=50;vt[1]=20.7;vt[2]=70;
+                t.Escala(E,ve);
+                t.Translacao(T,vt);
+                t.MxM(T,E,MT);
+                O->Transforoma(MT);
+                scene->Objetos.push_back(O);
+                iobj++;
+
+
+                O = Prisma_Triangular_Uni3(Telha2);
+                ve[0]=15;ve[1]=2;ve[2]=15;
+                vt[0]=21;vt[1]=3.8;vt[2]=75;
+                t.Escala(E,ve);
+                t.Translacao(T,vt);
+                t.MxM(T,E,MT);
+                O->Transforoma(MT);
+                scene->Objetos.push_back(O);
+                iobj++;
+
+                O = Prisma_Triangular_Uni3(Telha2);
+                ve[0]=20;ve[1]=3;ve[2]=20;
+                vt[0]=2;vt[1]=20.8;vt[2]=70;
+                t.Escala(E,ve);
+                t.Translacao(T,vt);
+                t.MxM(T,E,MT);
+                O->Transforoma(MT);
+                scene->Objetos.push_back(O);
+                iobj++;
+
+                O = Prisma_Triangular_Uni3(Telha1);
+                ve[0]=25;ve[1]=3;ve[2]=20;
+                vt[0]=5;vt[1]=3.8;vt[2]=20;
+                t.Escala(E,ve);
+                t.Translacao(T,vt);
+                t.MxM(T,E,MT);
+                O->Transforoma(MT);
+                scene->Objetos.push_back(O);
+                iobj++;
+
+                O = Prisma_Triangular_Uni3(Telha1);
+                ve[0]=15;ve[1]=3;ve[2]=15;
+                vt[0]=5;vt[1]=3.8;vt[2]=6;
+                t.Escala(E,ve);
+                t.Translacao(T,vt);
+                t.MxM(T,E,MT);
+                O->Transforoma(MT);
+                scene->Objetos.push_back(O);
+                iobj++;
+
+
+            }
+        if(arvores){
+
+               float z[4] = {8,14,40,60};
+               for(int i=0; i<3; i++){
+                   for(int j=0; j<4;j++){
+                       O = CuboUni3(Arvore);
+                       ve[0]=1.5;ve[1]=7;ve[2]=1.5;
+                       vt[0]=z[j];vt[1]=0.8;vt[2]=(i*5)+42;
+                       t.Escala(E,ve);
+                       t.Translacao(T,vt);
+                       t.MxM(T,E,MT);
+                       O->Transforoma(MT);
+                       scene->Objetos.push_back(O);
+                       iobj++;
+                   }
+                   O = CuboUni3(Arvore);
+                   ve[0]=1.5;ve[1]=7;ve[2]=1.5;
+                   vt[0]=72;vt[1]=0.8;vt[2]=(i*5)+75;
+                   t.Escala(E,ve);
+                   t.Translacao(T,vt);
+                   t.MxM(T,E,MT);
+                   O->Transforoma(MT);
+                   scene->Objetos.push_back(O);
+                   iobj++;
+
+                   O = CuboUni3(Arvore);
+                   ve[0]=1.5;ve[1]=2;ve[2]=1.5;
+                   vt[0]=40;vt[1]=0.8;vt[2]=(i*5)+75;
+                   t.Escala(E,ve);
+                   t.Translacao(T,vt);
+                   t.MxM(T,E,MT);
+                   O->Transforoma(MT);
+                   scene->Objetos.push_back(O);
+                   iobj++;
+
+                   for(int j=0; j<2;j++){
+                       O = CuboUni3(Arvore);
+                       ve[0]=1.5;ve[1]=2;ve[2]=1.5;
+                       vt[0]=(j*20)+40;vt[1]=0.8;vt[2]=(i*5)+5;
+                       t.Escala(E,ve);
+                       t.Translacao(T,vt);
+                       t.MxM(T,E,MT);
+                       O->Transforoma(MT);
+                       scene->Objetos.push_back(O);
+                       iobj++;
+                   }
+
+
+               }
+
+           }
+        if(portas){
+             O = CuboUni3(Porta1);
+             ve[0]=1;ve[1]=2;ve[2]=0.1;
+             vt[0]=80;vt[1]=0.8;vt[2]=25;
+             t.Escala(E,ve);
+             t.Translacao(T,vt);
+             t.MxM(T,E,MT);
+             O->Transforoma(MT);
+             scene->Objetos.push_back(O);
+             iobj++;
+
+             O = CuboUni3(Porta1);
+             ve[0]=1;ve[1]=2;ve[2]=0.1;
+             vt[0]=80;vt[1]=0.8;vt[2]=29.8;
+             t.Escala(E,ve);
+             t.Translacao(T,vt);
+             t.MxM(T,E,MT);
+             O->Transforoma(MT);
+             scene->Objetos.push_back(O);
+             iobj++;
+
+             O = CuboUni3(Porta1);
+             ve[0]=2;ve[1]=2;ve[2]=0.1;
+             vt[0]=85;vt[1]=0.8;vt[2]=69.8;
+             t.Escala(E,ve);
+             t.Translacao(T,vt);
+             t.MxM(T,E,MT);
+             O->Transforoma(MT);
+             scene->Objetos.push_back(O);
+             iobj++;
+
+             O = CuboUni3(Porta1);
+             ve[0]=4;ve[1]=2.5;ve[2]=0.1;
+             vt[0]=55;vt[1]=0.8;vt[2]=69.8;
+             t.Escala(E,ve);
+             t.Translacao(T,vt);
+             t.MxM(T,E,MT);
+             O->Transforoma(MT);
+             scene->Objetos.push_back(O);
+             iobj++;
+
+             O = CuboUni3(Porta1);
+             ve[0]=3;ve[1]=2;ve[2]=0.1;
+             vt[0]=27;vt[1]=0.8;vt[2]=74.8;
+             t.Escala(E,ve);
+             t.Translacao(T,vt);
+             t.MxM(T,E,MT);
+             O->Transforoma(MT);
+             scene->Objetos.push_back(O);
+             iobj++;
+
+             O = CuboUni3(Porta2);
+             ve[0]=4;ve[1]=2.5;ve[2]=0.1;
+             vt[0]=7;vt[1]=0.8;vt[2]=69.8;
+             t.Escala(E,ve);
+             t.Translacao(T,vt);
+             t.MxM(T,E,MT);
+             O->Transforoma(MT);
+            scene->Objetos.push_back(O);
+             iobj++;
+
+             O = CuboUni3(Porta3);
+             ve[0]=0.1;ve[1]=2;ve[2]=1.5;
+             vt[0]=30;vt[1]=0.8;vt[2]=30;
+             t.Escala(E,ve);
+             t.Translacao(T,vt);
+             t.MxM(T,E,MT);
+             O->Transforoma(MT);
+            scene->Objetos.push_back(O);
+             iobj++;
+
+
+
+         }
+        if(janelas){
+
+                for(int i=0; i<3;i++){
+                    for(int j=0; j<4;j++){
+
+                        O = CuboUni3(Janela);
+                        ve[0]=2;ve[1]=2;ve[2]=0.1;
+                        vt[0]=(i*5)+6;vt[1]=(j*3)+6.8;vt[2]=69.8;
+                        t.Escala(E,ve);
+                        t.Translacao(T,vt);
+                        t.MxM(T,E,MT);
+                        O->Transforoma(MT);
+                        scene->Objetos.push_back(O);
+                        iobj++;
+
+                        O = CuboUni3(Janela);
+                        ve[0]=0.1;ve[1]=2;ve[2]=1;
+                        vt[0]=70;vt[1]=(j*3)+6.8;vt[2]=(i*5)+72;
+                        t.Escala(E,ve);
+                        t.Translacao(T,vt);
+                        t.MxM(T,E,MT);
+                        O->Transforoma(MT);
+                        scene->Objetos.push_back(O);
+                        iobj++;
+
+                    }
+
+                    O = CuboUni3(Janela);
+                    ve[0]=0.1;ve[1]=1;ve[2]=1;
+                    vt[0]=90;vt[1]=1.8;vt[2]=(i*5)+10;
+                    t.Escala(E,ve);
+                    t.Translacao(T,vt);
+                    t.MxM(T,E,MT);
+                    O->Transforoma(MT);
+                   scene->Objetos.push_back(O);
+                    iobj++;
+
+                    O = CuboUni3(Janela);
+                    vt[2]=(i*5)+35;
+                    t.Escala(E,ve);
+                    t.Translacao(T,vt);
+                    t.MxM(T,E,MT);
+                    O->Transforoma(MT);
+                    scene->Objetos.push_back(O);
+                    iobj++;
+
+                    O = CuboUni3(Janela);
+                    vt[0]=95;vt[2]=(i*5)+75;
+                    t.Escala(E,ve);
+                    t.Translacao(T,vt);
+                    t.MxM(T,E,MT);
+                    O->Transforoma(MT);
+                   scene->Objetos.push_back(O);
+                    iobj++;
+
+                    O = CuboUni3(Porta1);
+                    ve[0]=2;ve[1]=2;ve[2]=0.1;
+                    vt[0]=(i*5)+6;vt[1]=1.8;vt[2]=5.9;
+                    t.Escala(E,ve);
+                    t.Translacao(T,vt);
+                    t.MxM(T,E,MT);
+                    O->Transforoma(MT);
+                   scene->Objetos.push_back(O);
+                    iobj++;
+                }
+            }
+
+       if(postes){
         O = CuboUni3(Pista);
-        ve[0]=0.5;ve[1]=0.5;ve[2]=15;
-        vt[0]=43;vt[1]=25;vt[2]=0.8;
+        ve[0]=0.5;ve[1]=15;ve[2]=0.5;
+        vt[0]=43;vt[1]=0.8;vt[2]=25;
         t.Escala(E,ve);
         t.Translacao(T,vt);
         t.MxM(T,E,MT);
@@ -702,7 +702,7 @@ void MainWindow::MontaCena(){
         iobj++;
         O = CuboUni3(Pista);
         ve[0]=2.5;ve[1]=0.5;ve[2]=0.5;
-        vt[2]=15.8;
+        vt[1]=15.8;
         t.Escala(E,ve);
         t.Translacao(T,vt);
         t.MxM(T,E,MT);
@@ -712,8 +712,8 @@ void MainWindow::MontaCena(){
 
 
         O = CuboUni3(Pista);
-        ve[0]=0.5;ve[1]=0.5;ve[2]=15;
-        vt[0]=61;vt[1]=35;vt[2]=0.8;
+        ve[0]=0.5;ve[1]=15;ve[2]=0.5;
+        vt[0]=61;vt[1]=0.8;vt[2]=35;
         t.Escala(E,ve);
         t.Translacao(T,vt);
         t.MxM(T,E,MT);
@@ -722,7 +722,7 @@ void MainWindow::MontaCena(){
         iobj++;
         O = CuboUni3(Pista);
         ve[0]=2.5;ve[1]=0.5;ve[2]=0.5;
-        vt[0]=59;vt[2]=15.8;
+        vt[0]=59;vt[1]=15.8;
         t.Escala(E,ve);
         t.Translacao(T,vt);
         t.MxM(T,E,MT);
@@ -731,8 +731,8 @@ void MainWindow::MontaCena(){
         iobj++;
 
         O = CuboUni3(Pista);
-        ve[0]=0.5;ve[1]=0.5;ve[2]=15;
-        vt[0]=43;vt[1]=70;vt[2]=0.8;
+        ve[0]=0.5;ve[1]=15;ve[2]=0.5;
+        vt[0]=43;vt[1]=0.8;vt[2]=70;
         t.Escala(E,ve);
         t.Translacao(T,vt);
         t.MxM(T,E,MT);
@@ -740,8 +740,8 @@ void MainWindow::MontaCena(){
         scene->Objetos.push_back(O);
         iobj++;
         O = CuboUni3(Pista);
-        ve[0]=0.5;ve[1]=2.5;ve[2]=0.5;
-        vt[1]=68;vt[2]=15.8;
+        ve[0]=0.5;ve[1]=0.5;ve[2]=2.5;
+        vt[2]=68;vt[1]=15.8;
         t.Escala(E,ve);
         t.Translacao(T,vt);
         t.MxM(T,E,MT);
@@ -751,8 +751,8 @@ void MainWindow::MontaCena(){
 
 
         O = CuboUni3(Pista);
-        ve[0]=0.5;ve[1]=0.5;ve[2]=15;
-        vt[0]=72;vt[1]=70;vt[2]=0.8;
+        ve[0]=0.5;ve[1]=15;ve[2]=0.5;
+        vt[0]=72;vt[1]=0.8;vt[2]=70;
         t.Escala(E,ve);
         t.Translacao(T,vt);
         t.MxM(T,E,MT);
@@ -760,8 +760,8 @@ void MainWindow::MontaCena(){
         scene->Objetos.push_back(O);
         iobj++;
         O = CuboUni3(Pista);
-        ve[0]=0.5;ve[1]=2.5;ve[2]=0.5;
-        vt[1]=68;vt[2]=15.8;
+        ve[0]=0.5;ve[1]=0.5;ve[2]=2.5;
+        vt[2]=68;vt[1]=15.8;
         t.Escala(E,ve);
         t.Translacao(T,vt);
         t.MxM(T,E,MT);
@@ -781,9 +781,10 @@ void MainWindow::CamT(){
     Point AVUp(Avx,Avy,Avz);
 
     Obs = new Observador(Eye,LA,AVUp);
-    Cam = new Camera(W,H,-d,sizeX,sizeY,*Obs);
+    Cam = new Camera(W,H,-d,sizeX,sizeY);
+    scene = new Cenario(Cam, Amb, Bg, Obs);
 
-    scene = new Cenario(Obs, Cam, Amb, Bg);
+
     scene->Renderiza_somb = this->Renderiza_sombras;
 
     RGB iF1(rF1,gF1,bF1);
@@ -803,6 +804,7 @@ void MainWindow::CamT(){
     pF4 = new Point(pF4x,pF4y,pF4z);
     pF5 = new Point(pF5x,pF5y,pF5z);
 
+
     if(rF1!=0||gF1!=0||bF1!=0)
         scene->addFonte2(pF1,iF1);
     if(rF2!=0||gF2!=0||bF2!=0)
@@ -814,33 +816,38 @@ void MainWindow::CamT(){
     if(rF5!=0||gF5!=0||bF5!=0)
         scene->addFonte2(pF5,iF5);
 
+    float iz, jz, kz;
+
+    iz = -Obs->i.y;
+    jz = -Obs->j.y;
+    kz = -Obs->k.y;
 
     if(p1 && postes){
 
-        Point *PosSp1 = new Point(43,25,15.5);
-        Point *D = new Point(0,0,-1);
-        scene->addSpot2(PosSp1,D,iSp1,15);
+        Point *PosSp1 = new Point(43,15.5,25);
+        Point *D = new Point(iz,jz,kz);
+        scene->addSpot2(PosSp1,D,iSp1,30);
 
     }
     if(p2 && postes){
 
-        Point *PosSp2 = new Point(61,35,15.5);
-        Point *D = new Point(0,0,-1);
-        scene->addSpot2(PosSp2,D,iSp2,15);
+        Point *PosSp2 = new Point(61,15.5,35);
+        Point *D = new Point(iz,jz,kz);
+        scene->addSpot2(PosSp2,D,iSp2,30);
 
     }
     if(p3 && postes){
 
-        Point *PosSp3 = new Point(43,68,15.5);
-        Point *D = new Point(0,0,-1);
-        scene->addSpot2(PosSp3,D,iSp3,15);
+        Point *PosSp3 = new Point(43,15.5,68);
+        Point *D = new Point(iz,jz,kz);
+        scene->addSpot2(PosSp3,D,iSp3,30);
 
     }
     if(p4 && postes){
 
-        Point *PosSp4 = new Point(72,68,15.5);
-        Point *D = new Point(0,0,-1);
-        scene->addSpot2(PosSp4,D,iSp4,15);
+        Point *PosSp4 = new Point(72,15.5,68);
+        Point *D = new Point(iz,jz,kz);
+        scene->addSpot2(PosSp4,D,iSp4,30);
 
     }
 
@@ -862,12 +869,12 @@ void MainWindow::Obq(){
 
             float Xj = (-scene->Cam->w/2)+(scene->Cam->DX/2)+(j*scene->Cam->DX);
             Point Po(Xj,Yi,scene->Cam->d);
-            //Pij.normalize();
+
                 Point D(dObq_x,dObq_y,dObq_z);
                 D.normalize();
 
                 RGB* print = scene->Ray_Pix_Ilm(Po, D);
-                image.setPixel( i, j, qRgb(print->R*255, print->G*255, print->B*255));
+                image.setPixel( j, i, qRgb(print->R*255, print->G*255, print->B*255));
         }
     }
 
@@ -877,6 +884,26 @@ void MainWindow::Obq(){
 
     scene->Libera();
     free(scene);
+}
+void MainWindow::Orto(){
+    float Dx = dObq_x, Dy = dObq_y, Dz= dObq_z;
+    dObq_x = 0;dObq_y = 0;dObq_z = -1;
+    Obq();
+    dObq_x = Dx; dObq_y = Dy; dObq_z = Dz;
+}
+
+void MainWindow::Cabinet(){
+    float Dx = dObq_x, Dy = dObq_y, Dz= dObq_z;
+    dObq_x = 0;dObq_y = 0;dObq_z = -1;
+    Obq();
+    dObq_x = Dx; dObq_y = Dy; dObq_z = Dz;
+}
+
+void MainWindow::Cavalier(){
+    float Dx = dObq_x, Dy = dObq_y, Dz= dObq_z;
+    dObq_x = 0;dObq_y = 0;dObq_z = -1;
+    Obq();
+    dObq_x = Dx; dObq_y = Dy; dObq_z = Dz;
 }
 
 void MainWindow::Sair(){
@@ -953,20 +980,46 @@ void MainWindow::RenderPFuga(Cenario *Cena){
 
 void MainWindow::Fuga_1P(){
 
-    Point Eye(0.5, 5, 0.5);
-    Point LA(0.5,0.5,0.5);
-    Point AVUp(0.5,0.5,10);
+    Point Eye(-25, 5, 5);
+    Point LA(5,5,5);
+    Point AVUp(5,10,5);
 
     Obs = new Observador(Eye,LA,AVUp);
-    Cam = new Camera(0.5,0.5,-1,400,400,*Obs);
+    Cam = new Camera(0.5,0.5,-1,400,400);
     RGB *Back = new RGB(0.1, 0.1, 0.1);
-    RGB *iA = new RGB(0.5, 0.5, 0.5);
-    Cenario *Cena = new Cenario(Obs, Cam, iA, Back);
-    Objeto *O;
-    O = CuboUni3(Pista);
-    Cena->Objetos.push_back(O);
+    RGB *iA = new RGB(0.7, 0.7, 0.7);
+    Cenario *Cena = new Cenario(Cam, iA, Back, Obs);
+
+    Objeto *cubo =  new Objeto();
+
+    cubo->addPoint(0,0,0);
+    cubo->addPoint(10,0,0);
+    cubo->addPoint(0,10,0);
+    cubo->addPoint(10,10,0);
+    cubo->addPoint(0,0,10);
+    cubo->addPoint(10,0,10);
+    cubo->addPoint(0,10,10);
+    cubo->addPoint(10,10,10);
+
+    //cubo->addFace(0,6,4,Casa3);
+    //cubo->addFace(0,2,6,Casa3);
+
+    cubo->addFace(0,1,3,Pista);
+    cubo->addFace(0,3,2,Pista);
+
+    cubo->addFace(4,7,5,Pista);
+    cubo->addFace(4,6,7,Pista);
+
+    cubo->addFace(0,4,5,Casa3);
+    cubo->addFace(0,5,1,Casa3);
+
+    cubo->addFace(2,7,6,Casa3);
+    cubo->addFace(2,3,7,Casa3);
+
+    Cena->Objetos.push_back(cubo);
     Cena->Word_Cam();
     RenderPFuga(Cena);
+
 
 }
 
@@ -977,12 +1030,14 @@ void MainWindow::Fuga_2P(){
     Point AVUp(0.5,0.5,5);
 
     Obs = new Observador(Eye,LA,AVUp);
-    Cam = new Camera(0.5,0.5,-1,400,400,*Obs);
+    Cam = new Camera(0.5,0.5,-1,400,400);
     RGB *Back = new RGB(0.1, 0.1, 0.1);
     RGB *iA = new RGB(0.5, 0.5, 0.5);
-    Cenario *Cena = new Cenario(Obs, Cam, iA, Back);
+    Cenario *Cena = new Cenario(Cam, iA, Back, Obs);
     Objeto *O;
     O = CuboUni3(Pista);
+    O->faces.at(2)->M=Casa3;
+    O->faces.at(3)->M=Casa3;
     Cena->Objetos.push_back(O);
     Cena->Word_Cam();
     RenderPFuga(Cena);
@@ -996,19 +1051,24 @@ void MainWindow::Fuga_3P(){
     Point AVUp(0.5,0.5,10);
 
     Obs = new Observador(Eye,LA,AVUp);
-    Cam = new Camera(0.5,0.5,-1,400,400,*Obs);
+    Cam = new Camera(0.5,0.5,-1,400,400);
     RGB *Back = new RGB(0.1, 0.1, 0.1);
     RGB *iA = new RGB(0.5, 0.5, 0.5);
-    Cenario *Cena = new Cenario(Obs, Cam, iA, Back);
+    Cenario *Cena = new Cenario(Cam, iA, Back,Obs);
     Objeto *O;
     O = CuboUni3(Pista);
+
+
+    O->faces.at(2)->M=Casa3;
+    O->faces.at(3)->M=Casa3;
+    O->faces.at(4)->M=Casa2;
+    O->faces.at(5)->M=Casa2;
+
     Cena->Objetos.push_back(O);
     Cena->Word_Cam();
     RenderPFuga(Cena);
 
 }
-
-
 
 void MainWindow::sombras_rend(bool s){
   Renderiza_sombras = s;
@@ -1217,10 +1277,6 @@ void MainWindow::setP4(bool b){
     p4=b;
 }
 
-
-
-
-
 void MainWindow::Eye_X(double x){
     Ex=(float)x;
 }
@@ -1299,11 +1355,11 @@ Objeto* MainWindow::Prisma_Triangular_Uni3(Material *M){
 
     Objeto *prism = new Objeto();
     prism->addPoint(1,0,0);
-    prism->addPoint(1,1,0);
-    prism->addPoint(0,1,0);
+    prism->addPoint(1,0,1);
+    prism->addPoint(0,0,1);
     prism->addPoint(0,0,0);
-    prism->addPoint(1,0.5,1);
-    prism->addPoint(0,0.5,1);
+    prism->addPoint(1,1,0.5);
+    prism->addPoint(0,1,0.5);
 
     prism->addFace(1,3,0, M);
     prism->addFace(0,4,1, M);

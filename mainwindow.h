@@ -79,7 +79,7 @@ public:
     float rSp3 = 1, gSp3=1, bSp3=1;
     float rSp4 = 1, gSp4=1, bSp4=1;
 
-    float dObq_x=0,dObq_y=0,dObq_z=0;
+    float dObq_x=0,dObq_y=0,dObq_z=-1;
 
     Point *sP1;
 
@@ -104,6 +104,10 @@ public slots:
     void CamT();
     void Sair();
     void Pad();
+
+    void Orto();
+    void Cavalier();
+    void Cabinet();
 
     void setDirObx(double);
     void setDirOby(double);

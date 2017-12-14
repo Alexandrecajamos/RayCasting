@@ -14,7 +14,7 @@ class Cenario
 {
 public:
     Cenario();
-    Cenario(Observador *_Obs, Camera *_Cam,RGB* Ambiente ,RGB* BackGround);
+    Cenario(Camera *_Cam,RGB* Ambiente ,RGB* BackGround, Observador *Obs);
     void addObjeto(Objeto *O);
     void addFonte(luz *L);
     void addFonte2(Point *P, RGB I);

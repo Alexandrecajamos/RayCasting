@@ -6,9 +6,8 @@ class Camera
 {
 public:
     Camera();
-    Camera(float w, float h, float d, int sizeX, int sizeY, Observador O);
+    Camera(float w, float h, float d, int sizeX, int sizeY);
     float w,h,d,DX,DY;
-    Observador* Obs;
 };
 
 #endif // CAMERA_H

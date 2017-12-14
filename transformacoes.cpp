@@ -40,11 +40,12 @@ void transformacoes::MxM(float A[TAM][TAM], float B[TAM][TAM], float C[TAM][TAM]
 }
 
 void transformacoes::MxV(float M[TAM][TAM], Point *P){
+
     float vP[TAM]={P->x, P->y, P->z,1};
     float vPt[TAM]={0,0,0,0};
-    for(int i=0;i<TAM;i++){
+    for(int i=0;i<TAM-1;i++){
         for(int j=0;j<TAM;j++)
-        vPt[i]+=M[i][j]*vP[j];
+            vPt[i]+=M[i][j]*vP[j];
     }
     P->x=vPt[0];
     P->y=vPt[1];

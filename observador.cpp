@@ -14,6 +14,13 @@ Observador::Observador()
 }
 
 Observador::Observador(Point _pos, Point Look_At, Point A_View_UP){
+
+   // std::cout <<"\n Teste Obs :";
+    //_pos.ImpPoint();
+   //Look_At.ImpPoint();
+    //A_View_UP.ImpPoint();
+
+
     Operacoes Op;
     this->Pos=_pos;
     Point pk = _pos;
@@ -21,24 +28,15 @@ Observador::Observador(Point _pos, Point Look_At, Point A_View_UP){
     pk.normalize();
     this->k=pk;
     Point px= A_View_UP;
-    px.operator -=(_pos);
+    px.operator -=(this->Pos);
     Point _x = Op.normal(px,pk);
     _x.normalize();
+
     this->i=_x;
-    this->j=Op.normal(pk,_x);
+    this->j=Op.normal(this->k, this->i);
 
 }
 
-Observador::Observador(Point _pos, Point Look_At){
-    Operacoes Op;
-    this->Pos=_pos;
-    Point pk = _pos;
-    pk.operator -=(Look_At);
-    pk.normalize();
-    this->k=pk;
-
-
-}
 
 void Observador::Cam_Word(float A[TAM][TAM]){
     transformacoes t;
@@ -73,6 +71,7 @@ void Observador::Word_Cam(float A[TAM][TAM]){
     float x = this->i.ProdutoEscalar(this->Pos);
     float y = this->j.ProdutoEscalar(this->Pos);
     float z = this->k.ProdutoEscalar(this->Pos);
+
     A[0][3]=-x;
     A[1][3]=-y;
     A[2][3]=-z;

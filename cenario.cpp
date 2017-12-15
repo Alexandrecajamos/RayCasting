@@ -89,10 +89,11 @@ RGB* Cenario::Ray_Pix_Ilm(Point Po, Point D){
     int iObj,iFace;
 
     float t = this->Ray_intersept(Po, D, iObj,iFace);
+
     if(t!=-1 && t>0){
         Face* F = this->Objetos.at(iObj)->faces.at(iFace);
         Point Pint = D;
-        //Pint.normalize();
+        Pint.normalize();
         Pint.operator *=(t);
 
         Point nFace = F->N;
@@ -153,19 +154,23 @@ RGB* Cenario::Ray_Pix_Ilm(Point Po, Point D){
             D->x = -D->x; D->y = -D->y; D->z = -D->z;
             float cosDL = Fonte.ProdutoEscalar(*D);
 
-            bool sombra_rend = false;
 
-            if(Renderiza_somb){
-                sombra_rend = this->sombra(Pint, Fonte);
-            }
-
-            if(!sombra_rend){
                 if(cosDL>0){
 
-                    //float Teta = acos (cos) * 180.0 / PI;
                     float cosTeta = cos(((*i)->Abertura*PI/180));
 
                     if(cosTeta<cosDL){
+
+                    bool sombra_rend = false;
+
+                    if(Renderiza_somb){
+
+                        sombra_rend = this->sombra(Pint, Fonte);
+                    }
+
+                    if(!sombra_rend){
+                    //float Teta = acos (cos) * 180.0 / PI;
+
 
                         float R = Luz->F.R*cosDL;
                         float G = Luz->F.G*cosDL;

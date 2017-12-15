@@ -80,6 +80,7 @@ public:
     float rSp4 = 1, gSp4=1, bSp4=1;
 
     float dObq_x=0,dObq_y=0,dObq_z=-1;
+    float FOb =0, Teta=0;
 
     Point *sP1;
 
@@ -105,13 +106,8 @@ public slots:
     void Sair();
     void Pad();
 
-    void Orto();
-    void Cavalier();
-    void Cabinet();
-
-    void setDirObx(double);
-    void setDirOby(double);
-    void setDirObz(double);
+    void setTeta(double);
+    void setFator(double);
 
     void sombras_rend(bool);
     void RenderPFuga(Cenario *Cena);

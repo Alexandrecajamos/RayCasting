@@ -118,13 +118,17 @@ void Objeto::ImpPoints(){
 
 
 bool Objeto::Obstaculo(Point Pint, Point l){
-    bool obstaculo = false;
+
     if(this->Esf.Interseccao(Pint)){
-        for(std::vector<Face*>::iterator i = this->faces.begin(); i!= this->faces.end() && !obstaculo; i++){
-            obstaculo = (*i)->Obstaculo(Pint, l);
+        for(std::vector<Face*>::iterator i = this->faces.begin(); i!= this->faces.end(); i++){
+            float t = (*i)->Ray_intersept(Pint, l);
+            if(t != -1 && t>0){
+                //std::cout << "\n Sombra Dist = " << t;
+                return true;
+            }//obstaculo = (*i)->Obstaculo(Pint, l);
         }
     }
-    return obstaculo;
+    return false;
 }
 
 void Objeto::Libera(){

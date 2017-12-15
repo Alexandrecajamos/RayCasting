@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "transformacoes.h"
 #include "QImage"
+#define PI 3.14159265
 
 RGB G(0.4196,0.5568,0.1372);
 RGB Pis(0.3235, 0.3823, 0.4450);
@@ -43,6 +44,7 @@ Material *Grama = new Material(G,G,Esp,1);
 Material *Pista = new Material(Pis,Pis,Pis,1);
 Material *Terra = new Material(PisT,PisT,PisT,1);
 Material *Arvore = new Material(Arv,Arv,Arv,1);
+
   float E[4][4], T[4][4], MT[4][4];
   float ve[4],vt[4];
   Objeto *O;
@@ -55,24 +57,12 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QImage image("/home/alexandre/TF_CG/raycasting/model.jpeg");
-    if(!image.isNull())
-    {
-        QGraphicsScene img;
-        img.addPixmap(QPixmap::fromImage(image));
-        ui->graphicsModel->setScene(&img);
-        ui->graphicsModel->show();
-    }
-
 
     Ex=-150; Ey=150;Ez=-150;
     Lox=50; Loy=0;Loz=50;
     Avx=50; Avy=100; Avz=50;
     Bg = new RGB(0.22,0.22,0.22);//(0.250980, 0.87843137, 0.815686275);
     Amb = new RGB(0.4, 0.4, 0.4);
-
-
-    connect(ui->orto, SIGNAL(pressed()),this, SLOT(Orto()));
 
 
     connect(ui->P1_Fuga, SIGNAL(pressed()),this, SLOT(Fuga_1P()));
@@ -121,9 +111,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->Av_z,SIGNAL(valueChanged(double)), this, SLOT(Av_Z(double)));
 
 
-    connect(ui->ObqD_x,SIGNAL(valueChanged(double)), this, SLOT(setDirObx(double)));
-    connect(ui->ObqD_y,SIGNAL(valueChanged(double)), this, SLOT(setDirOby(double)));
-    connect(ui->ObqD_z,SIGNAL(valueChanged(double)), this, SLOT(setDirObz(double)));
+    connect(ui->Teta,SIGNAL(valueChanged(double)), this, SLOT(setTeta(double)));
+    connect(ui->Fator,SIGNAL(valueChanged(double)), this, SLOT(setFator(double)));
+
 
     connect(ui->w,SIGNAL(valueChanged(double)), this, SLOT(setW(double)));
     connect(ui->h,SIGNAL(valueChanged(double)), this, SLOT(setH(double)));
@@ -216,27 +206,32 @@ MainWindow::~MainWindow()
 void MainWindow::Render(){
     CamT();
     MontaCena();
+
+
+
+
+
     scene->Word_Cam();
-
-
-
+    Point Po(0,0,0);
     QImage image = QImage( sizeX, sizeY, QImage::Format_RGB32 );
     //scene->fontes_luminosas.at(0)->P->ImpPoint();
     //Ray Casting :
-
+    //#pragma omp parallel for
     for( int i=0; i<sizeX; i++)
     {
 
         float Yi= (scene->Cam->h/2)-(scene->Cam->DY/2)-(i*scene->Cam->DY);
+
+       // #pragma omp parallel for
         for( int j=0; j<sizeY; j++ )
         {
-            //qif(i != 100 || j != 100)
-               //continue;
+            //if((i < 100 || i > 150)  || (j < 100 || j > 150))
+              // continue;
 
             float Xj = (-scene->Cam->w/2)+(scene->Cam->DX/2)+(j*scene->Cam->DX);
             Point Pij(Xj,Yi,scene->Cam->d);
-            //Pij.normalize();
-                Point Po(0,0,0);
+            Pij.normalize();
+
                 RGB* print = scene->Ray_Pix_Ilm(Po, Pij);
                 image.setPixel( j, i, qRgb(print->R*255, print->G*255, print->B*255));
         }
@@ -775,7 +770,6 @@ void MainWindow::MontaCena(){
 }
 void MainWindow::CamT(){
 
-
     Point Eye(Ex, Ey, Ez);
     Point LA(Lox,Loy,Loz);
     Point AVUp(Avx,Avy,Avz);
@@ -783,7 +777,6 @@ void MainWindow::CamT(){
     Obs = new Observador(Eye,LA,AVUp);
     Cam = new Camera(W,H,-d,sizeX,sizeY);
     scene = new Cenario(Cam, Amb, Bg, Obs);
-
 
     scene->Renderiza_somb = this->Renderiza_sombras;
 
@@ -818,34 +811,34 @@ void MainWindow::CamT(){
 
     float iz, jz, kz;
 
-    iz = -Obs->i.y;
-    jz = -Obs->j.y;
-    kz = -Obs->k.y;
+    iz = - Obs->i.y;
+    jz = - Obs->j.y;
+    kz = - Obs->k.y;
 
     if(p1 && postes){
 
-        Point *PosSp1 = new Point(43,15.5,25);
+        Point *PosSp1 = new Point(46,15,25);
         Point *D = new Point(iz,jz,kz);
         scene->addSpot2(PosSp1,D,iSp1,30);
 
     }
     if(p2 && postes){
 
-        Point *PosSp2 = new Point(61,15.5,35);
+        Point *PosSp2 = new Point(58,15,35);
         Point *D = new Point(iz,jz,kz);
         scene->addSpot2(PosSp2,D,iSp2,30);
 
     }
     if(p3 && postes){
 
-        Point *PosSp3 = new Point(43,15.5,68);
+        Point *PosSp3 = new Point(43,15,67);
         Point *D = new Point(iz,jz,kz);
         scene->addSpot2(PosSp3,D,iSp3,30);
 
     }
     if(p4 && postes){
 
-        Point *PosSp4 = new Point(72,15.5,68);
+        Point *PosSp4 = new Point(72,15,67);
         Point *D = new Point(iz,jz,kz);
         scene->addSpot2(PosSp4,D,iSp4,30);
 
@@ -854,9 +847,41 @@ void MainWindow::CamT(){
 
 }
 void MainWindow::Obq(){
-    CamT();
+
+/*
+    //Teste Cubo Unitário:
+
+    Point Eye(2.5, 2.5, 2.5);
+    Point LA(1,1,1);
+    Point AVUp(1,5,1);
+
+    Obs = new Observador(Eye,LA,AVUp);
+    Cam = new Camera(10,10,-0.00001,300,300);
+    RGB *Back = new RGB(0.1, 0.1, 0.1);
+    RGB *iA = new RGB(0.5, 0.5, 0.5);
+    Cenario *scene = new Cenario(Cam, iA, Back,Obs);
+    Objeto *O;
+    O = CuboUni3(Casa6);
+    O->faces.at(2)->M=Casa3;
+    O->faces.at(3)->M=Casa3;
+    O->faces.at(4)->M=Casa2;
+    O->faces.at(5)->M=Casa2;
+
+    scene->Objetos.push_back(O);
+   // O->ImpPoints();
+    */
+    //FIm Teste
+
+     CamT();
     MontaCena();
     scene->Word_Cam();
+
+    float FcT = FOb*cos(Teta*PI/180);
+    float FsT = FOb*sin(Teta*PI/180);
+   // Point po(0,0,0);
+    Point D(-FcT, -FsT, -1);
+   // D.ImpPoint();
+
 
     QImage image = QImage( sizeX, sizeY, QImage::Format_RGB32 );
 
@@ -869,10 +894,6 @@ void MainWindow::Obq(){
 
             float Xj = (-scene->Cam->w/2)+(scene->Cam->DX/2)+(j*scene->Cam->DX);
             Point Po(Xj,Yi,scene->Cam->d);
-
-                Point D(dObq_x,dObq_y,dObq_z);
-                D.normalize();
-
                 RGB* print = scene->Ray_Pix_Ilm(Po, D);
                 image.setPixel( j, i, qRgb(print->R*255, print->G*255, print->B*255));
         }
@@ -884,26 +905,6 @@ void MainWindow::Obq(){
 
     scene->Libera();
     free(scene);
-}
-void MainWindow::Orto(){
-    float Dx = dObq_x, Dy = dObq_y, Dz= dObq_z;
-    dObq_x = 0;dObq_y = 0;dObq_z = -1;
-    Obq();
-    dObq_x = Dx; dObq_y = Dy; dObq_z = Dz;
-}
-
-void MainWindow::Cabinet(){
-    float Dx = dObq_x, Dy = dObq_y, Dz= dObq_z;
-    dObq_x = 0;dObq_y = 0;dObq_z = -1;
-    Obq();
-    dObq_x = Dx; dObq_y = Dy; dObq_z = Dz;
-}
-
-void MainWindow::Cavalier(){
-    float Dx = dObq_x, Dy = dObq_y, Dz= dObq_z;
-    dObq_x = 0;dObq_y = 0;dObq_z = -1;
-    Obq();
-    dObq_x = Dx; dObq_y = Dy; dObq_z = Dz;
 }
 
 void MainWindow::Sair(){
@@ -966,7 +967,7 @@ void MainWindow::RenderPFuga(Cenario *Cena){
             Pij.normalize();
                 Point Po(0,0,0);
                 RGB* print = Cena->Ray_Pix_Ilm(Po, Pij);
-                image.setPixel( i, j, qRgb(print->R*255, print->G*255, print->B*255));
+                image.setPixel( j, i, qRgb(print->R*255, print->G*255, print->B*255));
         }
     }
 
@@ -1027,7 +1028,7 @@ void MainWindow::Fuga_2P(){
 
     Point Eye(5, 0.5, 5);
     Point LA(0.5,0.5,0.5);
-    Point AVUp(0.5,0.5,5);
+    Point AVUp(0.5,5,0.5);
 
     Obs = new Observador(Eye,LA,AVUp);
     Cam = new Camera(0.5,0.5,-1,400,400);
@@ -1046,9 +1047,10 @@ void MainWindow::Fuga_2P(){
 
 void MainWindow::Fuga_3P(){
 
-    Point Eye(5, 5, 5);
+
+    Point Eye(8, 5, 8);
     Point LA(0.5,0.5,0.5);
-    Point AVUp(0.5,0.5,10);
+    Point AVUp(0.5,10,0.5);
 
     Obs = new Observador(Eye,LA,AVUp);
     Cam = new Camera(0.5,0.5,-1,400,400);
@@ -1068,20 +1070,19 @@ void MainWindow::Fuga_3P(){
     Cena->Word_Cam();
     RenderPFuga(Cena);
 
+
 }
 
 void MainWindow::sombras_rend(bool s){
   Renderiza_sombras = s;
 }
 
-void MainWindow::setDirObx(double dx){
-    dObq_x=(float)dx;
+void MainWindow::setTeta(double T){
+    Teta=T;
 }
-void MainWindow::setDirOby(double dy){
-    dObq_y=(float)dy;
-}
-void MainWindow::setDirObz(double dz){
-    dObq_z=(float)dz;
+
+void MainWindow::setFator(double F){
+    FOb = F;
 }
 
 void MainWindow::setPF1x(double d){

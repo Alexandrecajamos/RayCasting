@@ -33,10 +33,10 @@
        <widget class="QPushButton" name="render">
         <property name="geometry">
          <rect>
-          <x>390</x>
-          <y>50</y>
-          <width>191</width>
-          <height>41</height>
+          <x>380</x>
+          <y>80</y>
+          <width>161</width>
+          <height>51</height>
          </rect>
         </property>
         <property name="text">
@@ -116,7 +116,7 @@
          <double>9999.989999999999782</double>
         </property>
         <property name="value">
-         <double>50.000000000000000</double>
+         <double>100.000000000000000</double>
         </property>
        </widget>
        <widget class="QDoubleSpinBox" name="La_y">
@@ -173,7 +173,7 @@
          <double>9999.989999999999782</double>
         </property>
         <property name="value">
-         <double>100.000000000000000</double>
+         <double>50.000000000000000</double>
         </property>
        </widget>
        <widget class="QDoubleSpinBox" name="La_z">
@@ -631,6 +631,9 @@
           <height>26</height>
          </rect>
         </property>
+        <property name="maximum">
+         <double>999.990000000000009</double>
+        </property>
         <property name="value">
          <double>0.500000000000000</double>
         </property>
@@ -643,6 +646,9 @@
           <width>69</width>
           <height>26</height>
          </rect>
+        </property>
+        <property name="maximum">
+         <double>999.990000000000009</double>
         </property>
         <property name="value">
          <double>0.500000000000000</double>
@@ -806,7 +812,7 @@
        <widget class="QPushButton" name="Pad">
         <property name="geometry">
          <rect>
-          <x>180</x>
+          <x>110</x>
           <y>560</y>
           <width>131</width>
           <height>51</height>
@@ -819,10 +825,10 @@
        <widget class="QPushButton" name="render_2">
         <property name="geometry">
          <rect>
-          <x>390</x>
-          <y>100</y>
-          <width>141</width>
-          <height>31</height>
+          <x>550</x>
+          <y>80</y>
+          <width>131</width>
+          <height>51</height>
          </rect>
         </property>
         <property name="text">
@@ -832,10 +838,10 @@
        <widget class="QCheckBox" name="sombras">
         <property name="geometry">
          <rect>
-          <x>1000</x>
-          <y>610</y>
-          <width>251</width>
-          <height>31</height>
+          <x>760</x>
+          <y>110</y>
+          <width>111</width>
+          <height>21</height>
          </rect>
         </property>
         <property name="font">
@@ -844,7 +850,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Projetar Sombras</string>
+         <string>Sombras</string>
         </property>
        </widget>
        <widget class="QCheckBox" name="Postes">
@@ -1797,13 +1803,13 @@
          <number>255</number>
         </property>
        </widget>
-       <widget class="QDoubleSpinBox" name="ObqD_y">
+       <widget class="QDoubleSpinBox" name="Teta">
         <property name="geometry">
          <rect>
-          <x>720</x>
-          <y>80</y>
-          <width>69</width>
-          <height>26</height>
+          <x>700</x>
+          <y>110</y>
+          <width>51</width>
+          <height>21</height>
          </rect>
         </property>
         <property name="minimum">
@@ -1816,94 +1822,52 @@
          <double>0.000000000000000</double>
         </property>
        </widget>
-       <widget class="QDoubleSpinBox" name="ObqD_z">
+       <widget class="QDoubleSpinBox" name="Fator">
         <property name="geometry">
          <rect>
-          <x>800</x>
+          <x>700</x>
           <y>80</y>
-          <width>69</width>
-          <height>26</height>
+          <width>51</width>
+          <height>21</height>
          </rect>
+        </property>
+        <property name="decimals">
+         <number>1</number>
         </property>
         <property name="minimum">
          <double>-9990.000000000000000</double>
         </property>
         <property name="maximum">
-         <double>9999.989999999999782</double>
+         <double>10000.000000000000000</double>
         </property>
         <property name="value">
-         <double>-1.000000000000000</double>
+         <double>0.000000000000000</double>
         </property>
        </widget>
        <widget class="QLabel" name="label_36">
         <property name="geometry">
          <rect>
-          <x>650</x>
-          <y>50</y>
-          <width>221</width>
-          <height>21</height>
+          <x>690</x>
+          <y>100</y>
+          <width>16</width>
+          <height>31</height>
          </rect>
         </property>
         <property name="text">
-         <string>Direção para Projeção Oblíqua</string>
+         <string>T</string>
         </property>
        </widget>
-       <widget class="QDoubleSpinBox" name="ObqD_x">
+       <widget class="QLabel" name="label_39">
         <property name="geometry">
          <rect>
-          <x>640</x>
+          <x>690</x>
           <y>80</y>
-          <width>69</width>
-          <height>26</height>
-         </rect>
-        </property>
-        <property name="minimum">
-         <double>-9990.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>9999.989999999999782</double>
-        </property>
-        <property name="value">
-         <double>0.000000000000000</double>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="Cav">
-        <property name="geometry">
-         <rect>
-          <x>630</x>
-          <y>110</y>
-          <width>81</width>
+          <width>20</width>
           <height>21</height>
          </rect>
         </property>
         <property name="text">
-         <string>Cavalier</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="Cab">
-        <property name="geometry">
-         <rect>
-          <x>720</x>
-          <y>110</y>
-          <width>61</width>
-          <height>21</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Cabinet</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="orto">
-        <property name="geometry">
-         <rect>
-          <x>790</x>
-          <y>110</y>
-          <width>91</width>
-          <height>21</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Ortográfica</string>
+         <string>F</string>
         </property>
        </widget>
       </widget>

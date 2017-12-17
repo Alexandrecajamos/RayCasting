@@ -817,7 +817,7 @@ void MainWindow::CamT(){
 
     if(p1 && postes){
 
-        Point *PosSp1 = new Point(46,15,25);
+        Point *PosSp1 = new Point(47,15,26);
         Point *D = new Point(iz,jz,kz);
         scene->addSpot2(PosSp1,D,iSp1,30);
 
@@ -1048,21 +1048,20 @@ void MainWindow::Fuga_2P(){
 void MainWindow::Fuga_3P(){
 
 
-    Point Eye(8, 5, 8);
+    Point Eye(18, 10, 18);
     Point LA(0.5,0.5,0.5);
     Point AVUp(0.5,10,0.5);
 
     Obs = new Observador(Eye,LA,AVUp);
-    Cam = new Camera(0.5,0.5,-1,400,400);
+    Cam = new Camera(0.5,0.5,-3,400,400);
     RGB *Back = new RGB(0.1, 0.1, 0.1);
-    RGB *iA = new RGB(0.5, 0.5, 0.5);
+    RGB *iA = new RGB(0.7, 0.7, 0.7);
     Cenario *Cena = new Cenario(Cam, iA, Back,Obs);
     Objeto *O;
     O = CuboUni3(Pista);
 
-
-    O->faces.at(2)->M=Casa3;
-    O->faces.at(3)->M=Casa3;
+    O->faces.at(2)->M=Grama;
+    O->faces.at(3)->M=Grama;
     O->faces.at(4)->M=Casa2;
     O->faces.at(5)->M=Casa2;
 

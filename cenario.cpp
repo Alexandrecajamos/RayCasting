@@ -178,7 +178,7 @@ RGB* Cenario::Ray_Pix_Ilm(Point Po, Point D){
 
                         float xDif = nFace.ProdutoEscalar(Fonte);
 
-                        Point v = Po;  //Luz->P;
+                        Point v = Po;
                         v.operator -=(Pint);
                         v.normalize();
                         Point r = nFace;

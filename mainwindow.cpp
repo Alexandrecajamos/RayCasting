@@ -879,7 +879,7 @@ void MainWindow::Obq(){
     float FcT = FOb*cos(Teta*PI/180);
     float FsT = FOb*sin(Teta*PI/180);
    // Point po(0,0,0);
-    Point D(-FcT, -FsT, -1);
+    Point D(FcT, FsT, -1);
    // D.ImpPoint();
 
 
@@ -1048,7 +1048,7 @@ void MainWindow::Fuga_2P(){
 void MainWindow::Fuga_3P(){
 
 
-    Point Eye(18, 10, 18);
+    Point Eye(15, 10, 15);
     Point LA(0.5,0.5,0.5);
     Point AVUp(0.5,10,0.5);
 
